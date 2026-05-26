@@ -341,3 +341,131 @@ body.menu-open { overflow: hidden; }
   .related-grid { grid-template-columns: 1fr !important; }
   .footer-grid { grid-template-columns: 1fr; }
 }
+
+/* ══════════════════════════════════════════════════
+   FIX 1 — 모바일 푸터 가독성 개선
+══════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  /* 브랜드 영역 전체 너비 + 하단 구분선 */
+  .footer-grid {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 0 !important;
+  }
+  .footer-brand {
+    grid-column: 1 / -1 !important;
+    padding-bottom: 24px !important;
+    margin-bottom: 20px !important;
+    border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+  }
+  .footer-brand p {
+    font-size: 12px !important;
+    line-height: 1.75 !important;
+    color: var(--ink-muted-48) !important;
+    margin-top: 10px !important;
+  }
+  /* 네비 컬럼 3개를 가로로 나란히 */
+  .footer-col {
+    padding: 0 8px 20px 0 !important;
+  }
+  .footer-col h5 {
+    font-size: 12px !important;
+    margin-bottom: 10px !important;
+  }
+  .footer-col ul li {
+    margin-bottom: 6px !important;
+  }
+  .footer-col ul li a {
+    font-size: 12px !important;
+  }
+  .footer-bottom {
+    font-size: 11px !important;
+    padding-top: 16px !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   FIX 2 — 제품 페이지 다운로드 버튼 정렬/크기
+══════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  /* hero-actions 버튼들 정렬 */
+  .hero-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+  .hero-actions > *,
+  .hero-actions .btn-dl-wrap {
+    width: 100% !important;
+  }
+  /* btn-dl 텍스트+아이콘 중앙 정렬, 크기 소형화 */
+  .hero-actions .btn-dl,
+  .hero-actions .btn-primary {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 10px 18px !important;
+    font-size: 13px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  /* 드롭다운 트리거 버튼도 동일하게 */
+  .btn-dl-wrap .btn-dl {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 18px !important;
+    font-size: 13px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  /* 드롭다운 메뉴 full-width */
+  .btn-dl-menu {
+    min-width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   FIX 3 — 품질혁신 이미지 잘림 수정
+══════════════════════════════════════════════════ */
+@media (max-width: 960px) {
+  .q-sec2-img {
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+    overflow: hidden !important;
+    display: block !important;
+  }
+  .q-sec2-img img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    display: block !important;
+  }
+}
+@media (max-width: 767px) {
+  .q-sec2-img {
+    aspect-ratio: 4 / 3 !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   FIX 4 — 자료실 CAD 인라인 그리드 + 다운로드 버튼
+══════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  /* inline style="display:grid;grid-template-columns:1fr 1fr" 오버라이드 */
+  [style*="grid-template-columns:1fr 1fr"],
+  [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* 자료실 다운로드 버튼 */
+  .dl-btn {
+    font-size: 11px !important;
+    padding: 6px 12px !important;
+    gap: 4px !important;
+    border-radius: 20px !important;
+  }
+}
