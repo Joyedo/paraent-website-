@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>문의 관리 — Paraent Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #f0f2f5; color: #1d1d1f; min-height: 100vh; }
+
+    /* TOP BAR */
+    .topbar {
+      background: #1a1a2e;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .topbar-left img { height: 28px; }
+    .topbar-title { color: #fff; font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+    .topbar-badge { background: #0066cc; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.05em; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .admin-name { font-size: 13px; color: rgba(255,255,255,0.6); }
+    .btn-logout {
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.8);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.18); color: #fff; }
+    .btn-home {
+      padding: 6px 14px;
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      border: none;
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .btn-home:hover { color: #fff; }
+
+    /* MAIN */
+    .main { max-width: 1300px; margin: 0 auto; padding: 28px 24px; }
+
+    /* STATS */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 24px;
+      border: 1px solid #e5e7eb;
+    }
+    .stat-label { font-size: 12px; color: #6b7280; font-weight: 500; margin-bottom: 8px; }
+    .stat-value { font-size: 28px; font-weight: 700; color: #111; letter-spacing: -0.5px; }
+    .stat-value.blue { color: #0066cc; }
+    .stat-value.green { color: #16a34a; }
+    .stat-value.orange { color: #ea580c; }
+
+    /* TABLE CARD */
+    .table-card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+    }
+    .table-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .table-header h2 { font-size: 16px; font-weight: 600; color: #111; }
+    .table-controls { display: flex; align-items: center; gap: 10px; }
+    .search-input {
+      padding: 8px 14px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      width: 220px;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus { border-color: #0066cc; }
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+      background: #fff;
+    }
+
+    /* TABLE */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: #f9fafb; }
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: #6b7280;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #f3f4f6;
+      white-space: nowrap;
+    }
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: middle;
+      color: #374151;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+
+    .td-no { color: #9ca3af; font-weight: 500; width: 60px; }
+    .td-title { max-width: 220px; }
+    .td-title-text { font-weight: 500; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; display: block; cursor: pointer; }
+    .td-title-text:hover { color: #0066cc; }
+    .td-product { color: #6b7280; font-size: 12px; margin-top: 2px; }
+    .td-name { font-weight: 500; color: #111; white-space: nowrap; }
+    .td-phone { color: #6b7280; white-space: nowrap; }
+    .td-date { color: #6b7280; font-size: 12px; white-space: nowrap; }
+    .td-ip { color: #9ca3af; font-size: 12px; font-family: monospace; }
+
+    /* STATUS BADGE */
+    .status-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      font-size: 11px; font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      font-family: inherit;
+    }
+    .status-badge.done { background: #dcfce7; color: #16a34a; }
+    .status-badge.done:hover { background: #bbf7d0; }
+    .status-badge.pending { background: #fef3c7; color: #d97706; }
+    .status-badge.pending:hover { background: #fde68a; }
+
+    /* ACTION BTNS */
+    .action-btns { display: flex; gap: 6px; }
+    .btn-edit, .btn-delete {
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .btn-edit { background: #eff6ff; color: #2563eb; }
+    .btn-edit:hover { background: #dbeafe; }
+    .btn-delete { background: #fef2f2; color: #dc2626; }
+    .btn-delete:hover { background: #fee2e2; }
+
+    /* PAGINATION */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-top: 1px solid #f3f4f6;
+    }
+    .page-info { font-size: 13px; color: #6b7280; }
+    .page-btns { display: flex; gap: 4px; }
+    .page-btn {
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid #e5e7eb;
+      border-radius: 7px;
+      background: #fff;
+      font-size: 13px;
+      color: #374151;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .page-btn:hover { border-color: #0066cc; color: #0066cc; }
+    .page-btn.active { background: #0066cc; color: #fff; border-color: #0066cc; font-weight: 600; }
+    .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* LOADING / EMPTY */
+    .loading-row td { text-align: center; padding: 48px; color: #9ca3af; }
+    .empty-row td { text-align: center; padding: 48px; color: #9ca3af; }
+
+    /* MODAL */
+    .modal-backdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 560px;
+      margin: 24px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal-title { font-size: 18px; font-weight: 700; color: #111; margin-bottom: 20px; }
+    .modal-row { margin-bottom: 14px; }
+    .modal-label { font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .modal-value { font-size: 14px; color: #111; line-height: 1.6; }
+    .modal-content-box {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 14px;
+      color: #374151;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+    .btn-modal-close {
+      padding: 9px 20px;
+      background: #f3f4f6;
+      color: #374151;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .btn-modal-close:hover { background: #e5e7eb; }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <img src="../assets/images/logo-white.png" alt="Paraent" />
+    <span class="topbar-title">관리자 페이지</span>
+    <span class="topbar-badge">ADMIN</span>
+  </div>
+  <div class="topbar-right">
+    <span class="admin-name" id="adminEmail"></span>
+    <a href="../index.html" class="btn-home">홈페이지</a>
+    <button class="btn-logout" onclick="handleLogout()">로그아웃</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">전체 문의</div>
+      <div class="stat-value blue" id="statTotal">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">처리 완료</div>
+      <div class="stat-value green" id="statDone">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">미처리</div>
+      <div class="stat-value orange" id="statPending">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">오늘 접수</div>
+      <div class="stat-value" id="statToday">—</div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-card">
+    <div class="table-header">
+      <h2>문의 목록</h2>
+      <div class="table-controls">
+        <input type="text" class="search-input" id="searchInput" placeholder="이름, 제목, 이메일 검색..." oninput="onSearch()" />
+        <select class="filter-select" id="statusFilter" onchange="loadInquiries()">
+          <option value="">전체</option>
+          <option value="pending">미처리</option>
+          <option value="done">처리완료</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>제목 / 제품</th>
+            <th>이름</th>
+            <th>전화번호</th>
+            <th>처리</th>
+            <th>신청일</th>
+            <th>IP</th>
+            <th>관리</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr class="loading-row"><td colspan="8">불러오는 중...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <div class="page-info" id="pageInfo"></div>
+      <div class="page-btns" id="pageBtns"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 상세보기 모달 -->
+<div class="modal-backdrop" id="detailModal">
+  <div class="modal">
+    <div class="modal-title">문의 상세</div>
+    <div id="modalContent"></div>
+    <div class="modal-footer">
+      <button class="btn-modal-close" onclick="closeModal()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  const SUPABASE_URL = 'https://ttrxqfrzzwyrpgiyjwix.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0cnhxZnJ6end5cnBnaXlqd2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3OTM2MjcsImV4cCI6MjA5NTM2OTYyN30.xUJwYc7e4hir3zNEWT1JvEnWHLkxVlDB3P56XHUJ1eg';
+  const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const PAGE_SIZE = 15;
+  let currentPage = 1;
+  let totalCount = 0;
+  let searchTimer = null;
+
+  // 인증 확인
+  async function checkAuth() {
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (!session) { window.location.href = './index.html'; return; }
+    document.getElementById('adminEmail').textContent = session.user.email;
+    loadInquiries();
+    loadStats();
+  }
+
+  // 통계 로드
+  async function loadStats() {
+    const today = new Date().toISOString().split('T')[0];
+    const { count: total } = await _supabase.from('inquiries').select('*', { count: 'exact', head: true });
+    const { count: done } = await _supabase.from('inquiries').select('*', { count: 'exact', head: true }).eq('status', 'done');
+    const { count: todayCount } = await _supabase.from('inquiries').select('*', { count: 'exact', head: true }).gte('created_at', today);
+
+    document.getElementById('statTotal').textContent = total ?? 0;
+    document.getElementById('statDone').textContent = done ?? 0;
+    document.getElementById('statPending').textContent = (total ?? 0) - (done ?? 0);
+    document.getElementById('statToday').textContent = todayCount ?? 0;
+  }
+
+  // 문의 목록 로드
+  async function loadInquiries(page = currentPage) {
+    currentPage = page;
+    const keyword = document.getElementById('searchInput').value.trim();
+    const statusFilter = document.getElementById('statusFilter').value;
+
+    let query = _supabase
+      .from('inquiries')
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+
+    if (statusFilter) query = query.eq('status', statusFilter);
+    if (keyword) query = query.or(`name.ilike.%${keyword}%,title.ilike.%${keyword}%,email.ilike.%${keyword}%`);
+
+    const { data, count, error } = await query;
+    if (error) { console.error(error); return; }
+
+    totalCount = count ?? 0;
+    renderTable(data ?? []);
+    renderPagination();
+  }
+
+  // 테이블 렌더링
+  function renderTable(rows) {
+    const tbody = document.getElementById('tableBody');
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="8">문의 내역이 없습니다.</td></tr>';
+      return;
+    }
+
+    const offset = (currentPage - 1) * PAGE_SIZE;
+    tbody.innerHTML = rows.map((r, i) => {
+      const no = totalCount - offset - i;
+      const isDone = r.status === 'done';
+      const date = new Date(r.created_at);
+      const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}<br>${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+
+      return `<tr>
+        <td class="td-no">${no}</td>
+        <td class="td-title">
+          <span class="td-title-text" onclick="showDetail(${r.id})" title="${escHtml(r.title)}">${escHtml(r.title)}</span>
+          ${r.product ? `<div class="td-product">${escHtml(r.product)}</div>` : ''}
+        </td>
+        <td class="td-name">${escHtml(r.name)}</td>
+        <td class="td-phone">${escHtml(r.phone ?? '—')}</td>
+        <td>
+          <button class="status-badge ${isDone ? 'done' : 'pending'}" onclick="toggleStatus(${r.id}, '${r.status}')" title="클릭해서 처리상태 변경">
+            ${isDone ? 'Y' : 'N'}
+          </button>
+        </td>
+        <td class="td-date">${dateStr}</td>
+        <td class="td-ip">${escHtml(r.ip_address ?? '—')}</td>
+        <td>
+          <div class="action-btns">
+            <button class="btn-edit" onclick="showDetail(${r.id})">상세</button>
+            <button class="btn-delete" onclick="deleteInquiry(${r.id})">삭제</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  // 페이지네이션 렌더링
+  function renderPagination() {
+    const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+    const start = (currentPage - 1) * PAGE_SIZE + 1;
+    const end = Math.min(currentPage * PAGE_SIZE, totalCount);
+
+    document.getElementById('pageInfo').textContent =
+      totalCount > 0 ? `전체 ${totalCount}건 중 ${start}–${end}` : '검색 결과 없음';
+
+    const btns = document.getElementById('pageBtns');
+    btns.innerHTML = '';
+
+    const prev = document.createElement('button');
+    prev.className = 'page-btn';
+    prev.textContent = '‹';
+    prev.disabled = currentPage <= 1;
+    prev.onclick = () => loadInquiries(currentPage - 1);
+    btns.appendChild(prev);
+
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, startPage + 4);
+
+    for (let p = startPage; p <= endPage; p++) {
+      const btn = document.createElement('button');
+      btn.className = 'page-btn' + (p === currentPage ? ' active' : '');
+      btn.textContent = p;
+      btn.onclick = () => loadInquiries(p);
+      btns.appendChild(btn);
+    }
+
+    const next = document.createElement('button');
+    next.className = 'page-btn';
+    next.textContent = '›';
+    next.disabled = currentPage >= totalPages;
+    next.onclick = () => loadInquiries(currentPage + 1);
+    btns.appendChild(next);
+  }
+
+  // 처리상태 토글
+  async function toggleStatus(id, currentStatus) {
+    const newStatus = currentStatus === 'done' ? 'pending' : 'done';
+    const { error } = await _supabase.from('inquiries').update({ status: newStatus }).eq('id', id);
+    if (!error) { loadInquiries(); loadStats(); }
+  }
+
+  // 삭제
+  async function deleteInquiry(id) {
+    if (!confirm('이 문의를 삭제하시겠습니까?')) return;
+    const { error } = await _supabase.from('inquiries').delete().eq('id', id);
+    if (!error) { loadInquiries(); loadStats(); }
+  }
+
+  // 상세보기
+  async function showDetail(id) {
+    const { data, error } = await _supabase.from('inquiries').select('*').eq('id', id).single();
+    if (error || !data) return;
+
+    const date = new Date(data.created_at).toLocaleString('ko-KR');
+    document.getElementById('modalContent').innerHTML = `
+      <div class="modal-row"><div class="modal-label">이름</div><div class="modal-value">${escHtml(data.name)}</div></div>
+      ${data.company ? `<div class="modal-row"><div class="modal-label">회사명</div><div class="modal-value">${escHtml(data.company)}</div></div>` : ''}
+      <div class="modal-row"><div class="modal-label">연락처</div><div class="modal-value">${escHtml(data.phone ?? '—')}</div></div>
+      <div class="modal-row"><div class="modal-label">이메일</div><div class="modal-value">${escHtml(data.email)}</div></div>
+      ${data.product ? `<div class="modal-row"><div class="modal-label">문의 제품</div><div class="modal-value">${escHtml(data.product)}</div></div>` : ''}
+      ${data.inquiry_type ? `<div class="modal-row"><div class="modal-label">문의 유형</div><div class="modal-value">${escHtml(data.inquiry_type)}</div></div>` : ''}
+      <div class="modal-row"><div class="modal-label">제목</div><div class="modal-value" style="font-weight:600">${escHtml(data.title)}</div></div>
+      <div class="modal-row"><div class="modal-label">내용</div><div class="modal-content-box">${escHtml(data.content)}</div></div>
+      <div class="modal-row"><div class="modal-label">신청일</div><div class="modal-value">${date}</div></div>
+      ${data.ip_address ? `<div class="modal-row"><div class="modal-label">IP</div><div class="modal-value" style="font-family:monospace">${escHtml(data.ip_address)}</div></div>` : ''}
+    `;
+    document.getElementById('detailModal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('detailModal').classList.remove('open');
+  }
+
+  document.getElementById('detailModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // 검색 (디바운스)
+  function onSearch() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => loadInquiries(1), 400);
+  }
+
+  // 로그아웃
+  async function handleLogout() {
+    await _supabase.auth.signOut();
+    window.location.href = './index.html';
+  }
+
+  // XSS 방지
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  checkAuth();
+</script>
+</body>
+</html>
