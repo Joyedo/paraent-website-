@@ -225,15 +225,15 @@
         <div class="form-grid">
           <div class="form-group">
             <label class="form-label">이름 <span class="req">*</span></label>
-            <input type="text" class="form-input" placeholder="홍길동" required />
+            <input type="text" id="inp-name" class="form-input" placeholder="홍길동" required />
           </div>
           <div class="form-group">
             <label class="form-label">회사명</label>
-            <input type="text" class="form-input" placeholder="(주)회사명" />
+            <input type="text" id="inp-company" class="form-input" placeholder="(주)회사명" />
           </div>
           <div class="form-group">
             <label class="form-label">연락처 <span class="req">*</span></label>
-            <input type="tel" class="form-input" placeholder="010-0000-0000" required />
+            <input type="tel" id="inp-phone" class="form-input" placeholder="010-0000-0000" required />
           </div>
           <div class="form-group">
             <label class="form-label">이메일 <span class="req">*</span></label>
@@ -256,7 +256,7 @@
           </div>
           <div class="form-group">
             <label class="form-label">문의 제품</label>
-            <select class="form-select">
+            <select id="inp-product" class="form-select">
               <option value="">제품을 선택하세요</option>
               <option>Pll 전력조정기</option>
               <option>SMART 전력조정기</option>
@@ -270,7 +270,7 @@
           </div>
           <div class="form-group">
             <label class="form-label">문의 유형</label>
-            <select class="form-select">
+            <select id="inp-inquiry-type" class="form-select">
               <option value="">유형을 선택하세요</option>
               <option>제품 사양 문의</option>
               <option>가격 및 견적 요청</option>
@@ -282,11 +282,11 @@
           </div>
           <div class="form-group full">
             <label class="form-label">제목 <span class="req">*</span></label>
-            <input type="text" class="form-input" placeholder="문의 제목을 입력하세요" required />
+            <input type="text" id="inp-title" class="form-input" placeholder="문의 제목을 입력하세요" required />
           </div>
           <div class="form-group full">
             <label class="form-label">문의 내용 <span class="req">*</span></label>
-            <textarea class="form-textarea" placeholder="문의 내용을 자세히 입력해 주세요.&#10;&#10;예: 사용 환경 (전압/전류/부하 종류), 희망 납기일, 수량 등을 포함해 주시면 더욱 정확한 답변을 드릴 수 있습니다." required></textarea>
+            <textarea id="inp-content" class="form-textarea" placeholder="문의 내용을 자세히 입력해 주세요.&#10;&#10;예: 사용 환경 (전압/전류/부하 종류), 희망 납기일, 수량 등을 포함해 주시면 더욱 정확한 답변을 드릴 수 있습니다." required></textarea>
           </div>
         </div>
 
@@ -326,6 +326,14 @@
   </div>
 </footer>
 
+<!-- Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://ttrxqfrzzwyrpgiyjwix.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0cnhxZnJ6end5cnBnaXlqd2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3OTM2MjcsImV4cCI6MjA5NTM2OTYyN30.xUJwYc7e4hir3zNEWT1JvEnWHLkxVlDB3P56XHUJ1eg';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+
 <script>
 (function() {
   var sel = document.getElementById('email-domain-select');
@@ -358,7 +366,7 @@ function getEmailValue() {
   return id && domain ? id + '@' + domain : '';
 }
 
-function handleSubmit(e) {
+async function handleSubmit(e) {
   e.preventDefault();
   var email = getEmailValue();
   if (!email) {
@@ -366,12 +374,40 @@ function handleSubmit(e) {
     document.getElementById('email-id').focus();
     return;
   }
+
   var btn = e.target.querySelector('.btn-submit');
+  btn.textContent = '접수 중...';
+  btn.disabled = true;
+
+  const { error } = await supabase.from('inquiries').insert({
+    name:         document.getElementById('inp-name').value.trim(),
+    company:      document.getElementById('inp-company').value.trim() || null,
+    phone:        document.getElementById('inp-phone').value.trim(),
+    email:        email,
+    product:      document.getElementById('inp-product').value || null,
+    inquiry_type: document.getElementById('inp-inquiry-type').value || null,
+    title:        document.getElementById('inp-title').value.trim(),
+    content:      document.getElementById('inp-content').value.trim(),
+  });
+
+  if (error) {
+    console.error(error);
+    alert('접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+    btn.textContent = '문의 접수하기';
+    btn.disabled = false;
+    return;
+  }
+
   btn.textContent = '접수 완료 ✓';
   btn.style.background = '#34c759';
-  btn.disabled = true;
   setTimeout(function() {
     alert('문의가 접수되었습니다. 영업일 기준 1-2일 이내에 답변 드리겠습니다.');
+    e.target.reset();
+    document.getElementById('email-domain-custom').style.display = 'none';
+    document.getElementById('email-domain-select').style.display = '';
+    btn.textContent = '문의 접수하기';
+    btn.style.background = '';
+    btn.disabled = false;
   }, 300);
 }
 </script>
