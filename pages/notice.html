@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>공지사항 — Paraent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0066cc; --primary-focus: #0071e3; --primary-on-dark: #2997ff;
+      --ink: #1d1d1f; --ink-muted-80: #333333; --ink-muted-48: #7a7a7a;
+      --hairline: #e0e0e0; --canvas: #ffffff; --canvas-parchment: #f5f5f7;
+      --surface-tile-1: #272729; --surface-tile-2: #2a2a2c; --surface-black: #000000;
+      --on-dark: #ffffff; --r-pill: 9999px; --r-lg: 18px; --r-sm: 8px; --r-md: 11px;
+      --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+      --font-text: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-text); color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 200;
+      height: 64px;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      display: flex; align-items: center;
+      padding: 0 32px;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px;
+    }
+    .nav-logo { display: flex; align-items: center; flex-shrink: 0; }
+    .nav-logo img { height: 34px; width: auto; display: block; }
+    .nav-menu { display: flex; align-items: center; }
+    .nav-item { position: relative; }
+    .nav-link {
+      display: flex; align-items: center; gap: 3px;
+      padding: 0 15px; height: 64px;
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 13px; font-weight: 400; white-space: nowrap;
+      letter-spacing: -0.12px;
+      transition: color 0.15s;
+    }
+    .nav-link:hover { color: #fff; }
+    .nav-link svg { opacity: 0.5; transition: transform 0.2s, opacity 0.15s; }
+    .nav-item:hover .nav-link svg { transform: rotate(180deg); opacity: 1; }
+    .nav-dropdown {
+      position: absolute; top: 100%; left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: rgba(22,22,24,0.98);
+      backdrop-filter: blur(24px);
+      border-radius: var(--r-md);
+      padding: 8px;
+      min-width: 200px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s 0.1s, transform 0.2s 0.1s;
+      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+    }
+    .nav-item:hover .nav-dropdown {
+      opacity: 1; pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+      transition: opacity 0.15s 0s, transform 0.15s 0s;
+    }
+    .nav-dropdown a {
+      display: block; font-size: 13px;
+      color: rgba(255,255,255,0.62);
+      padding: 10px 14px;
+      border-radius: var(--r-sm);
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+    .nav-dropdown a + a { border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-dropdown a:hover {
+      background: rgba(41,151,255,0.13);
+      color: var(--primary-on-dark);
+      box-shadow: inset 3px 0 0 var(--primary-on-dark);
+    }
+    .nav-dropdown a.active { color: var(--primary-on-dark); }
+    .nav-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .lang-btn {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      padding: 4px 7px; border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: none; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lang-btn:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    .lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); }
+    .btn-primary {
+      font-family: var(--font-text);
+      font-size: 12px; color: #fff;
+      background: var(--primary); border: none;
+      border-radius: var(--r-pill); padding: 7px 15px;
+      margin-left: 4px;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { background: var(--primary-focus); }
+    .btn-primary:active { transform: scale(0.95); }
+
+    .page-header { background: var(--surface-tile-1); padding: 80px 24px; text-align: center; }
+    .page-header h1 { font-family: var(--font-display); font-size: 40px; font-weight: 600; color: var(--on-dark); margin-bottom: 12px; }
+    .breadcrumb { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .breadcrumb span { margin: 0 6px; }
+
+    .section { padding: 60px 24px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+
+    /* NOTICE BOARD */
+    .board-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .board-count { font-size: 14px; color: var(--ink-muted-48); }
+    .board-count strong { color: var(--primary); }
+
+    .notice-list { border-top: 2px solid var(--ink); }
+    .notice-item {
+      border-bottom: 1px solid var(--hairline);
+      cursor: pointer;
+    }
+    .notice-item-header {
+      display: grid; grid-template-columns: 60px 1fr 120px 100px;
+      align-items: center; padding: 18px 16px; gap: 16px;
+      transition: background 0.15s;
+    }
+    .notice-item:hover .notice-item-header { background: var(--canvas-parchment); }
+    .notice-num { font-size: 14px; color: var(--ink-muted-48); text-align: center; }
+    .notice-badge { display: inline-block; background: var(--primary); color: #fff; font-size: 11px; font-weight: 700; border-radius: 4px; padding: 2px 7px; margin-right: 8px; }
+    .notice-title-text { font-size: 15px; color: var(--ink); font-weight: 400; }
+    .notice-title-text:hover { color: var(--primary); }
+    .notice-author { font-size: 13px; color: var(--ink-muted-48); text-align: center; }
+    .notice-date { font-size: 13px; color: var(--ink-muted-48); text-align: center; }
+    .notice-body {
+      display: none;
+      padding: 24px 16px 24px 92px;
+      border-top: 1px solid var(--hairline);
+      background: var(--canvas-parchment);
+    }
+    .notice-body.open { display: block; }
+    .notice-body-text { font-size: 15px; color: var(--ink-muted-80); line-height: 1.8; }
+    .notice-body-text p { margin-bottom: 12px; }
+    .notice-body-text p:last-child { margin-bottom: 0; }
+
+    /* PAGINATION */
+    .pagination { display: flex; justify-content: center; gap: 6px; margin-top: 40px; }
+    .page-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: var(--r-sm); border: 1px solid var(--hairline); background: var(--canvas); font-size: 14px; color: var(--ink-muted-48); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; }
+    .page-btn:hover { background: var(--canvas-parchment); color: var(--ink); }
+    .page-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    footer { background: var(--canvas-parchment); padding: 60px 24px 40px; border-top: 1px solid var(--hairline); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand p { font-size: 13px; color: var(--ink-muted-48); line-height: 1.8; margin-top: 12px; }
+    .footer-logo { display: block; margin-bottom: 0; } .footer-logo img { height: 32px; width: auto; display: block; }
+    .footer-col h5 { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li a { font-size: 13px; color: var(--ink-muted-48); text-decoration: none; }
+    .footer-col ul li a:hover { color: var(--primary); }
+    .footer-bottom { border-top: 1px solid var(--hairline); padding-top: 20px; font-size: 12px; color: var(--ink-muted-48); }
+
+    @media (max-width: 640px) {
+      .notice-item-header { grid-template-columns: 1fr 80px; }
+      .notice-num, .notice-author { display: none; }
+      .notice-body { padding-left: 16px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo"><img src="../assets/images/logo-white.png" alt="Paraent"></a>
+    <div class="nav-menu">
+      <div class="nav-item"><a href="#" class="nav-link">회사소개<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./company-overview.html">회사개요</a><a href="./history.html">회사연혁</a><a href="./certifications.html">인증현황</a><a href="./location.html">오시는길</a><a href="./quality.html">품질혁신</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">제품소개<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./product-pll.html">Pll 전력조정기</a><a href="./product-smart.html">SMART 전력조정기</a><a href="./product-flex.html">FLEX 전력조정기</a><a href="./product-mini.html">MINI 전력조정기</a><a href="./product-etype.html">E-TYPE 전력조정기</a><a href="./product-multi.html">MULTI 전력조정기</a><a href="./product-ptype.html">P-TYPE 전력조정기</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">자료실<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./resources.html">기술자료</a><a href="./resources.html">메뉴얼</a><a href="./resources.html">캐드도면</a><a href="./resources.html">카다로그</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">고객센터<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./inquiry.html">온라인상담</a><a href="./notice.html" class="active">공지사항</a></div></div>
+    </div>
+    <div class="nav-right"><button class="lang-btn">KO</button><button class="lang-btn">EN</button><button class="lang-btn">中</button><a href="./inquiry.html" class="btn-primary">온라인 문의</a></div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>공지사항</h1>
+  <div class="breadcrumb"><a href="../index.html">홈</a><span>›</span><a href="#">고객센터</a><span>›</span>공지사항</div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="board-header">
+      <div class="board-count">전체 <strong>12</strong>건</div>
+    </div>
+
+    <div class="notice-list">
+      <!-- Notice 1 — pinned -->
+      <div class="notice-item">
+        <div class="notice-item-header" onclick="toggleNotice(this)">
+          <div class="notice-num" style="color:var(--primary);">📌</div>
+          <div><span class="notice-badge">공지</span><span class="notice-title-text">2025년 하계 휴가 안내 (8/12 ~ 8/16)</span></div>
+          <div class="notice-author">관리자</div>
+          <div class="notice-date">2025-07-28</div>
+        </div>
+        <div class="notice-body">
+          <div class="notice-body-text">
+            <p>안녕하세요, (주)파라이엔티입니다.</p>
+            <p>2025년 하계 휴가 일정을 아래와 같이 안내드립니다.</p>
+            <p><strong>휴가 기간: 2025년 8월 12일(화) ~ 8월 16일(토)</strong></p>
+            <p>휴가 기간 중 접수된 문의는 8월 18일(월)부터 순차적으로 답변 드립니다. 긴급 문의는 이메일(paraent@paraent.com)로 연락 주시기 바랍니다.</p>
+            <p>고객 여러분의 양해를 부탁드립니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notice 2 — pinned -->
+      <div class="notice-item">
+        <div class="notice-item-header" onclick="toggleNotice(this)">
+          <div class="notice-num" style="color:var(--primary);">📌</div>
+          <div><span class="notice-badge">공지</span><span class="notice-title-text">FLEX 전력조정기 EtherCAT 드라이버 업데이트 안내 (v2.3.1)</span></div>
+          <div class="notice-author">기술팀</div>
+          <div class="notice-date">2025-06-10</div>
+        </div>
+        <div class="notice-body">
+          <div class="notice-body-text">
+            <p>FLEX 전력조정기 EtherCAT 드라이버 버전 2.3.1이 출시되었습니다.</p>
+            <p><strong>주요 업데이트 내용:</strong></p>
+            <p>- 일부 마스터 PLC에서 발생하던 초기화 오류 수정<br>- 통신 응답 속도 15% 개선<br>- 알람 이력 저장 안정성 향상</p>
+            <p>드라이버는 자료실 &gt; 기술자료에서 다운로드 가능합니다. 업데이트 방법은 FLEX 매뉴얼 5장을 참조하시기 바랍니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Regular notices -->
+      <div class="notice-item">
+        <div class="notice-item-header" onclick="toggleNotice(this)">
+          <div class="notice-num">12</div>
+          <div><span class="notice-title-text">SMART MPD™ 기능 관련 기술 세미나 개최 안내</span></div>
+          <div class="notice-author">관리자</div>
+          <div class="notice-date">2025-05-15</div>
+        </div>
+        <div class="notice-body">
+          <div class="notice-body-text">
+            <p>SMART 전력조정기의 핵심 기술인 MPD(Multi-Point Detection) 기능 활용 방법을 소개하는 온라인 기술 세미나를 개최합니다.</p>
+            <p>일시: 2025년 6월 5일(목) 오후 2시 / 방식: 온라인 화상 세미나 (Zoom)</p>
+            <p>참가 신청은 온라인상담 게시판을 통해 접수해 주시기 바랍니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="notice-item">
+        <div class="notice-item-header" onclick="toggleNotice(this)">
+          <div class="notice-num">11</div>
+          <div><span class="notice-title-text">2025 스마트 제조혁신 박람회 참가 안내 (SIMTOS 2025)</span></div>
+          <div class="notice-author">관리자</div>
+          <div class="notice-date">2025-03-20</div>
+        </div>
+        <div class="notice-body">
+          <div class="notice-body-text">
+            <p>파라이엔티가 2025 SIMTOS (서울 국제 제조기술 전시회)에 참가합니다.</p>
+            <p>일시: 2025년 4월 7일(월) ~ 11일(금) / 장소: 킨텍스 (KINTEX) 제2전시장</p>
+            <p>부스에서 FLEX, SMART 등 최신 제품을 직접 체험하실 수 있습니다. 방문 사전 예약은 온라인상담으로 문의해 주세요.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="notice-item">
+        <div class="notice-item-header" onclick="toggleNotice(this)">
+          <div class="notice-num">10</div>
+          <div><span class="notice-title-text">UL 인증 갱신 완료 안내 (P-TYPE, Pll, SMART)</span></div>
+          <div class="notice-author">품질팀</div>
+          <div class="notice-date">2025-02-14</div>
+        </div>
+        <div class="notice-body">
+          <div class="notice-body-text">
+            <p>P-TYPE, Pll, SMART 전력조정기의 UL 인증이 2025년 2월 갱신 완료되었습니다.</p>
+            <p>인증 유효 기간은 2028년 2월까지이며, 관련 인증서는 자료실에서 확인하실 수 있습니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="notice-item">
+        <div class="notice-item-header" onclick="toggleNotice(this)">
+          <div class="notice-num">9</div>
+          <div><span class="notice-title-text">홈페이지 리뉴얼 안내</span></div>
+          <div class="notice-author">관리자</div>
+          <div class="notice-date">2025-01-06</div>
+        </div>
+        <div class="notice-body">
+          <div class="notice-body-text">
+            <p>파라이엔티 홈페이지가 새롭게 리뉴얼 되었습니다.</p>
+            <p>더욱 편리한 자료 검색과 제품 정보 제공을 위해 개선하였습니다. 이용에 불편하신 점이 있으시면 온라인상담으로 문의해 주세요.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="notice-item">
+        <div class="notice-item-header" onclick="toggleNotice(this)">
+          <div class="notice-num">8</div>
+          <div><span class="notice-title-text">MINI 전력조정기 신규 삼상 라인업 출시</span></div>
+          <div class="notice-author">관리자</div>
+          <div class="notice-date">2024-11-25</div>
+        </div>
+        <div class="notice-body">
+          <div class="notice-body-text">
+            <p>기존 단상 26mm 라인업에 이어 삼상 115mm MINI 전력조정기가 새롭게 출시되었습니다.</p>
+            <p>SCR 방식, 내장 CT, 파형 손실 보상 기능이 모두 탑재된 삼상 모델로, 좁은 패널 공간에서도 3상 시스템 제어가 가능합니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination">
+      <a href="#" class="page-btn">‹</a>
+      <a href="#" class="page-btn active">1</a>
+      <a href="#" class="page-btn">2</a>
+      <a href="#" class="page-btn">›</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../assets/images/logo.png" alt="Paraent"></a><p>(주)파라이엔티<br>경기도 화성시 동탄기흥로 64-14<br>TEL: 031-357-0680 · FAX: 031-357-0679<br>E-mail: paraent@paraent.com</p></div>
+      <div class="footer-col"><h5>회사소개</h5><ul><li><a href="./company-overview.html">회사개요</a></li><li><a href="./history.html">회사연혁</a></li><li><a href="./certifications.html">인증현황</a></li><li><a href="./location.html">오시는길</a></li><li><a href="./quality.html">품질혁신</a></li></ul></div>
+      <div class="footer-col"><h5>제품소개</h5><ul><li><a href="./product-pll.html">Pll 전력조정기</a></li><li><a href="./product-smart.html">SMART 전력조정기</a></li><li><a href="./product-flex.html">FLEX 전력조정기</a></li><li><a href="./product-mini.html">MINI 전력조정기</a></li><li><a href="./product-etype.html">E-TYPE 전력조정기</a></li><li><a href="./product-multi.html">MULTI 전력조정기</a></li><li><a href="./product-ptype.html">P-TYPE 전력조정기</a></li></ul></div>
+      <div class="footer-col"><h5>고객센터</h5><ul><li><a href="./resources.html">자료실</a></li><li><a href="./inquiry.html">온라인상담</a></li><li><a href="./notice.html">공지사항</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">© 2025 (주)파라이엔티. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+function toggleNotice(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+</script>
+
+<!-- FLOATING BUTTONS -->
+<div class="float-btns">
+  <a href="./inquiry.html" class="float-btn float-inquiry-btn" aria-label="문의하기">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="float-btn-label">문의</span>
+  </a>
+  <button id="scrollTopBtn" class="float-btn scroll-top-btn" aria-label="맨 위로">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+</div>
+<style>
+.float-btns{position:fixed;bottom:32px;right:32px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:9999}
+.float-btn{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,transform .2s;gap:2px}
+.float-btn svg{width:18px;height:18px;flex-shrink:0}
+.float-btn-label{font-size:9px;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;letter-spacing:0.2px;line-height:1}
+.float-btn:hover{background:rgba(0,0,0,0.9);transform:translateY(-2px)}
+.float-btn:active{transform:scale(0.92)}
+.float-inquiry-btn{background:rgba(0,102,204,0.85)}
+.float-inquiry-btn:hover{background:rgba(0,82,170,0.95)}
+.scroll-top-btn{opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .3s,transform .3s,visibility .3s,background .2s}
+.scroll-top-btn.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.scroll-top-btn:hover{transform:translateY(-2px)}
+</style>
+<script>
+(function(){var b=document.getElementById('scrollTopBtn');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>300)},{passive:true});b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})})})();
+</script>
+</body>
+</html>

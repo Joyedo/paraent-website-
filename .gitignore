@@ -1,0 +1,19 @@
+# 임시/테스트 파일
+tmp_*.html
+test-*.html
+test-*.png
+ss-*.png
+mobile-*.png
+
+# 도구 페이지 (배포 제외)
+tools/
+
+# OS 파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 에디터
+.vscode/
+*.swp
+*.swo

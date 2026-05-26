@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMART 전력조정기 — Paraent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0066cc; --primary-focus: #0071e3; --primary-on-dark: #2997ff;
+      --ink: #1d1d1f; --ink-muted-80: #333333; --ink-muted-48: #7a7a7a;
+      --hairline: #e0e0e0; --canvas: #ffffff; --canvas-parchment: #f5f5f7;
+      --surface-tile-1: #272729; --surface-tile-2: #2a2a2c; --surface-black: #000000;
+      --on-dark: #ffffff; --r-pill: 9999px; --r-lg: 18px; --r-sm: 8px; --r-md: 11px;
+      --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+      --font-text: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-text); color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 200;
+      height: 64px;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      display: flex; align-items: center;
+      padding: 0 32px;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px;
+    }
+    .nav-logo { display: flex; align-items: center; flex-shrink: 0; }
+    .nav-logo img { height: 34px; width: auto; display: block; }
+    .nav-menu { display: flex; align-items: center; }
+    .nav-item { position: relative; }
+    .nav-link {
+      display: flex; align-items: center; gap: 3px;
+      padding: 0 15px; height: 64px;
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 13px; font-weight: 400; white-space: nowrap;
+      letter-spacing: -0.12px;
+      transition: color 0.15s;
+    }
+    .nav-link:hover { color: #fff; }
+    .nav-link svg { opacity: 0.5; transition: transform 0.2s, opacity 0.15s; }
+    .nav-item:hover .nav-link svg { transform: rotate(180deg); opacity: 1; }
+    .nav-dropdown {
+      position: absolute; top: 100%; left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: rgba(22,22,24,0.98);
+      backdrop-filter: blur(24px);
+      border-radius: var(--r-md);
+      padding: 8px;
+      min-width: 200px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s 0.1s, transform 0.2s 0.1s;
+      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+    }
+    .nav-item:hover .nav-dropdown {
+      opacity: 1; pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+      transition: opacity 0.15s 0s, transform 0.15s 0s;
+    }
+    .nav-dropdown a {
+      display: block; font-size: 13px;
+      color: rgba(255,255,255,0.62);
+      padding: 10px 14px;
+      border-radius: var(--r-sm);
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+    .nav-dropdown a + a { border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-dropdown a:hover {
+      background: rgba(41,151,255,0.13);
+      color: var(--primary-on-dark);
+      box-shadow: inset 3px 0 0 var(--primary-on-dark);
+    }
+    .nav-dropdown a.active { color: var(--primary-on-dark); }
+    .nav-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .lang-btn {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      padding: 4px 7px; border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: none; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lang-btn:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    .lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); }
+    .btn-primary {
+      font-family: var(--font-text);
+      font-size: 12px; color: #fff;
+      background: var(--primary); border: none;
+      border-radius: var(--r-pill); padding: 7px 15px;
+      margin-left: 4px;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { background: var(--primary-focus); }
+    .btn-primary:active { transform: scale(0.95); }
+    .hero-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+    .btn-dl { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-text); font-size: 14px; color: rgba(255,255,255,0.82); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: var(--r-pill); padding: 11px 20px; cursor: pointer; text-decoration: none; transition: background 0.15s, border-color 0.15s, transform 0.1s; white-space: nowrap; }
+    .btn-dl:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.3); color: #fff; }
+    .btn-dl:active { transform: scale(0.95); }
+    .btn-dl-wrap{position:relative;display:inline-block}
+    .btn-dl-menu{position:absolute;top:calc(100% + 6px);left:0;background:rgba(18,18,18,0.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.15);border-radius:10px;min-width:190px;padding:5px;display:none;z-index:200}
+    .btn-dl-wrap.open .btn-dl-menu{display:block}
+    .btn-dl-item{display:flex;align-items:center;gap:8px;padding:8px 12px;color:rgba(255,255,255,0.82);font-size:13px;font-family:var(--font-text);text-decoration:none;border-radius:6px;transition:background 0.1s;white-space:nowrap}
+    .btn-dl-item:hover{background:rgba(255,255,255,0.1);color:#fff}
+    .btn-dl-label{font-size:9px;color:rgba(255,255,255,0.45);padding:4px 12px 3px;display:block;font-family:var(--font-text);letter-spacing:0.6px;border-top:1px solid rgba(255,255,255,0.08);margin-top:3px}
+    .btn-dl-label:first-child{border-top:none;margin-top:0}
+
+    .product-hero { background: var(--surface-black); padding: 100px 24px 80px; text-align: center; position: relative; overflow: hidden; }
+    .product-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,102,204,0.18) 0%, transparent 70%); }
+    .product-hero-inner { position: relative; z-index: 1; }
+    .product-tag { display: inline-block; background: rgba(41,151,255,0.15); border: 1px solid rgba(41,151,255,0.3); border-radius: var(--r-pill); padding: 6px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary-on-dark); margin-bottom: 24px; }
+    .product-hero h1 { font-family: var(--font-display); font-size: 64px; font-weight: 700; color: var(--on-dark); line-height: 1.05; margin-bottom: 16px; letter-spacing: -0.02em; }
+    .product-hero-sub { font-size: 22px; color: rgba(255,255,255,0.6); max-width: 640px; margin: 0 auto 36px; line-height: 1.5; }
+    .hero-badge-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+    .hero-badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r-pill); padding: 8px 20px; font-size: 13px; color: rgba(255,255,255,0.8); }
+
+    .tab-bar { background: #0d0d0f; border-bottom: 1px solid rgba(255,255,255,0.07); position: sticky; top: 64px; z-index: 90; padding: 12px 24px; display: flex; justify-content: center; }
+    .tab-bar-inner { display: flex; background: rgba(255,255,255,0.07); border-radius: var(--r-pill); padding: 3px; gap: 2px; }
+    .tab-btn { padding: 13px 48px; background: transparent; border: none; border-radius: var(--r-pill); color: rgba(255,255,255,0.48); font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.22s; font-family: var(--font-text); white-space: nowrap; letter-spacing: 0.01em; }
+    .tab-btn:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.05); }
+    .tab-btn.active { background: rgba(41,151,255,0.22); color: var(--primary-on-dark); font-weight: 600; box-shadow: 0 1px 6px rgba(0,0,0,0.35); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .section { padding: 80px 24px; }
+    .section-dark { background: var(--surface-tile-1); }
+    .section-dark-2 { background: var(--surface-tile-2); }
+    .section-parchment { background: var(--canvas-parchment); }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
+    .section-label-light { color: var(--primary-on-dark); }
+    .section-title { font-family: var(--font-display); font-size: 36px; font-weight: 600; color: var(--ink); line-height: 1.2; margin-bottom: 16px; }
+    .section-title-light { color: var(--on-dark); }
+    .section-body { font-size: 17px; color: var(--ink-muted-48); line-height: 1.7; max-width: 720px; }
+    .section-body-light { color: rgba(255,255,255,0.6); }
+
+    .pillar-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 40px; }
+    .pillar-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 36px 28px; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; }
+    .pillar-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--primary-on-dark), transparent); }
+    .pillar-num { font-family: var(--font-display); font-size: 48px; font-weight: 800; color: rgba(41,151,255,0.12); position: absolute; top: 16px; right: 20px; line-height: 1; }
+    .pillar-tag { display: inline-block; background: rgba(41,151,255,0.15); border: 1px solid rgba(41,151,255,0.25); border-radius: var(--r-sm); padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--primary-on-dark); margin-bottom: 14px; }
+    .pillar-card h3 { font-size: 20px; font-weight: 700; color: var(--on-dark); margin-bottom: 10px; }
+    .pillar-card p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+
+    .order-diagram { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding: 40px 0 16px; }
+    .order-seg { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .order-seg-code { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--on-dark); white-space: nowrap; padding: 0 14px 10px; border-bottom: 2.5px solid var(--primary-on-dark); text-align: center; }
+    .order-seg-arrow { color: var(--primary-on-dark); font-size: 20px; line-height: 1; margin: 8px 0 4px; }
+    .order-seg-num { font-size: 20px; color: var(--primary-on-dark); }
+    .order-dash { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.4); padding: 0 2px 10px; align-self: flex-start; flex-shrink: 0; }
+    .order-steps { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 32px; }
+    .order-step { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--r-md); padding: 20px; }
+    .order-step-num { font-size: 13px; font-weight: 700; color: var(--primary-on-dark); margin-bottom: 6px; }
+    .order-step-title { font-size: 14px; font-weight: 600; color: var(--on-dark); margin-bottom: 8px; }
+    .order-step-opts { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+
+    .spec-table-wrap { overflow-x: auto; margin-top: 40px; border-radius: var(--r-lg); border: 1px solid rgba(255,255,255,0.08); }
+    .spec-table { width: 100%; border-collapse: collapse; }
+    .spec-table th { background: rgba(255,255,255,0.06); padding: 14px 20px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .spec-table td { padding: 14px 20px; font-size: 14px; color: rgba(255,255,255,0.8); border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: top; }
+    .spec-table tr:last-child td { border-bottom: none; }
+    .spec-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+    .related-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 40px; }
+    .related-card { background: var(--canvas); border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--hairline); text-decoration: none; transition: box-shadow 0.2s, transform 0.2s; display: flex; flex-direction: column; }
+    .related-card:hover { box-shadow: rgba(0,0,0,0.12) 0 8px 24px; transform: translateY(-2px); }
+    .related-card-img { width: 100%; aspect-ratio: 3/4; background: var(--surface-black); overflow: hidden; }
+    .related-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+    .related-card:hover .related-card-img img { transform: scale(1.03); }
+    .related-card-body { padding: 20px; }
+    .related-card h4 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+    .related-card p { font-size: 13px; color: var(--ink-muted-48); }
+    .related-arrow { color: var(--primary); font-size: 18px; margin-top: 12px; display: block; }
+
+    footer { background: var(--canvas-parchment); padding: 60px 24px 40px; border-top: 1px solid var(--hairline); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand p { font-size: 13px; color: var(--ink-muted-48); line-height: 1.8; margin-top: 12px; }
+    .footer-logo { display: block; margin-bottom: 0; } .footer-logo img { height: 32px; width: auto; display: block; }
+    .footer-col h5 { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li a { font-size: 13px; color: var(--ink-muted-48); text-decoration: none; }
+    .footer-col ul li a:hover { color: var(--primary); }
+    .footer-bottom { border-top: 1px solid var(--hairline); padding-top: 20px; font-size: 12px; color: var(--ink-muted-48); }
+
+    .graph-box {
+      border: 1.5px solid #c8d4ea;
+      border-radius: 8px;
+      background: #fff;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .graph-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+    .graph-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    /* 파형 두 박스: 동일 비율(3:2)로 높이 고정 */
+    .wave-box {
+      aspect-ratio: 3 / 2;
+    }
+    .wave-box .graph-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    @media (max-width: 768px) {
+      .product-hero h1 { font-size: 40px; }
+      .pillar-grid, .order-steps, .related-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .tab-bar { padding: 10px 16px; }
+      .tab-btn { padding: 11px 28px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo"><img src="../assets/images/logo-white.png" alt="Paraent"></a>
+    <div class="nav-menu">
+      <div class="nav-item"><a href="#" class="nav-link">회사소개<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./company-overview.html">회사개요</a><a href="./history.html">회사연혁</a><a href="./certifications.html">인증현황</a><a href="./location.html">오시는길</a><a href="./quality.html">품질혁신</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">제품소개<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./product-pll.html">Pll 전력조정기</a><a href="./product-smart.html" class="active">SMART 전력조정기</a><a href="./product-flex.html">FLEX 전력조정기</a><a href="./product-mini.html">MINI 전력조정기</a><a href="./product-etype.html">E-TYPE 전력조정기</a><a href="./product-multi.html">MULTI 전력조정기</a><a href="./product-ptype.html">P-TYPE 전력조정기</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">자료실<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./resources.html">기술자료</a><a href="./resources.html">메뉴얼</a><a href="./resources.html">캐드도면</a><a href="./resources.html">카다로그</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">고객센터<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./inquiry.html">온라인상담</a><a href="./notice.html">공지사항</a></div></div>
+    </div>
+    <div class="nav-right"><button class="lang-btn">KO</button><button class="lang-btn">EN</button><button class="lang-btn">中</button><a href="./inquiry.html" class="btn-primary">온라인 문의</a></div>
+  </div>
+</nav>
+
+<section class="product-hero">
+  <div class="product-hero-inner">
+    <div class="product-tag">Flagship · 특허 보유</div>
+    <h1>SMART</h1>
+    <p class="product-hero-sub">Nothing is smarter than SMART<br>스마트 MPD · PLF · 컬러 LCD · 복합 제어</p>
+    <div class="hero-actions">
+      <a href="./inquiry.html" class="btn-primary" style="font-size:15px;padding:12px 28px;">제품 문의하기</a>
+      <a href="../files/manual/manual-smart.pdf" download class="btn-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>메뉴얼 다운로드</a>
+      <div class="btn-dl-wrap">
+        <button class="btn-dl btn-dl-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>캐드 다운로드<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="btn-dl-menu">
+          <a href="../files/cad/SMART-10A-치수도면.dwg" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>10A</a>
+          <a href="../files/cad/SMART-70A-치수도면.dwg" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>70A</a>
+          <a href="../files/cad/SMART-250A-치수도면.dwg" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>250A</a>
+          <a href="../files/cad/SMART-400A-치수도면.dwg" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>400A</a>
+        </div>
+      </div>
+      <a href="../files/catalog/catalog-general.pdf" download class="btn-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>카다로그 다운로드</a>
+    </div>
+    <div class="hero-badge-row">
+      <span class="hero-badge">SMART MPD 특허</span>
+      <span class="hero-badge">PLF 특허 #10-1405243</span>
+      <span class="hero-badge">컬러 LCD 디스플레이</span>
+      <span class="hero-badge">RS-485 · Modbus-RTU</span>
+    </div>
+  </div>
+</section>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <button class="tab-btn active" data-tab="tab-features">특장점</button>
+    <button class="tab-btn" data-tab="tab-order">주문형식</button>
+    <button class="tab-btn" data-tab="tab-spec">사양</button>
+  </div>
+</div>
+
+<!-- TAB: 특장점 -->
+<div id="tab-features" class="tab-panel active">
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label section-label-light">특장점</div>
+      <h2 class="section-title section-title-light">4가지 SMART 핵심 기술</h2>
+      <p class="section-body section-body-light">파라이엔티의 모든 전력조정기 기술이 집약된 차세대 플래그십 전력조정기</p>
+      <div class="pillar-grid">
+        <div class="pillar-card">
+          <span class="pillar-num">01</span>
+          <span class="pillar-tag">특허 보유</span>
+          <h3>SMART MPD</h3>
+          <p>최대전력분산제어 기능으로 다수의 전력조정기를 제로크로싱으로 제어 시 각 전력조정기 간의 전력분배로 메인 수전의 전력을 평활합니다. 역률 개선 및 피크 전력을 감소시킵니다.</p>
+        </div>
+        <div class="pillar-card">
+          <span class="pillar-num">02</span>
+          <span class="pillar-tag">특허 #10-1405243</span>
+          <h3>SMART PLF</h3>
+          <p>한 대의 전력조정기에 여러 개의 병렬 부하 연결 시, 부분적인 부하의 단선을 검출해 내는 기능입니다. 오토튜닝을 통해 부하 특성을 파악하여 정확한 감지를 실현합니다.</p>
+        </div>
+        <div class="pillar-card">
+          <span class="pillar-num">03</span>
+          <span class="pillar-tag">컬러 LCD · 18키 패드</span>
+          <h3>SMART DISPLAY (PSD)</h3>
+          <p>컬러 LCD와 18KEYPAD 적용으로 사용자 인터페이스를 개선했습니다. 자가진단, 테스트 모드, 용이한 파라미터 설정이 가능하며, 본체 부착 및 분리 장착이 모두 가능합니다.</p>
+        </div>
+        <div class="pillar-card">
+          <span class="pillar-num">04</span>
+          <span class="pillar-tag">복합 제어</span>
+          <h3>SMART COMBINATION</h3>
+          <p>하나의 몸체에 최대 단상 3대의 전력조정기를 탑재하여 비용과 공간을 절약합니다. 단상, 삼상 등 다양한 결선 방식에 대응하며 1P1L, 1P2L, 1P3L, 3P3L 등을 지원합니다.</p>
+        </div>
+      </div>
+      <div style="margin-top:32px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r-lg);padding:28px;">
+        <h3 style="font-size:16px;font-weight:600;color:var(--on-dark);margin-bottom:12px;">RS-485 · Modbus-RTU 통신</h3>
+        <p style="font-size:14px;color:rgba(255,255,255,0.55);line-height:1.7;">최대 32대까지 멀티드롭 네트워크 구성 가능. 최대 115,200bps 통신 속도로 PLC, SCADA, HMI와 표준 연동됩니다. 32Bit CPU 탑재로 고속·고정밀 연산을 처리합니다.</p>
+      </div>
+    </div>
+  </section>
+  <!-- SMART MPD + PLF 다이어그램 — 흰 배경 섹션 -->
+  <section class="section" style="background:#ffffff;border-top:1px solid var(--hairline);padding-top:48px;padding-bottom:48px;">
+    <div class="container">
+      <!-- SMART MPD -->
+      <div>
+        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART MPD <span style="font-size:13px;font-weight:400;color:#555;">(Max Power Distribution, 최대전력분산제어) 기능</span></h3>
+        <p style="font-size:13px;font-weight:600;color:#1a3f8f;margin:10px 0 4px;">1) 역률개선 효과</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 최대전력 분산제어는 다수의 전력조정기를 제로크로싱으로 제어 시 각 전력조정기 간의 전력분배로 메인 수전의 전력을 평활하는 기능입니다.</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:20px;">- 일반 제로크로싱 제어방식과 전력분산 제어 시 메인 수전의 파형은 다음의 그림과 같이 나타낼 수 있습니다.</p>
+        <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:16px;align-items:stretch;">
+          <div>
+            <img src="../images/smart-mpd-main.png" alt="SMART MPD 다이어그램" style="width:100%;height:auto;display:block;">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;height:100%;">
+            <div class="graph-box" style="flex:1;min-height:0;padding:10px;">
+              <img src="../images/smart-mpd-wave-new.png" alt="일반 제로크로싱 제어 시" style="width:100%;height:100%;object-fit:contain;display:block;">
+            </div>
+            <div class="graph-box" style="flex:1;min-height:0;padding:10px;">
+              <img src="../images/smart-mpd-wave-new2.png" alt="전력분산제어 시" style="width:100%;height:100%;object-fit:contain;display:block;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- SMART PLF -->
+      <div style="margin-top:48px;">
+        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART PLF <span style="font-size:13px;font-weight:400;color:#555;">(Partial Load Failure, 부분부하단선 감지) 기능</span></h3>
+        <p style="font-size:13px;color:var(--ink-muted-48);margin-bottom:8px;">(특허 제10-1405243호 부분부하단선 검출기를 구비한 전력조정기 및 이의 부분부하단선 검출 방법)</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 한 대의 전력조정기에 여러 개의 병렬 부하 연결 시, 부분적인 부하의 단선을 검출해 내는 기능</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:20px;">- 스마트 전력 조정기는 오토튜닝을 통해 부하 특성 패턴을 획득하여 정확한 부분부하 단선 검출을 실현 하였습니다.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+          <div class="graph-box" style="padding:0;overflow:hidden;aspect-ratio:4/5;">
+            <img src="../images/smart-plf-new1.png" alt="단상 병렬연결 시" style="width:100%;height:100%;object-fit:contain;background:#fff;display:block;">
+          </div>
+          <div class="graph-box" style="padding:0;overflow:hidden;aspect-ratio:4/5;">
+            <img src="../images/smart-plf-new2.png" alt="삼상 델타 병렬연결 시" style="width:100%;height:100%;object-fit:contain;background:#fff;display:block;">
+          </div>
+          <div class="graph-box" style="padding:0;overflow:hidden;aspect-ratio:4/5;">
+            <img src="../images/smart-plf-new3.png" alt="삼상 와이 병렬연결 시" style="width:100%;height:100%;object-fit:contain;background:#fff;display:block;">
+          </div>
+        </div>
+      </div>
+      <!-- SMART DISPLAY (PSD) -->
+      <div style="margin-top:28px;">
+        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART DISPLAY <span style="font-size:13px;font-weight:400;color:#555;">(PSD, PARA SMART DISPLAY) 기능</span></h3>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 컬러 LCD와 18KEYPAD 적용으로 사용자 인터페이스 개선</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 전력조정기의 자가진단 기능탑재, 테스트 모드실행 및 쉬운 파라미터 설정을 통해 고객의 편의성 제고</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:20px;">- 또한, PSD (PARA SMART DISPLAY)가 본체와 분리 판넬 외부에 장착이 가능하여 시인성 확보</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
+          <div class="graph-box" style="flex-direction:column;padding:12px 12px 10px;overflow:hidden;aspect-ratio:4/3;">
+            <img src="../images/smart-psd-attached.png" alt="PSD 본체 부착 시" style="width:100%;flex:1;min-height:0;object-fit:contain;display:block;">
+            <p style="text-align:center;font-size:12px;font-weight:600;color:#1a3f8f;margin-top:8px;flex-shrink:0;">PSD 본체 부착 시</p>
+          </div>
+          <div class="graph-box" style="flex-direction:column;padding:12px 12px 10px;overflow:hidden;aspect-ratio:4/3;">
+            <img src="../images/smart-psd-detached.png" alt="PSD 분리 시" style="width:100%;flex:1;min-height:0;object-fit:contain;display:block;">
+            <p style="text-align:center;font-size:12px;font-weight:600;color:#1a3f8f;margin-top:8px;flex-shrink:0;">PSD 분리 시</p>
+          </div>
+          <div class="graph-box" style="flex-direction:column;padding:12px 12px 10px;overflow:hidden;aspect-ratio:4/3;">
+            <img src="../images/smart-psd-unit.png" alt="PSD (PARA SMART DISPLAY)" style="width:100%;flex:1;min-height:0;object-fit:contain;display:block;">
+            <p style="text-align:center;font-size:12px;font-weight:600;color:#1a3f8f;margin-top:8px;flex-shrink:0;">PSD (PARA SMART DISPLAY)</p>
+          </div>
+        </div>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 전압/전류/전력/저항(온도:선택시)을 표시하고 각 상의 파라메터를 순환함으로써 사용자의 편의성을 제고</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 입력 및 출력량을 그래프로 나타냄으로써 현시성을 증가 시킴</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 설정 유니트의 탈.부착이 가능하며, 유니트를 탈착하여 패널의 전면부에 설치 시, 전류계 및 전압계를 별도로 부착하지 않아도 되는 장점이 있음.</p>
+      </div>
+      <!-- SMART COMBINATION — 결선 구성표 -->
+      <div style="margin-top:28px;">
+        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:8px;">SMART COMBINATION</h3>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:20px;">- 비용 및 공간 절약을 위해 하나의 몸체에 최대 단상 3대의 전력조정기를 탑재하여 각각의 입력신호에 따라 제어가 되며 모든 히터결선에 사용 할 수 있도록 설계.</p>
+        <div style="border:1.5px solid #c8d4ea;border-radius:8px;overflow:hidden;">
+          <!-- Row 1 -->
+          <div style="display:grid;grid-template-columns:200px 1fr 1fr;border-bottom:1px solid #c8d4ea;">
+            <div style="background:#f8f9fb;display:flex;align-items:center;justify-content:center;min-height:120px;border-right:1px solid #c8d4ea;padding:8px;">
+              <img src="../images/smart-combo-1.jpg" alt="단상 1대" style="width:100%;height:100%;object-fit:contain;display:block;">
+            </div>
+            <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
+              <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 단상 1대 사용 시</p>
+            </div>
+            <div style="padding:16px 20px;display:flex;align-items:center;">
+            </div>
+          </div>
+          <!-- Row 2 -->
+          <div style="display:grid;grid-template-columns:200px 1fr 1fr;border-bottom:1px solid #c8d4ea;">
+            <div style="background:#f8f9fb;display:flex;align-items:center;justify-content:center;min-height:140px;border-right:1px solid #c8d4ea;padding:8px;">
+              <img src="../images/smart-combo-2.jpg" alt="단상 2대" style="width:100%;height:100%;object-fit:contain;display:block;">
+            </div>
+            <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
+              <div>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 단상 2대 사용 시</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 두상을 제어하여 단상 히터1개 사용 시</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 삼상 2LEG 사용 시(제로크로싱만 사용가능)</p>
+              </div>
+            </div>
+            <div style="padding:16px 20px;display:flex;align-items:center;">
+              <div>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 안정성 향상</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 경제성 향상</p>
+              </div>
+            </div>
+          </div>
+          <!-- Row 3 -->
+          <div style="display:grid;grid-template-columns:200px 1fr 1fr;">
+            <div style="background:#f8f9fb;display:flex;align-items:center;justify-content:center;min-height:160px;border-right:1px solid #c8d4ea;padding:8px;">
+              <img src="../images/smart-combo-3.jpg" alt="단상 3대" style="width:100%;height:100%;object-fit:contain;display:block;">
+            </div>
+            <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
+              <div>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 단상 3대 사용 시</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 삼상 4선식 사용 시</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 삼상 3LEG 사용 시(스타 및 델타 결선)</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- OPEN DELTA 결선 시</p>
+              </div>
+            </div>
+            <div style="padding:16px 20px;display:flex;align-items:center;">
+              <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 입력신호 각각 입수 또는 1개의 입력신호로 3대 제어 가능</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- SMART COMBINATION — 알람 기능 -->
+      <div style="margin-top:28px;">
+        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:12px;">SMART COMBINATION</h3>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 각각의 알람을 사용자의 선택에 따라 3개의 릴레이 중 택일하여 신호 발생</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 알람 발생 시, 출력을 차단여부 고객이 선택</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 펜의 수명연장을 위해 고객이 지정하는 방열판의 온도에 따라 펜 구동</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:8px;">- 방열판 과열 방지를 위해 고객이 원하는 온도에서 경고 및 알람 발생 지정</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 알람의 종류</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.85;padding-left:16px;">① 과전류 &nbsp;② 휴즈 단선 &nbsp;③ 히터 단선 &nbsp;④ 방열판 과열 &nbsp;⑤ SCR 소자소손 &nbsp;⑥ U.L &nbsp;⑦ 메인전원 차단 알람 &nbsp;⑧ FAN고장 알람 &nbsp;⑨ 주파수Noise 알람 &nbsp;⑩ PLF(부분부하단선 알람)</p>
+      </div>
+      <!-- SMART 통신기능 -->
+      <div style="margin-top:28px;">
+        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:12px;">SMART 통신기능</h3>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 통신방식 : RS-485 2 WIRE 반이중방식</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 통신속도 : 4800, 9600, 19200, 38400, 57600, 최대 115200bps</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 최대 접속가능 대수 : 32대</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 프로토콜 : Modbus-RTU Protocol</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 통신을 통한 READ &amp; WRITE 기능 실행</p>
+        <p style="font-size:14px;color:var(--ink);line-height:1.7;">- USER INTERFACE 제공</p>
+      </div>
+      <!-- SMART CPU / 자가진단 / 테스트 3열 표 -->
+      <div style="margin-top:28px;">
+        <div style="border:1.5px solid #c8d4ea;border-radius:8px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);">
+            <!-- 헤더 행 -->
+            <div style="padding:18px 20px;text-align:center;border-right:1px solid #c8d4ea;border-bottom:1px solid #c8d4ea;">
+              <span style="font-size:15px;font-weight:700;color:#1a3f8f;">SMART CPU</span>
+            </div>
+            <div style="padding:18px 20px;text-align:center;border-right:1px solid #c8d4ea;border-bottom:1px solid #c8d4ea;">
+              <span style="font-size:15px;font-weight:700;color:#1a3f8f;">SMART 자가진단 기능</span>
+            </div>
+            <div style="padding:18px 20px;text-align:center;border-bottom:1px solid #c8d4ea;">
+              <span style="font-size:15px;font-weight:700;color:#1a3f8f;">SMART 테스트 기능</span>
+            </div>
+            <!-- 내용 행 -->
+            <div style="padding:20px;border-right:1px solid #c8d4ea;">
+              <p style="font-size:14px;color:var(--ink);line-height:1.7;">강력한 32Bit CPU(12Bit ADC)를 탑재하여 연산 및 반응속도를 높이고 최상의 제어 성능유지</p>
+            </div>
+            <div style="padding:20px;border-right:1px solid #c8d4ea;">
+              <p style="font-size:14px;color:var(--ink);line-height:1.7;">기기에 전원 및 부하가 연결된 상태에서 현재 설정된 각종 파라미터 값과 알람 및 신호선 결선상태를 확인할 수 있는 기능 탑재</p>
+            </div>
+            <div style="padding:20px;">
+              <p style="font-size:14px;color:var(--ink);line-height:1.7;">실부하로 테스트하기 어려운 경우, 작은 용량의 부하를 결선하여 사용자가 임의로 출력을 내보내면서 기기의 출력상태를 점검할 수 있는 테스트 기능 탑재</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section section-parchment">
+    <div class="container">
+      <div class="section-label">관련 제품</div>
+      <h2 class="section-title">함께 보면 좋은 제품</h2>
+      <div class="related-grid">
+        <a href="./product-ptype.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/ptype.png" alt="P-TYPE 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>P-TYPE 전력조정기</h4><p>디지털 전력조정기의 Steady Seller</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-pll.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/pll.png" alt="Pll 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>Pll 전력조정기</h4><p>Free Voltage 지원, P-TYPE 계승 차세대 제품</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-flex.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/flex.png" alt="FLEX 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>FLEX 전력조정기</h4><p>EtherCAT 지원, 최첨단 산업 네트워크 연동</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-mini.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/mini.png" alt="MINI 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>MINI 전력조정기</h4><p>초소형 26mm 폭, SCR 방식의 고신뢰성 제품</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-etype.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/etype.png" alt="E-TYPE 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>E-TYPE 전력조정기</h4><p>경제적이고 실용적인 올인원 전력조정기</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-multi.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/multi.png" alt="MULTI 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>MULTI 전력조정기</h4><p>Three in One — 공간절약 · 경제성 겸비</p><span class="related-arrow">→</span></div></a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TAB: 주문형식 -->
+<div id="tab-order" class="tab-panel">
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label section-label-light">주문형식</div>
+      <h2 class="section-title section-title-light">SMART 주문 코드 구성</h2>
+      <p class="section-body section-body-light">SMC(제어부) + PM(파워 모듈) 구조로 구성됩니다.</p>
+      <div class="order-diagram">
+        <div class="order-seg"><div class="order-seg-code">SMC</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">①</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">PA/PI/PV/PW/ZC/PZ</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">②</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">결선방식</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">옵션</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">④</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">PM</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑤</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">전압</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑥</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">전류</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑦</div></div>
+      </div>
+      <div class="order-steps">
+        <div class="order-step">
+          <div class="order-step-num">SMC — 제어부</div>
+          <div class="order-step-title">제어 방식</div>
+          <div class="order-step-opts">PA — 위상각 제어 (P.A-N)<br>PI — 전류 피드백 (P.A-I)<br>PV — 전압 피드백 (P.A-V)<br>PW — 전력 피드백 (P.A-W)<br>ZC — 제로크로싱 제어 (ZCS)<br>PZ — 혼합 제어 (PZM)<br>※ 기본값: PA (위상각 제어)</div>
+        </div>
+        <div class="order-step">
+          <div class="order-step-num">결선방식</div>
+          <div class="order-step-title">전기 결선 구성</div>
+          <div class="order-step-opts">1P1L / 1P2L / 1P3L<br>2P2L / 3P2L<br>3P3L / 3P4L / 3P6L</div>
+        </div>
+        <div class="order-step">
+          <div class="order-step-num">옵션</div>
+          <div class="order-step-title">추가 기능 선택</div>
+          <div class="order-step-opts">C — 통신 기능<br>S — PSD 분리형 (D-SUB 케이블 5M)<br>MPD — 최대전력분산 기능<br>PSD2 — PSD-2000<br>1R — 전송출력 1채널<br>3R — 전송출력 3채널</div>
+        </div>
+        <div class="order-step">
+          <div class="order-step-num">PM — 파워 모듈</div>
+          <div class="order-step-title">정격전압 · 정격전류</div>
+          <div class="order-step-opts">전압: 1(110V) / 2(220V) / 3(380V) / 4(440V) / 6(660V)<br>전류: 10A ~ 2500A 중 선택</div>
+        </div>
+      </div>
+      <div style="margin-top:48px;">
+        <div class="section-label section-label-light">구성 개요</div>
+        <h3 style="font-size:20px;font-weight:700;color:var(--on-dark);margin-bottom:20px;">SMC + PM + PSD 모듈 구성</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:40px;">
+          <div style="background:rgba(41,151,255,0.08);border:1px solid rgba(41,151,255,0.25);border-radius:var(--r-lg);padding:24px;text-align:center;">
+            <div style="font-size:28px;margin-bottom:12px;">🖥️</div>
+            <div style="font-size:15px;font-weight:700;color:var(--on-dark);margin-bottom:6px;">SMC</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);">스마트 메인 컨트롤러<br>32Bit CPU · 12Bit ADC</div>
+          </div>
+          <div style="background:rgba(41,151,255,0.08);border:1px solid rgba(41,151,255,0.25);border-radius:var(--r-lg);padding:24px;text-align:center;">
+            <div style="font-size:28px;margin-bottom:12px;">⚡</div>
+            <div style="font-size:15px;font-weight:700;color:var(--on-dark);margin-bottom:6px;">PM</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);">파워 모듈<br>10A ~ 2500A</div>
+          </div>
+          <div style="background:rgba(41,151,255,0.08);border:1px solid rgba(41,151,255,0.25);border-radius:var(--r-lg);padding:24px;text-align:center;">
+            <div style="font-size:28px;margin-bottom:12px;">📟</div>
+            <div style="font-size:15px;font-weight:700;color:var(--on-dark);margin-bottom:6px;">PSD</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);">컬러 LCD 디스플레이<br>18키 패드</div>
+          </div>
+        </div>
+        <div class="section-label section-label-light">PSD-2000 사양</div>
+        <h3 style="font-size:20px;font-weight:700;color:var(--on-dark);margin-bottom:20px;">PSD-2000 디스플레이 외형 및 사양</h3>
+        <div style="overflow-x:auto;border-radius:var(--r-lg);border:1px solid rgba(255,255,255,0.08);margin-bottom:16px;">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead><tr style="background:rgba(255,255,255,0.06);">
+              <th style="padding:14px 20px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);text-align:left;border-bottom:1px solid rgba(255,255,255,0.08);">항목</th>
+              <th style="padding:14px 20px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);text-align:left;border-bottom:1px solid rgba(255,255,255,0.08);">사양</th>
+            </tr></thead>
+            <tbody>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.05);">화면 해상도</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);border-bottom:1px solid rgba(255,255,255,0.05);">800 × 480</td></tr>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.05);">밝기 · 명암비</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);border-bottom:1px solid rgba(255,255,255,0.05);">350 cd/m² · 500:1</td></tr>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.05);">백라이트</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);border-bottom:1px solid rgba(255,255,255,0.05);">LED · 수명 30,000Hrs 이상</td></tr>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.05);">색상</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);border-bottom:1px solid rgba(255,255,255,0.05);">16.7M 컬러</td></tr>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.05);">터치 방식</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);border-bottom:1px solid rgba(255,255,255,0.05);">4선식 저항막 방식</td></tr>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.05);">메모리</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);border-bottom:1px solid rgba(255,255,255,0.05);">Flash 128M · RAM 128M</td></tr>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.05);">USB / Ethernet</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);border-bottom:1px solid rgba(255,255,255,0.05);">USB 2.0 × 1 · 10/100BASE-T × 1</td></tr>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.05);">COM 포트</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);border-bottom:1px solid rgba(255,255,255,0.05);">COM1: RS-232 · COM2: RS-485 2W/4W · COM3: RS-485 2W</td></tr>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.05);">제어전원</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);border-bottom:1px solid rgba(255,255,255,0.05);">DC 24V ±20% · 소비전류 350mA</td></tr>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.05);">동작 온도 · 습도</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);border-bottom:1px solid rgba(255,255,255,0.05);">0 ~ 50℃ · 10 ~ 90%RH (결로 없을 것)</td></tr>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.05);">방진 · 방수</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);border-bottom:1px solid rgba(255,255,255,0.05);">전면 패널 NEMA4 / IP65</td></tr>
+              <tr><td style="padding:13px 20px;font-size:13px;color:rgba(255,255,255,0.65);">외형크기 (W×H×D)</td><td style="padding:13px 20px;font-size:14px;color:rgba(255,255,255,0.85);">200.3 × 146.3 × 34.0 mm · 패널 컷아웃 192 × 138 mm</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:12px;color:rgba(255,255,255,0.3);">* SMC · PM 외형크기는 전류 용량별로 상이합니다. 상세 치수는 카탈로그를 참조하십시오.</p>
+        <div style="margin-top:40px;background:#ffffff;border-radius:var(--r-lg);padding:32px;text-align:center;">
+          <img src="../assets/images/psd-2000-display.jpg" alt="PSD-2000 와이드 디스플레이 화면 구성" style="max-width:100%;height:auto;display:block;margin:0 auto;">
+        </div>
+        <!-- PSD-2000 Detailed Spec Table -->
+        <div style="margin-top:40px;">
+          <div class="section-label section-label-light">PSD-2000 상세 사양</div>
+          <h3 style="font-size:20px;font-weight:700;color:var(--on-dark);margin-bottom:24px;">PSD-2000 Detailed Specification</h3>
+          <div style="overflow-x:auto;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:640px;">
+              <!-- Left Table -->
+              <div style="border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);overflow:hidden;">
+                <table style="width:100%;border-collapse:collapse;">
+                  <tbody>
+                    <tr>
+                      <td rowspan="6" style="background:rgba(41,151,255,0.2);color:#2997ff;font-weight:700;font-size:13px;text-align:center;padding:14px 10px;border-right:1px solid rgba(255,255,255,0.08);vertical-align:middle;width:90px;letter-spacing:0.02em;">Display</td>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);width:38%;">Resolution</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">800 X 480</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Brightness (cd/m²)</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">350</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Contrast Ratio</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">500:1</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Backlight Type</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">LED</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Backlight Life Time</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">&gt;30,000 Hrs</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Colors</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">16.7M</td>
+                    </tr>
+                    <tr>
+                      <td rowspan="2" style="background:rgba(41,151,255,0.2);color:#2997ff;font-weight:700;font-size:13px;text-align:center;padding:14px 10px;border-right:1px solid rgba(255,255,255,0.08);vertical-align:middle;border-top:1px solid rgba(255,255,255,0.1);">Touch Panel</td>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Type</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">4 Wires resistive type</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Accuracy</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">Active Area Length (X) ±2%, Width (Y) ±2%</td>
+                    </tr>
+                    <tr>
+                      <td rowspan="2" style="background:rgba(41,151,255,0.2);color:#2997ff;font-weight:700;font-size:13px;text-align:center;padding:14px 10px;border-right:1px solid rgba(255,255,255,0.08);vertical-align:middle;border-top:1px solid rgba(255,255,255,0.1);">Memory</td>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Flash</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">128M</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">RAM</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">128M</td>
+                    </tr>
+                    <tr>
+                      <td rowspan="3" style="background:rgba(41,151,255,0.2);color:#2997ff;font-weight:700;font-size:13px;text-align:center;padding:14px 10px;border-right:1px solid rgba(255,255,255,0.08);vertical-align:middle;border-top:1px solid rgba(255,255,255,0.1);">I/O Ports</td>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">USB Host</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">USB 2.0 ×1</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Ethernet</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">10/100 BASE-T ×1</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">COM Port</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);line-height:1.7;">COM1: RS232<br>COM2: RS485 2W/4W<br>COM3: RS485 2W</td>
+                    </tr>
+                    <tr>
+                      <td style="background:rgba(41,151,255,0.2);color:#2997ff;font-weight:700;font-size:13px;text-align:center;padding:14px 10px;border-right:1px solid rgba(255,255,255,0.08);border-top:1px solid rgba(255,255,255,0.1);">RTC</td>
+                      <td colspan="2" style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);">Built in</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Right Table -->
+              <div style="border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);overflow:hidden;">
+                <table style="width:100%;border-collapse:collapse;">
+                  <tbody>
+                    <tr>
+                      <td rowspan="6" style="background:rgba(41,151,255,0.2);color:#2997ff;font-weight:700;font-size:13px;text-align:center;padding:14px 10px;border-right:1px solid rgba(255,255,255,0.08);vertical-align:middle;width:90px;">Power</td>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);width:38%;">Control Power</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">24 ±20% VDC</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Power Isolation</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">Built in</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Power Consumption</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">350mA @ 24VDC</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Voltage Resistance</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">500VAC (Min.)</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Isolation Resistance</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">Exceed 50MΩ at 500VDC</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Vibration Endurance</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">10 to 25Hz (X,Y,Z direction 2G 30Min.)</td>
+                    </tr>
+                    <tr>
+                      <td rowspan="6" style="background:rgba(41,151,255,0.2);color:#2997ff;font-weight:700;font-size:13px;text-align:center;padding:14px 10px;border-right:1px solid rgba(255,255,255,0.08);vertical-align:middle;border-top:1px solid rgba(255,255,255,0.1);line-height:1.4;">Physical<br>Dimension</td>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">PCB Coating</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">Yes</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Enclosure</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">Plastic</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Dimension</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">(W × H × D): 200.3 × 146.3 × 34.0 mm</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Panel Cutout</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">192 × 138 mm</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Weight</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">Approx. 0.6 Kgs</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Mount</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">Panel Mount</td>
+                    </tr>
+                    <tr>
+                      <td rowspan="4" style="background:rgba(41,151,255,0.2);color:#2997ff;font-weight:700;font-size:13px;text-align:center;padding:14px 10px;border-right:1px solid rgba(255,255,255,0.08);vertical-align:middle;border-top:1px solid rgba(255,255,255,0.1);">Environment</td>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Protection Structure</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">NEMA4 / IP65 Compliant Front Panel</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Storage Temp</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">-20°C ~ 60°C</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);">Operating Temp</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);border-bottom:1px solid rgba(255,255,255,0.06);">0°C ~ 50°C</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.03);border-right:1px solid rgba(255,255,255,0.06);">Relative Humidity</td>
+                      <td style="padding:11px 14px;font-size:13px;color:rgba(255,255,255,0.88);">10% ~ 90% (Non condensing)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:48px;">
+          <div class="section-label section-label-light">외형크기</div>
+          <h3 style="font-size:20px;font-weight:700;color:var(--on-dark);margin-bottom:24px;">PSD-2000 외형크기</h3>
+        </div>
+        <div style="background:#ffffff;border-radius:var(--r-lg);padding:32px;text-align:center;">
+          <img src="../assets/images/psd-2000-drawing.jpg" alt="PSD-2000 외형 치수 도면" style="max-width:100%;height:auto;display:block;margin:0 auto;">
+        </div>
+        <div style="margin-top:16px;border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);overflow:hidden;">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr style="background:rgba(41,151,255,0.2);">
+                <th style="padding:14px 20px;font-size:13px;font-weight:700;color:#2997ff;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">Type</th>
+                <th style="padding:14px 20px;font-size:13px;font-weight:700;color:#2997ff;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">W</th>
+                <th style="padding:14px 20px;font-size:13px;font-weight:700;color:#2997ff;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">H</th>
+                <th style="padding:14px 20px;font-size:13px;font-weight:700;color:#2997ff;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">D</th>
+                <th style="padding:14px 20px;font-size:13px;font-weight:700;color:#2997ff;text-align:center;">Remark</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:14px 20px;font-size:14px;color:rgba(255,255,255,0.88);text-align:center;border-right:1px solid rgba(255,255,255,0.06);">PSD-2000</td>
+                <td style="padding:14px 20px;font-size:14px;color:rgba(255,255,255,0.88);text-align:center;border-right:1px solid rgba(255,255,255,0.06);">200.3</td>
+                <td style="padding:14px 20px;font-size:14px;color:rgba(255,255,255,0.88);text-align:center;border-right:1px solid rgba(255,255,255,0.06);">146.3</td>
+                <td style="padding:14px 20px;font-size:14px;color:rgba(255,255,255,0.88);text-align:center;border-right:1px solid rgba(255,255,255,0.06);">37</td>
+                <td style="padding:14px 20px;font-size:14px;color:rgba(255,255,255,0.88);text-align:center;"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TAB: 사양 -->
+<div id="tab-spec" class="tab-panel">
+  <section class="section section-dark-2">
+    <div class="container">
+      <div class="section-label section-label-light">사양</div>
+      <h2 class="section-title section-title-light">SMART 제품 사양</h2>
+      <div class="spec-table-wrap">
+        <table class="spec-table">
+          <thead><tr><th>항목</th><th>사양</th></tr></thead>
+          <tbody>
+            <tr><td>사용전압</td><td>110V / 220V / 380V / 440V (최소 50V, 최대 500V)</td></tr>
+            <tr><td>허용전압 변동범위</td><td>정격전압의 ±10%</td></tr>
+            <tr><td>정격전류</td><td>10A ~ 2500A</td></tr>
+            <tr><td>정격 주파수</td><td>50/60Hz (자동선택)</td></tr>
+            <tr><td>최소부하전류</td><td>1A</td></tr>
+            <tr><td>출력범위</td><td>위상각 제어 / 제로크로싱 제어: 0 ~ 99.8%</td></tr>
+            <tr><td>제어전원</td><td>DC 24V</td></tr>
+            <tr><td>소비전력</td><td>Max. 15W (FAN 전원 별도)</td></tr>
+            <tr><td>제어입력 신호</td><td>4~20mA 3CH / 0~5V, 1~5V, 0~10V, 10K VOL (선택) 1CH</td></tr>
+            <tr><td>입력 접점</td><td>Switch Input 3CH</td></tr>
+            <tr><td>출력 접점</td><td>Relay Out 6CH (Alarm 3CH, Fan Control 3CH)</td></tr>
+            <tr><td>제어방법</td><td>위상각 / 제로크로싱(MPD 옵션) / PZ 혼합모드</td></tr>
+            <tr><td>내전압</td><td>AC 3KV (Step 1Min.)</td></tr>
+            <tr><td>절연저항</td><td>10MΩ 이상</td></tr>
+            <tr><td>냉각방식</td><td>55A 이하 자연공냉 / 70A 이상 강제공냉</td></tr>
+            <tr><td>알람기능</td><td>과전류(OC), 과전류 경고(OCW), 방열판 과열(OTW/OT), 휴즈단선(FUSE), 부하단선(LINE), SCR 소자 이상(SCR), 부분부하단선(PLF), 주전원 차단(MPF), FAN 고장(FAN), 부하불평형(UL) — 총 10종</td></tr>
+            <tr><td>동작 보증 온도</td><td>0 ~ 40℃</td></tr>
+            <tr><td>사용습도 범위</td><td>30% ~ 90% RH (결로가 없을 것)</td></tr>
+            <tr><td>SMC (제어부)</td><td>32Bit CPU 적용 (12Bit ADC)</td></tr>
+            <tr><td>PM (파워 모듈)</td><td>출력전압 / 전류 RMS 측정</td></tr>
+            <tr><td>PSD (디스플레이)</td><td>컬러 LCD 및 18Key Pad</td></tr>
+            <tr><td>통신</td><td>RS-485 3Wire, 최대 115,200bps, Modbus-RTU, 최대 32대 접속</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../assets/images/logo.png" alt="Paraent"></a><p>(주)파라이엔티<br>경기도 화성시 동탄기흥로 64-14<br>TEL: 031-357-0680 · FAX: 031-357-0679<br>E-mail: paraent@paraent.com</p></div>
+      <div class="footer-col"><h5>회사소개</h5><ul><li><a href="./company-overview.html">회사개요</a></li><li><a href="./history.html">회사연혁</a></li><li><a href="./certifications.html">인증현황</a></li><li><a href="./location.html">오시는길</a></li><li><a href="./quality.html">품질혁신</a></li></ul></div>
+      <div class="footer-col"><h5>제품소개</h5><ul><li><a href="./product-pll.html">Pll 전력조정기</a></li><li><a href="./product-smart.html">SMART 전력조정기</a></li><li><a href="./product-flex.html">FLEX 전력조정기</a></li><li><a href="./product-mini.html">MINI 전력조정기</a></li><li><a href="./product-etype.html">E-TYPE 전력조정기</a></li><li><a href="./product-multi.html">MULTI 전력조정기</a></li><li><a href="./product-ptype.html">P-TYPE 전력조정기</a></li></ul></div>
+      <div class="footer-col"><h5>고객센터</h5><ul><li><a href="./resources.html">자료실</a></li><li><a href="./inquiry.html">온라인상담</a></li><li><a href="./notice.html">공지사항</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">© 2025 (주)파라이엔티. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+
+<!-- FLOATING BUTTONS -->
+<div class="float-btns">
+  <a href="./inquiry.html" class="float-btn float-inquiry-btn" aria-label="문의하기">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="float-btn-label">문의</span>
+  </a>
+  <button id="scrollTopBtn" class="float-btn scroll-top-btn" aria-label="맨 위로">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+</div>
+<style>
+.float-btns{position:fixed;bottom:32px;right:32px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:9999}
+.float-btn{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,transform .2s;gap:2px}
+.float-btn svg{width:18px;height:18px;flex-shrink:0}
+.float-btn-label{font-size:9px;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;letter-spacing:0.2px;line-height:1}
+.float-btn:hover{background:rgba(0,0,0,0.9);transform:translateY(-2px)}
+.float-btn:active{transform:scale(0.92)}
+.float-inquiry-btn{background:rgba(0,102,204,0.85)}
+.float-inquiry-btn:hover{background:rgba(0,82,170,0.95)}
+.scroll-top-btn{opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .3s,transform .3s,visibility .3s,background .2s}
+.scroll-top-btn.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.scroll-top-btn:hover{transform:translateY(-2px)}
+</style>
+<script>
+(function(){var b=document.getElementById('scrollTopBtn');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>300)},{passive:true});b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})})})();
+</script>
+</body>
+</html>

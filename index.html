@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paraent — 디지털 전력조정기 전문 기업</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════════
+       DESIGN TOKENS — apple-DESIGN.md 기반
+    ═══════════════════════════════════════════ */
+    :root {
+      --primary:           #0066cc;
+      --primary-focus:     #0071e3;
+      --primary-on-dark:   #2997ff;
+      --ink:               #1d1d1f;
+      --ink-muted-80:      #333333;
+      --ink-muted-48:      #7a7a7a;
+      --body-muted:        #cccccc;
+      --hairline:          #e0e0e0;
+      --canvas:            #ffffff;
+      --canvas-parchment:  #f5f5f7;
+      --surface-tile-1:    #272729;
+      --surface-tile-2:    #2a2a2c;
+      --surface-black:     #000000;
+      --on-dark:           #ffffff;
+
+      --r-pill: 9999px;
+      --r-lg:   18px;
+      --r-sm:   8px;
+      --r-md:   11px;
+
+      --sp-xs:      8px;
+      --sp-sm:      12px;
+      --sp-md:      17px;
+      --sp-lg:      24px;
+      --sp-xl:      32px;
+      --sp-xxl:     48px;
+      --sp-section: 80px;
+
+      --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+      --font-text:    "SF Pro Text",    -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+    }
+
+    /* ═══════════════════════════════════════════
+       RESET
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-text);
+      color: var(--ink);
+      background: var(--canvas);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ═══════════════════════════════════════════
+       GLOBAL NAV
+    ═══════════════════════════════════════════ */
+    .global-nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      height: 64px;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--sp-xl);
+    }
+    .nav-inner {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-lg);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .nav-logo img {
+      height: 34px;
+      width: auto;
+      display: block;
+    }
+    .nav-menu {
+      display: flex;
+      align-items: center;
+    }
+    .nav-menu > li {
+      position: relative;
+    }
+    .nav-menu > li > a {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: -0.12px;
+      padding: 0 15px;
+      height: 64px;
+      transition: color 0.15s;
+    }
+    .nav-menu > li > a:hover { color: #fff; }
+    .nav-menu > li > a svg {
+      opacity: 0.5;
+      transition: transform 0.2s, opacity 0.15s;
+    }
+    .nav-menu > li:hover > a svg {
+      transform: rotate(180deg);
+      opacity: 1;
+    }
+    .nav-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: rgba(22,22,24,0.98);
+      backdrop-filter: blur(24px);
+      border-radius: var(--r-md);
+      padding: 8px;
+      min-width: 200px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s 0.1s, transform 0.2s 0.1s;
+      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+    }
+    .nav-menu > li:hover .nav-dropdown {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+      transition: opacity 0.15s 0s, transform 0.15s 0s;
+    }
+    .nav-dropdown a {
+      display: block;
+      font-size: 13px;
+      color: rgba(255,255,255,0.62);
+      padding: 10px 14px;
+      border-radius: var(--r-sm);
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+    .nav-dropdown a + a {
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .nav-dropdown a:hover {
+      background: rgba(41,151,255,0.13);
+      color: var(--primary-on-dark);
+      box-shadow: inset 3px 0 0 var(--primary-on-dark);
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .lang-btn {
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      padding: 4px 7px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.18);
+      transition: all 0.15s;
+    }
+    .lang-btn:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    .lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); }
+    .nav-cta-btn {
+      font-family: var(--font-text);
+      font-size: 12px;
+      color: #fff;
+      background: var(--primary);
+      padding: 7px 15px;
+      border-radius: var(--r-pill);
+      margin-left: 4px;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .nav-cta-btn:hover { background: var(--primary-focus); }
+    .nav-cta-btn:active { transform: scale(0.95); }
+
+    /* ═══════════════════════════════════════════
+       HERO CAROUSEL
+    ═══════════════════════════════════════════ */
+    .hero-carousel {
+      position: relative;
+      overflow: hidden;
+    }
+    .slides-track {
+      display: flex;
+      will-change: transform;
+      transition: transform 0.72s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 2;
+    }
+    #heroMouseLight {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .slide {
+      flex: 0 0 100%;
+      width: 100%;
+      min-height: calc(100vh - 64px);
+      display: flex;
+      align-items: center;
+      padding: var(--sp-section) var(--sp-xl);
+    }
+    .slide-dark     { background: var(--surface-tile-1); }
+    .slide-dark2    { background: var(--surface-tile-2); }
+    .slide-light    { background: var(--canvas); }
+    .slide-parchment{ background: var(--canvas-parchment); }
+
+    /* ── 첫 번째 슬라이드 배경 이미지 ── */
+    .slide-hero {
+      background-size: cover;
+      background-position: center center;
+      position: relative;
+    }
+    .slide-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg,
+        rgba(0,0,0,0.60) 0%,
+        rgba(0,0,0,0.30) 40%,
+        transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .slide-hero .slide-inner { position: relative; z-index: 1; }
+    .slide-hero .slide-badge { background: rgba(41,151,255,0.18); color: var(--primary-on-dark); }
+    .slide-hero .slide-title { color: var(--on-dark); }
+    .slide-hero .slide-tagline { color: rgba(255,255,255,0.72); }
+    .slide-hero .slide-features li { color: rgba(255,255,255,0.78); }
+    .slide-hero .slide-features li::before { background: var(--primary-on-dark); }
+    .slide-hero .slide-features li strong { color: #fff; }
+    .slide-hero .slide-visual {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .slide-hero .hero-product-img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      mix-blend-mode: multiply;
+      filter: drop-shadow(0 16px 48px rgba(0,0,0,0.6));
+      object-fit: contain;
+    }
+
+    .slide-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .slide-text { max-width: 520px; }
+
+    .slide-badge {
+      display: inline-block;
+      font-family: var(--font-text);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 11px;
+      border-radius: var(--r-pill);
+      margin-bottom: var(--sp-md);
+    }
+    .slide-dark  .slide-badge,
+    .slide-dark2 .slide-badge {
+      background: rgba(41,151,255,0.14);
+      color: var(--primary-on-dark);
+    }
+    .slide-light .slide-badge,
+    .slide-parchment .slide-badge {
+      background: rgba(0,102,204,0.08);
+      color: var(--primary);
+    }
+
+    .slide-title {
+      font-family: var(--font-display);
+      font-size: 52px;
+      font-weight: 600;
+      line-height: 1.06;
+      letter-spacing: -0.28px;
+      margin-bottom: var(--sp-md);
+    }
+    .slide-dark .slide-title,
+    .slide-dark2 .slide-title { color: var(--on-dark); }
+    .slide-light .slide-title,
+    .slide-parchment .slide-title { color: var(--ink); }
+
+    .slide-tagline {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: 0.1px;
+      margin-bottom: var(--sp-xl);
+    }
+    .slide-dark .slide-tagline,
+    .slide-dark2 .slide-tagline { color: var(--body-muted); }
+    .slide-light .slide-tagline,
+    .slide-parchment .slide-tagline { color: var(--ink-muted-48); }
+
+    .slide-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: var(--sp-xl);
+    }
+    .slide-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-family: var(--font-text);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: -0.2px;
+    }
+    .slide-features li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+    .slide-dark  .slide-features li,
+    .slide-dark2 .slide-features li { color: rgba(255,255,255,0.78); }
+    .slide-dark  .slide-features li::before,
+    .slide-dark2 .slide-features li::before { background: var(--primary-on-dark); }
+    .slide-light .slide-features li,
+    .slide-parchment .slide-features li { color: var(--ink-muted-80); }
+    .slide-light .slide-features li::before,
+    .slide-parchment .slide-features li::before { background: var(--primary); }
+    .slide-features li strong { font-weight: 600; }
+    .slide-dark  .slide-features li strong,
+    .slide-dark2 .slide-features li strong { color: #fff; }
+    .slide-light .slide-features li strong,
+    .slide-parchment .slide-features li strong { color: var(--ink); }
+
+    .slide-ctas {
+      display: flex;
+      gap: var(--sp-md);
+      flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      font-family: var(--font-text);
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -0.2px;
+      line-height: 1;
+      padding: 11px 22px;
+      border-radius: var(--r-pill);
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      display: inline-block;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover { background: var(--primary-focus); }
+    .btn-primary:active { transform: scale(0.95); }
+
+    .btn-ghost-dark {
+      font-family: var(--font-text);
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -0.2px;
+      line-height: 1;
+      padding: 10px 22px;
+      border-radius: var(--r-pill);
+      background: transparent;
+      color: var(--primary-on-dark);
+      border: 1px solid rgba(41,151,255,0.45);
+      display: inline-block;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.1s;
+    }
+    .btn-ghost-dark:hover { border-color: var(--primary-on-dark); }
+    .btn-ghost-dark:active { transform: scale(0.95); }
+
+    .btn-ghost-light {
+      font-family: var(--font-text);
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -0.2px;
+      line-height: 1;
+      padding: 10px 22px;
+      border-radius: var(--r-pill);
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      display: inline-block;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-ghost-light:hover { background: rgba(0,102,204,0.06); }
+    .btn-ghost-light:active { transform: scale(0.95); }
+
+    /* Product Image Area */
+    .slide-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .product-frame {
+      width: 100%;
+      max-width: 460px;
+      aspect-ratio: 4/3;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: rgba(0,0,0,0.22) 3px 5px 30px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .slide-dark  .product-frame,
+    .slide-dark2 .product-frame {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .slide-light .product-frame,
+    .slide-parchment .product-frame {
+      background: var(--canvas-parchment);
+      border: 1px solid var(--hairline);
+    }
+    .product-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Carousel Controls */
+    .carousel-nav {
+      position: absolute;
+      bottom: var(--sp-xl);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-md);
+      z-index: 10;
+    }
+    .c-arrow {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.1s;
+      line-height: 1;
+    }
+    .c-arrow:hover { background: rgba(255,255,255,0.2); }
+    .c-arrow:active { transform: scale(0.92); }
+
+    .c-dots { display: flex; gap: 7px; }
+    .c-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.3);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .c-dot.active {
+      width: 22px;
+      background: #fff;
+    }
+
+    /* Light slide nav theme */
+    .carousel-nav.nav-on-light .c-arrow {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.22);
+      color: var(--ink);
+    }
+    .carousel-nav.nav-on-light .c-arrow:hover {
+      background: rgba(0,0,0,0.13);
+    }
+    .carousel-nav.nav-on-light .c-dot {
+      background: rgba(0,0,0,0.22);
+    }
+    .carousel-nav.nav-on-light .c-dot.active {
+      background: var(--ink);
+    }
+
+    .carousel-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: var(--primary);
+      width: 0%;
+    }
+
+    /* ═══════════════════════════════════════════
+       PRODUCT GRID
+    ═══════════════════════════════════════════ */
+    .section-parchment {
+      background: var(--canvas-parchment);
+      padding: var(--sp-section) var(--sp-xl);
+    }
+    .section-dark {
+      background: var(--surface-tile-1);
+      padding: var(--sp-section) var(--sp-xl);
+    }
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--sp-xxl);
+    }
+    .eyebrow {
+      font-family: var(--font-text);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: var(--sp-sm);
+    }
+    .eyebrow-dark {
+      font-family: var(--font-text);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--primary-on-dark);
+      margin-bottom: var(--sp-sm);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: var(--sp-md);
+    }
+    .section-title-dark {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: var(--sp-md);
+      color: var(--on-dark);
+    }
+    .section-sub {
+      font-family: var(--font-text);
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.47;
+      letter-spacing: -0.374px;
+      color: var(--ink-muted-48);
+      max-width: 540px;
+      margin: 0 auto;
+    }
+    .section-sub-dark {
+      font-family: var(--font-text);
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.47;
+      letter-spacing: -0.374px;
+      color: var(--body-muted);
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-lg);
+    }
+    .product-card {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: var(--r-lg);
+      padding: var(--sp-lg);
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .product-card:hover {
+      box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+      transform: translateY(-3px);
+    }
+    .card-img-link {
+      display: block;
+      text-decoration: none;
+    }
+    .card-img {
+      width: 100%;
+      background: var(--canvas-parchment);
+      border-radius: var(--r-sm);
+      margin-bottom: var(--sp-md);
+      overflow: hidden;
+    }
+    .card-img img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .card-label {
+      font-family: var(--font-text);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.374px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .card-tagline {
+      font-family: var(--font-text);
+      font-size: 13px;
+      color: var(--ink-muted-48);
+      line-height: 1.4;
+      flex: 1;
+      margin-bottom: var(--sp-md);
+    }
+    .card-link {
+      font-family: var(--font-text);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: gap 0.15s;
+    }
+    .card-link:hover { gap: 7px; }
+
+    /* ═══════════════════════════════════════════
+       CTA SECTION
+    ═══════════════════════════════════════════ */
+    .cta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-xl);
+      margin-top: var(--sp-xxl);
+    }
+    .cta-panel {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--r-lg);
+      padding: var(--sp-xxl) var(--sp-xl);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .cta-panel .icon {
+      font-size: 34px;
+      margin-bottom: var(--sp-md);
+    }
+    .cta-panel h3 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--on-dark);
+      margin-bottom: var(--sp-sm);
+    }
+    .cta-panel p {
+      font-family: var(--font-text);
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--body-muted);
+      margin-bottom: var(--sp-xl);
+      max-width: 280px;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    footer {
+      background: var(--canvas-parchment);
+      padding: 56px var(--sp-xl) var(--sp-xl);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--sp-xxl);
+      padding-bottom: var(--sp-xl);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .footer-brand-logo {
+      display: block;
+      margin-bottom: var(--sp-sm);
+    }
+    .footer-brand-logo img {
+      height: 32px;
+      width: auto;
+      display: block;
+    }
+    .footer-brand .addr {
+      font-family: var(--font-text);
+      font-size: 12px;
+      line-height: 1.9;
+      color: var(--ink-muted-48);
+    }
+    .footer-cols {
+      display: flex;
+      gap: var(--sp-xxl);
+    }
+    .footer-col h4 {
+      font-family: var(--font-text);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.224px;
+      color: var(--ink-muted-80);
+      margin-bottom: var(--sp-sm);
+    }
+    .footer-col li {
+      font-family: var(--font-text);
+      font-size: 12px;
+      line-height: 2.41;
+      color: var(--ink-muted-48);
+    }
+    .footer-col li a {
+      color: var(--ink-muted-48);
+      transition: color 0.15s;
+    }
+    .footer-col li a:hover { color: var(--primary); }
+    .footer-bottom {
+      margin-top: var(--sp-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--sp-sm);
+      font-family: var(--font-text);
+      font-size: 11px;
+      color: var(--ink-muted-48);
+      letter-spacing: -0.08px;
+    }
+    .footer-bottom a {
+      color: var(--ink-muted-48);
+      margin-left: var(--sp-md);
+      transition: color 0.15s;
+    }
+    .footer-bottom a:hover { color: var(--primary); }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 1068px) {
+      .slide-title { font-size: 40px; }
+      .product-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 833px) {
+      .nav-menu { display: none; }
+      .slide { min-height: 82vh; padding: var(--sp-xxl) var(--sp-lg); }
+      .slide-inner { grid-template-columns: 1fr; gap: var(--sp-xxl); }
+      .slide-visual { display: none; }
+      .slide-title { font-size: 36px; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+      .cta-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-cols { flex-wrap: wrap; gap: var(--sp-xl); }
+    }
+    @media (max-width: 640px) {
+      .slide-title { font-size: 30px; }
+      .slide-tagline { font-size: 17px; }
+      .section-title,
+      .section-title-dark { font-size: 28px; }
+      .product-grid { grid-template-columns: 1fr; }
+      .section-parchment,
+      .section-dark { padding: var(--sp-xxl) var(--sp-lg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════
+       GLOBAL NAV
+  ══════════════════════════════════ -->
+  <nav class="global-nav">
+    <div class="nav-inner">
+      <a href="./index.html" class="nav-logo">
+        <img src="assets/images/logo-white.png" alt="Paraent">
+      </a>
+
+      <ul class="nav-menu">
+        <li>
+          <a href="#">회사소개
+            <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown">
+            <a href="pages/company-overview.html">회사개요</a>
+            <a href="pages/history.html">회사연혁</a>
+            <a href="pages/certifications.html">인증현황</a>
+            <a href="pages/location.html">오시는길</a>
+            <a href="pages/quality.html">품질혁신</a>
+          </div>
+        </li>
+        <li>
+          <a href="#">제품소개
+            <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown">
+            <a href="pages/product-pll.html">Pll 디지털 전력조정기</a>
+            <a href="pages/product-smart.html">SMART 디지털 전력조정기</a>
+            <a href="pages/product-flex.html">FLEX 디지털 전력조정기</a>
+            <a href="pages/product-mini.html">MINI 디지털 전력조정기</a>
+            <a href="pages/product-etype.html">E-TYPE 디지털 전력조정기</a>
+            <a href="pages/product-multi.html">MULTI 디지털 전력조정기</a>
+            <a href="pages/product-ptype.html">P-TYPE 디지털 전력조정기</a>
+          </div>
+        </li>
+        <li>
+          <a href="#">자료실
+            <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown">
+            <a href="pages/resources.html#tech">기술자료</a>
+            <a href="pages/resources.html#manual">메뉴얼</a>
+            <a href="pages/resources.html#cad">캐드도면</a>
+            <a href="pages/resources.html#catalog">카다로그</a>
+          </div>
+        </li>
+        <li>
+          <a href="#">고객센터
+            <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown">
+            <a href="pages/inquiry.html">온라인상담</a>
+            <a href="pages/notice.html">공지사항</a>
+          </div>
+        </li>
+      </ul>
+
+      <div class="nav-right">
+        <a href="#" class="lang-btn active">KO</a>
+        <a href="#" class="lang-btn">EN</a>
+        <a href="#" class="lang-btn">中</a>
+        <a href="pages/inquiry.html" class="nav-cta-btn">온라인 문의</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════
+       HERO CAROUSEL — 7 Products
+  ══════════════════════════════════ -->
+  <section class="hero-carousel" id="carousel">
+    <canvas id="waveCanvas" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4;mix-blend-mode:screen;"></canvas>
+    <div id="heroMouseLight" aria-hidden="true"></div>
+    <div class="slides-track" id="slidesTrack">
+
+      <!-- ① Pll -->
+      <div class="slide slide-hero" style="background-image: url('assets/images/hero-bg-pll.png');">
+        <div class="slide-inner">
+          <div class="slide-text">
+            <span class="slide-badge">디지털 전력조정기</span>
+            <h1 class="slide-title">Pll 디지털<br>전력조정기</h1>
+            <p class="slide-tagline">P-TYPE의 명성과 기술을 담은<br>차세대 전력조정기</p>
+            <ul class="slide-features">
+              <li>P-TYPE의 명성은 그대로, <strong>가격은 저렴하게</strong></li>
+              <li>차별화된 <strong>Free Voltage</strong></li>
+              <li><strong>ALL IN ONE CONTROL</strong></li>
+              <li><strong>전압, 전류</strong> 디스플레이</li>
+            </ul>
+            <div class="slide-ctas">
+              <a href="pages/product-pll.html" class="btn-primary">제품 상세보기</a>
+              <a href="pages/inquiry.html" class="btn-ghost-dark">온라인 문의</a>
+            </div>
+          </div>
+          <div class="slide-visual"></div>
+        </div>
+      </div>
+
+      <!-- ② SMART -->
+      <div class="slide slide-hero" style="background-image: url('assets/images/hero-bg-smart.png');">
+        <div class="slide-inner">
+          <div class="slide-text">
+            <span class="slide-badge">디지털 전력조정기</span>
+            <h1 class="slide-title">SMART 디지털<br>전력조정기</h1>
+            <p class="slide-tagline">Nothing is smarter than SMART</p>
+            <ul class="slide-features">
+              <li><strong>모든 제어방식 탑재</strong> — 제로크로싱, 위상각</li>
+              <li><strong>혼합제어방식</strong> (파라미터 설정으로 제어 자동 전환)</li>
+              <li><strong>MPD</strong> (최대전력분산 기능) 기본탑재 — 특허</li>
+              <li>자가진단 기능 내장</li>
+            </ul>
+            <div class="slide-ctas">
+              <a href="pages/product-smart.html" class="btn-primary">제품 상세보기</a>
+              <a href="pages/inquiry.html" class="btn-ghost-dark">온라인 문의</a>
+            </div>
+          </div>
+          <div class="slide-visual"></div>
+        </div>
+      </div>
+
+      <!-- ③ FLEX -->
+      <div class="slide slide-hero" style="background-image: url('assets/images/hero-bg-flex.png');">
+        <div class="slide-inner">
+          <div class="slide-text">
+            <span class="slide-badge">디지털 전력조정기</span>
+            <h1 class="slide-title">FLEX 디지털<br>전력조정기</h1>
+            <p class="slide-tagline">EtherCAT Communication</p>
+            <ul class="slide-features">
+              <li><strong>READ&amp;WRITE 가능</strong> — RS-485통신 기본 탑재</li>
+              <li><strong>전력분산제어</strong>로 전력효율 극대화</li>
+              <li>부분적인 부하의 <strong>단선 검출</strong> 가능</li>
+            </ul>
+            <div class="slide-ctas">
+              <a href="pages/product-flex.html" class="btn-primary">제품 상세보기</a>
+              <a href="pages/inquiry.html" class="btn-ghost-dark">온라인 문의</a>
+            </div>
+          </div>
+          <div class="slide-visual"></div>
+        </div>
+      </div>
+
+      <!-- ④ MINI -->
+      <div class="slide slide-hero" style="background-image: url('assets/images/hero-bg-mini.png');">
+        <div class="slide-inner">
+          <div class="slide-text">
+            <span class="slide-badge">디지털 전력조정기</span>
+            <h1 class="slide-title">MINI 디지털<br>전력조정기</h1>
+            <p class="slide-tagline">국내 최소형 / SSR 대체형</p>
+            <ul class="slide-features">
+              <li>부하단선 검출 기능 — <strong>자체 CT 내장</strong></li>
+              <li><strong>과전류 보호기능</strong></li>
+              <li>방열판 온도 <strong>2중 감지기능</strong></li>
+            </ul>
+            <div class="slide-ctas">
+              <a href="pages/product-mini.html" class="btn-primary">제품 상세보기</a>
+              <a href="pages/inquiry.html" class="btn-ghost-dark">온라인 문의</a>
+            </div>
+          </div>
+          <div class="slide-visual"></div>
+        </div>
+      </div>
+
+      <!-- ⑤ E-TYPE -->
+      <div class="slide slide-hero" style="background-image: url('assets/images/hero-bg-etype.png');">
+        <div class="slide-inner">
+          <div class="slide-text">
+            <span class="slide-badge">디지털 전력조정기</span>
+            <h1 class="slide-title">E-TYPE 디지털<br>전력조정기</h1>
+            <p class="slide-tagline">Economic Power Control</p>
+            <ul class="slide-features">
+              <li>보급형, <strong>기본 기능 모두 포함</strong></li>
+              <li>제로크로싱 · 위상각 <strong>제어 일체형</strong></li>
+              <li>부하의 종류에 따라 <strong>변경 사용 가능</strong></li>
+            </ul>
+            <div class="slide-ctas">
+              <a href="pages/product-etype.html" class="btn-primary">제품 상세보기</a>
+              <a href="pages/inquiry.html" class="btn-ghost-dark">온라인 문의</a>
+            </div>
+          </div>
+          <div class="slide-visual"></div>
+        </div>
+      </div>
+
+      <!-- ⑥ MULTI -->
+      <div class="slide slide-hero" style="background-image: url('assets/images/hero-bg-multi.png');">
+        <div class="slide-inner">
+          <div class="slide-text">
+            <span class="slide-badge">디지털 전력조정기</span>
+            <h1 class="slide-title">MULTI 디지털<br>전력조정기</h1>
+            <p class="slide-tagline">Three in One Digital Power Regulator</p>
+            <ul class="slide-features">
+              <li><strong>1대의 제품으로 단상 3대 운용</strong></li>
+              <li><strong>삼상으로도 사용</strong> 가능 (3상 4선식)</li>
+              <li><strong>정밀성, 안정성 및 신뢰성</strong>을 갖춘 제품</li>
+            </ul>
+            <div class="slide-ctas">
+              <a href="pages/product-multi.html" class="btn-primary">제품 상세보기</a>
+              <a href="pages/inquiry.html" class="btn-ghost-dark">온라인 문의</a>
+            </div>
+          </div>
+          <div class="slide-visual"></div>
+        </div>
+      </div>
+
+      <!-- ⑦ P-TYPE -->
+      <div class="slide slide-hero" style="background-image: url('assets/images/hero-bg-ptype.png');">
+        <div class="slide-inner">
+          <div class="slide-text">
+            <span class="slide-badge">디지털 전력조정기</span>
+            <h1 class="slide-title">P-TYPE 디지털<br>전력조정기</h1>
+            <p class="slide-tagline">Steady Seller 전력조정기</p>
+            <ul class="slide-features">
+              <li><strong>국내 최초</strong>의 디지털 전력조정기</li>
+              <li>2000년 출시 이래 <strong>가장 많이 판매된</strong> 제품</li>
+              <li>검증된 품질과 <strong>안정적인 성능</strong></li>
+            </ul>
+            <div class="slide-ctas">
+              <a href="pages/product-ptype.html" class="btn-primary">제품 상세보기</a>
+              <a href="pages/inquiry.html" class="btn-ghost-dark">온라인 문의</a>
+            </div>
+          </div>
+          <div class="slide-visual"></div>
+        </div>
+      </div>
+
+    </div><!-- /slides-track -->
+
+    <!-- Carousel Controls -->
+    <div class="carousel-nav">
+      <button class="c-arrow" id="prevBtn">&#8592;</button>
+      <div class="c-dots" id="dots"></div>
+      <button class="c-arrow" id="nextBtn">&#8594;</button>
+    </div>
+    <div class="carousel-progress" id="progress"></div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       PRODUCT GRID
+  ══════════════════════════════════ -->
+  <section class="section-parchment">
+    <div class="section-inner">
+      <div class="section-header">
+        <p class="eyebrow">전체 제품 라인업</p>
+        <h2 class="section-title">7가지 디지털 전력조정기</h2>
+        <p class="section-sub">고객의 요구에 최적화된 모델로 모든 산업 환경에 대응합니다.</p>
+      </div>
+      <div class="product-grid">
+        <div class="product-card">
+          <a href="pages/product-pll.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/pll.png" alt="Pll 디지털 전력조정기"></div></a>
+          <p class="card-label">Pll</p>
+          <h3 class="card-title">Pll 디지털 전력조정기</h3>
+          <p class="card-tagline">P-TYPE의 명성과 기술을 담은 차세대 전력조정기</p>
+          <a href="pages/product-pll.html" class="card-link">자세히 보기 →</a>
+        </div>
+        <div class="product-card">
+          <a href="pages/product-smart.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/smart.png" alt="SMART 디지털 전력조정기"></div></a>
+          <p class="card-label">SMART</p>
+          <h3 class="card-title">SMART 디지털 전력조정기</h3>
+          <p class="card-tagline">Nothing is smarter than SMART</p>
+          <a href="pages/product-smart.html" class="card-link">자세히 보기 →</a>
+        </div>
+        <div class="product-card">
+          <a href="pages/product-flex.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/flex.png" alt="FLEX 디지털 전력조정기"></div></a>
+          <p class="card-label">FLEX</p>
+          <h3 class="card-title">FLEX 디지털 전력조정기</h3>
+          <p class="card-tagline">EtherCAT Communication</p>
+          <a href="pages/product-flex.html" class="card-link">자세히 보기 →</a>
+        </div>
+        <div class="product-card">
+          <a href="pages/product-mini.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/mini.png" alt="MINI 디지털 전력조정기"></div></a>
+          <p class="card-label">MINI</p>
+          <h3 class="card-title">MINI 디지털 전력조정기</h3>
+          <p class="card-tagline">국내 최소형 / SSR 대체형</p>
+          <a href="pages/product-mini.html" class="card-link">자세히 보기 →</a>
+        </div>
+        <div class="product-card">
+          <a href="pages/product-etype.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/etype.png" alt="E-TYPE 디지털 전력조정기"></div></a>
+          <p class="card-label">E-TYPE</p>
+          <h3 class="card-title">E-TYPE 디지털 전력조정기</h3>
+          <p class="card-tagline">Economic Power Control</p>
+          <a href="pages/product-etype.html" class="card-link">자세히 보기 →</a>
+        </div>
+        <div class="product-card">
+          <a href="pages/product-multi.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/multi.png" alt="MULTI 디지털 전력조정기"></div></a>
+          <p class="card-label">MULTI</p>
+          <h3 class="card-title">MULTI 디지털 전력조정기</h3>
+          <p class="card-tagline">Three in One Digital Power Regulator</p>
+          <a href="pages/product-multi.html" class="card-link">자세히 보기 →</a>
+        </div>
+        <div class="product-card">
+          <a href="pages/product-ptype.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/ptype.png" alt="P-TYPE 디지털 전력조정기"></div></a>
+          <p class="card-label">P-TYPE</p>
+          <h3 class="card-title">P-TYPE 디지털 전력조정기</h3>
+          <p class="card-tagline">Steady Seller 전력조정기</p>
+          <a href="pages/product-ptype.html" class="card-link">자세히 보기 →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       CTA SECTION
+  ══════════════════════════════════ -->
+  <section class="section-dark">
+    <div class="section-inner">
+      <div class="section-header">
+        <p class="eyebrow-dark">문의 및 지원</p>
+        <h2 class="section-title-dark">파라이엔티와 함께하세요</h2>
+        <p class="section-sub-dark">스펙에 맞는 제품 추천부터 기술 지원까지,<br>전문 상담팀이 도와드립니다.</p>
+      </div>
+      <div class="cta-grid">
+        <div class="cta-panel">
+          <div class="icon">📋</div>
+          <h3>다양한 모델 보러가기</h3>
+          <p>고객의 사용 환경과 스펙에 맞는 최적의 전력조정기 모델을 찾아보세요.</p>
+          <a href="pages/product-pll.html" class="btn-primary">제품 라인업 보기</a>
+        </div>
+        <div class="cta-panel">
+          <div class="icon">💬</div>
+          <h3>온라인 문의하기</h3>
+          <p>제품 선택이 어려우신가요? 전문 상담팀이 최적의 솔루션을 제안해 드립니다.</p>
+          <a href="pages/inquiry.html" class="btn-primary">온라인 상담 신청</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       FOOTER
+  ══════════════════════════════════ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="/" class="footer-brand-logo">
+            <img src="assets/images/logo.png" alt="Paraent">
+          </a>
+          <p class="addr">
+            (주)파라이엔티<br>
+            경기도 화성시 동탄기흥로 64-14<br>
+            TEL 031-831-8310 &nbsp;|&nbsp; FAX 031-831-8314
+          </p>
+        </div>
+        <div class="footer-cols">
+          <div class="footer-col">
+            <h4>회사소개</h4>
+            <ul>
+              <li><a href="pages/company-overview.html">회사개요</a></li>
+              <li><a href="pages/history.html">회사연혁</a></li>
+              <li><a href="pages/certifications.html">인증현황</a></li>
+              <li><a href="pages/location.html">오시는길</a></li>
+              <li><a href="pages/quality.html">품질혁신</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>제품소개</h4>
+            <ul>
+              <li><a href="pages/product-pll.html">Pll 전력조정기</a></li>
+              <li><a href="pages/product-smart.html">SMART 전력조정기</a></li>
+              <li><a href="pages/product-flex.html">FLEX 전력조정기</a></li>
+              <li><a href="pages/product-mini.html">MINI 전력조정기</a></li>
+              <li><a href="pages/product-etype.html">E-TYPE 전력조정기</a></li>
+              <li><a href="pages/product-multi.html">MULTI 전력조정기</a></li>
+              <li><a href="pages/product-ptype.html">P-TYPE 전력조정기</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>자료실</h4>
+            <ul>
+              <li><a href="pages/resources.html#tech">기술자료</a></li>
+              <li><a href="pages/resources.html#manual">메뉴얼</a></li>
+              <li><a href="pages/resources.html#cad">캐드도면</a></li>
+              <li><a href="pages/resources.html#catalog">카다로그</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>고객센터</h4>
+            <ul>
+              <li><a href="pages/inquiry.html">온라인상담</a></li>
+              <li><a href="pages/notice.html">공지사항</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>Copyright © 2026 (주)파라이엔티. All rights reserved.</span>
+        <span>
+          <a href="#">이용약관</a>
+          <a href="#">개인정보처리방침</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════
+       CAROUSEL SCRIPT
+  ══════════════════════════════════ -->
+  <script>
+    const track      = document.getElementById('slidesTrack');
+    const dotsEl     = document.getElementById('dots');
+    const progress   = document.getElementById('progress');
+    const carouselNav = document.querySelector('.carousel-nav');
+    const slides     = Array.from(track.querySelectorAll('.slide'));
+    const TOTAL      = slides.length;
+    const DURATION   = 6000;
+
+    let cur = 0, timer = null, rafId = null, t0 = null;
+
+    function updateNavTheme() {
+      const isLight = slides[cur].classList.contains('slide-light') ||
+                      slides[cur].classList.contains('slide-parchment');
+      carouselNav.classList.toggle('nav-on-light', isLight);
+    }
+
+    // Build dots
+    slides.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.className = 'c-dot' + (i === 0 ? ' active' : '');
+      b.setAttribute('aria-label', `슬라이드 ${i+1}`);
+      b.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(b);
+    });
+
+    function goTo(n) {
+      dotsEl.children[cur].classList.remove('active');
+      cur = ((n % TOTAL) + TOTAL) % TOTAL;
+      track.style.transition = 'transform 0.72s cubic-bezier(0.4,0,0.2,1)';
+      track.style.transform = `translateX(-${cur * 100}%)`;
+      dotsEl.children[cur].classList.add('active');
+      updateNavTheme();
+      resetTimer();
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => goTo(cur - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => goTo(cur + 1));
+
+    // ── Drag / swipe ──────────────────────────────────────────────
+    let dragStart = null, isDragging = false, dragDelta = 0;
+
+    function onDragStart(clientX) {
+      dragStart = clientX;
+      isDragging = true;
+      dragDelta = 0;
+      track.style.transition = 'none';
+    }
+    function onDragMove(clientX) {
+      if (!isDragging) return;
+      dragDelta = clientX - dragStart;
+      track.style.transform = `translateX(calc(-${cur * 100}% + ${dragDelta}px))`;
+    }
+    function onDragEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      if (dragDelta < -60)      goTo(cur + 1);
+      else if (dragDelta > 60)  goTo(cur - 1);
+      else                      goTo(cur);
+      dragDelta = 0;
+    }
+
+    // Mouse
+    track.addEventListener('mousedown',  e => { e.preventDefault(); onDragStart(e.clientX); });
+    window.addEventListener('mousemove', e => onDragMove(e.clientX));
+    window.addEventListener('mouseup',   () => onDragEnd());
+
+    // Touch
+    track.addEventListener('touchstart', e => onDragStart(e.touches[0].clientX), { passive: true });
+    track.addEventListener('touchmove',  e => onDragMove(e.touches[0].clientX),  { passive: true });
+    track.addEventListener('touchend',   () => onDragEnd());
+
+    function resetTimer() {
+      clearTimeout(timer);
+      cancelAnimationFrame(rafId);
+      progress.style.transition = 'none';
+      progress.style.width = '0%';
+      t0 = performance.now();
+      tick();
+      timer = setTimeout(() => goTo(cur + 1), DURATION);
+    }
+
+    function tick() {
+      rafId = requestAnimationFrame(now => {
+        const pct = Math.min((now - t0) / DURATION * 100, 100);
+        progress.style.transition = 'none';
+        progress.style.width = pct + '%';
+        if (pct < 100) tick();
+      });
+    }
+
+    resetTimer();
+    updateNavTheme();
+  </script>
+
+  <!-- HERO MOUSE LIGHT -->
+  <script>
+    (function () {
+      const carousel = document.getElementById('carousel');
+      const light    = document.getElementById('heroMouseLight');
+      if (!carousel || !light) return;
+
+      let rafLight = null;
+
+      // 슬라이드별 제품 위치 (carousel 너비/높이 비율)
+      // [x중심, y중심, 반지름] — 배경 이미지 기준 오른쪽 영역
+      const productPos = [
+        [0.71, 0.50, 0.26],  // ① Pll
+        [0.72, 0.52, 0.28],  // ② SMART
+        [0.65, 0.50, 0.30],  // ③ FLEX
+        [0.68, 0.48, 0.32],  // ④ MINI
+        [0.68, 0.50, 0.28],  // ⑤ E-TYPE
+        [0.66, 0.50, 0.30],  // ⑥ MULTI
+        [0.70, 0.52, 0.34],  // ⑦ P-TYPE
+      ];
+
+      // 현재 활성 슬라이드 인덱스 추적
+      let currentSlide = 0;
+      const track = document.getElementById('slidesTrack');
+      if (track) {
+        const observer = new MutationObserver(function() {
+          const tx = new DOMMatrix(getComputedStyle(track).transform).m41;
+          currentSlide = Math.round(Math.abs(tx) / (carousel.offsetWidth || 1));
+        });
+        observer.observe(track, { attributes: true, attributeFilter: ['style'] });
+      }
+
+      carousel.addEventListener('mousemove', function (e) {
+        cancelAnimationFrame(rafLight);
+        rafLight = requestAnimationFrame(function () {
+          const rect = carousel.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const w = rect.width;
+          const h = rect.height;
+
+          // 현재 슬라이드의 제품 위치
+          const pos   = productPos[Math.min(currentSlide, productPos.length - 1)];
+          const px    = w * pos[0];
+          const py    = h * pos[1];
+          const pr    = h * pos[2];
+
+          // 마우스와 제품 중심 간 거리
+          const dx   = x - px;
+          const dy   = y - py;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          // 제품에 가까울수록 그림자 강하게 (최대 0.38)
+          const maxDist = pr * 1.7;
+          const shadow  = dist < maxDist
+            ? (1 - dist / maxDist) * 0.38
+            : 0;
+
+          if (shadow > 0.01) {
+            // 빛 + 제품 위치에 어두운 마스크 → 빛이 제품 뒤에 있는 효과
+            light.style.background =
+              'radial-gradient(700px circle at ' + x + 'px ' + y + 'px, ' +
+                'rgba(41,151,255,0.10) 0%, rgba(41,151,255,0.03) 40%, transparent 70%), ' +
+              'radial-gradient(' + (pr * 1.05).toFixed(0) + 'px circle at ' + px.toFixed(0) + 'px ' + py.toFixed(0) + 'px, ' +
+                'rgba(0,0,0,' + shadow.toFixed(3) + ') 0%, ' +
+                'rgba(0,0,0,' + (shadow * 0.4).toFixed(3) + ') 55%, ' +
+                'rgba(41,151,255,' + (shadow * 0.12).toFixed(3) + ') 85%, ' +
+                'transparent 100%)';
+          } else {
+            light.style.background =
+              'radial-gradient(700px circle at ' + x + 'px ' + y + 'px, ' +
+              'rgba(41,151,255,0.11) 0%, rgba(41,151,255,0.03) 40%, transparent 70%)';
+          }
+          light.style.opacity = '1';
+        });
+      });
+
+      carousel.addEventListener('mouseleave', function () {
+        light.style.opacity = '0';
+      });
+    }());
+  </script>
+
+<!-- WAVE CANVAS ANIMATION -->
+<script>
+(function () {
+  const canvas = document.getElementById('waveCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = canvas.parentElement.offsetWidth  || window.innerWidth;
+    canvas.height = canvas.parentElement.offsetHeight || Math.round(window.innerHeight * 0.92);
+  }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  // 3 wave ribbons — blue / purple / teal
+  const waves = [
+    { cy: 0.28, amp: 0.10, freq: 1.6, phOff: 0.0,  speed: 0.42, r: 41,  g: 151, b: 255 },
+    { cy: 0.54, amp: 0.13, freq: 2.1, phOff: 2.3,  speed: 0.30, r: 100, g: 55,  b: 235 },
+    { cy: 0.74, amp: 0.09, freq: 1.4, phOff: 4.7,  speed: 0.55, r: 0,   g: 185, b: 170 },
+  ];
+
+  // Softness layers: wider + more transparent → narrower + more opaque
+  const layers = [
+    [0.085, 0.03],
+    [0.058, 0.05],
+    [0.038, 0.08],
+    [0.022, 0.11],
+    [0.009, 0.15],
+  ];
+
+  const STEPS = 100;
+
+  function frame(ts) {
+    const t = ts * 0.001;
+    const W = canvas.width;
+    const H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    ctx.save();
+    // Hard clip: never draw past x=62% — keeps product area clean
+    ctx.beginPath();
+    ctx.rect(0, 0, W * 0.62, H);
+    ctx.clip();
+
+    const maxX = W * 0.62;
+
+    waves.forEach(wave => {
+      const phase = wave.phOff + t * wave.speed;
+      const cy    = wave.cy * H;
+      const amp   = wave.amp * H;
+
+      // Pre-build center-line points
+      const pts = [];
+      for (let i = 0; i <= STEPS; i++) {
+        pts.push({
+          x: (i / STEPS) * maxX,
+          y: cy + Math.sin((i / STEPS) * Math.PI * 2 * wave.freq + phase) * amp
+        });
+      }
+
+      // Draw layers from widest (blurry outer glow) to thinnest (bright core)
+      layers.forEach(([hwRatio, alpha]) => {
+        const hw = hwRatio * H;
+
+        // Horizontal gradient: fade in from left edge, hold, fade out at clip boundary
+        const grad = ctx.createLinearGradient(0, 0, maxX, 0);
+        grad.addColorStop(0,    `rgba(${wave.r},${wave.g},${wave.b},0)`);
+        grad.addColorStop(0.05, `rgba(${wave.r},${wave.g},${wave.b},${alpha})`);
+        grad.addColorStop(0.55, `rgba(${wave.r},${wave.g},${wave.b},${alpha})`);
+        grad.addColorStop(1.0,  `rgba(${wave.r},${wave.g},${wave.b},0)`);
+
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y - hw);
+        for (let i = 1; i <= STEPS; i++) ctx.lineTo(pts[i].x, pts[i].y - hw);
+        for (let i = STEPS; i >= 0; i--) ctx.lineTo(pts[i].x, pts[i].y + hw);
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+      });
+    });
+
+    ctx.restore();
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+}());
+</script>
+
+<!-- FLOATING BUTTONS -->
+<div class="float-btns">
+  <a href="pages/inquiry.html" class="float-btn float-inquiry-btn" aria-label="문의하기">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="float-btn-label">문의</span>
+  </a>
+  <button id="scrollTopBtn" class="float-btn scroll-top-btn" aria-label="맨 위로">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+</div>
+<style>
+.float-btns{position:fixed;bottom:32px;right:32px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:9999}
+.float-btn{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,transform .2s;gap:2px}
+.float-btn svg{width:18px;height:18px;flex-shrink:0}
+.float-btn-label{font-size:9px;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;letter-spacing:0.2px;line-height:1}
+.float-btn:hover{background:rgba(0,0,0,0.9);transform:translateY(-2px)}
+.float-btn:active{transform:scale(0.92)}
+.float-inquiry-btn{background:rgba(0,102,204,0.85)}
+.float-inquiry-btn:hover{background:rgba(0,82,170,0.95)}
+.scroll-top-btn{opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .3s,transform .3s,visibility .3s,background .2s}
+.scroll-top-btn.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.scroll-top-btn:hover{transform:translateY(-2px)}
+</style>
+<script>
+(function(){var b=document.getElementById('scrollTopBtn');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>300)},{passive:true});b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})})})();
+</script>
+</body>
+</html>

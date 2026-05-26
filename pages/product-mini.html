@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MINI 전력조정기 — Paraent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0066cc; --primary-focus: #0071e3; --primary-on-dark: #2997ff;
+      --ink: #1d1d1f; --ink-muted-80: #333333; --ink-muted-48: #7a7a7a;
+      --hairline: #e0e0e0; --canvas: #ffffff; --canvas-parchment: #f5f5f7;
+      --surface-tile-1: #272729; --surface-tile-2: #2a2a2c; --surface-black: #000000;
+      --on-dark: #ffffff; --r-pill: 9999px; --r-lg: 18px; --r-sm: 8px; --r-md: 11px;
+      --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+      --font-text: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-text); color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 200;
+      height: 64px;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      display: flex; align-items: center;
+      padding: 0 32px;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px;
+    }
+    .nav-logo { display: flex; align-items: center; flex-shrink: 0; }
+    .nav-logo img { height: 34px; width: auto; display: block; }
+    .nav-menu { display: flex; align-items: center; }
+    .nav-item { position: relative; }
+    .nav-link {
+      display: flex; align-items: center; gap: 3px;
+      padding: 0 15px; height: 64px;
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 13px; font-weight: 400; white-space: nowrap;
+      letter-spacing: -0.12px;
+      transition: color 0.15s;
+    }
+    .nav-link:hover { color: #fff; }
+    .nav-link svg { opacity: 0.5; transition: transform 0.2s, opacity 0.15s; }
+    .nav-item:hover .nav-link svg { transform: rotate(180deg); opacity: 1; }
+    .nav-dropdown {
+      position: absolute; top: 100%; left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: rgba(22,22,24,0.98);
+      backdrop-filter: blur(24px);
+      border-radius: var(--r-md);
+      padding: 8px;
+      min-width: 200px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s 0.1s, transform 0.2s 0.1s;
+      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+    }
+    .nav-item:hover .nav-dropdown {
+      opacity: 1; pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+      transition: opacity 0.15s 0s, transform 0.15s 0s;
+    }
+    .nav-dropdown a {
+      display: block; font-size: 13px;
+      color: rgba(255,255,255,0.62);
+      padding: 10px 14px;
+      border-radius: var(--r-sm);
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+    .nav-dropdown a + a { border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-dropdown a:hover {
+      background: rgba(41,151,255,0.13);
+      color: var(--primary-on-dark);
+      box-shadow: inset 3px 0 0 var(--primary-on-dark);
+    }
+    .nav-dropdown a.active { color: var(--primary-on-dark); }
+    .nav-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .lang-btn {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      padding: 4px 7px; border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: none; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lang-btn:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    .lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); }
+    .btn-primary {
+      font-family: var(--font-text);
+      font-size: 12px; color: #fff;
+      background: var(--primary); border: none;
+      border-radius: var(--r-pill); padding: 7px 15px;
+      margin-left: 4px;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { background: var(--primary-focus); }
+    .btn-primary:active { transform: scale(0.95); }
+    .hero-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+    .btn-dl { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-text); font-size: 14px; color: rgba(255,255,255,0.82); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: var(--r-pill); padding: 11px 20px; cursor: pointer; text-decoration: none; transition: background 0.15s, border-color 0.15s, transform 0.1s; white-space: nowrap; }
+    .btn-dl:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.3); color: #fff; }
+    .btn-dl:active { transform: scale(0.95); }
+    .btn-dl-wrap{position:relative;display:inline-block}
+    .btn-dl-menu{position:absolute;top:calc(100% + 6px);left:0;background:rgba(18,18,18,0.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.15);border-radius:10px;min-width:190px;padding:5px;display:none;z-index:200}
+    .btn-dl-wrap.open .btn-dl-menu{display:block}
+    .btn-dl-item{display:flex;align-items:center;gap:8px;padding:8px 12px;color:rgba(255,255,255,0.82);font-size:13px;font-family:var(--font-text);text-decoration:none;border-radius:6px;transition:background 0.1s;white-space:nowrap}
+    .btn-dl-item:hover{background:rgba(255,255,255,0.1);color:#fff}
+    .btn-dl-label{font-size:9px;color:rgba(255,255,255,0.45);padding:4px 12px 3px;display:block;font-family:var(--font-text);letter-spacing:0.6px;border-top:1px solid rgba(255,255,255,0.08);margin-top:3px}
+    .btn-dl-label:first-child{border-top:none;margin-top:0}
+    .product-hero { background: var(--surface-black); padding: 100px 24px 80px; text-align: center; position: relative; overflow: hidden; }
+    .product-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,102,204,0.18) 0%, transparent 70%); }
+    .product-hero-inner { position: relative; z-index: 1; }
+    .product-tag { display: inline-block; background: rgba(41,151,255,0.15); border: 1px solid rgba(41,151,255,0.3); border-radius: var(--r-pill); padding: 6px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary-on-dark); margin-bottom: 24px; }
+    .product-hero h1 { font-family: var(--font-display); font-size: 64px; font-weight: 700; color: var(--on-dark); line-height: 1.05; margin-bottom: 16px; letter-spacing: -0.02em; }
+    .product-hero-sub { font-size: 22px; color: rgba(255,255,255,0.6); max-width: 640px; margin: 0 auto 36px; line-height: 1.5; }
+    .hero-badge-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+    .hero-badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r-pill); padding: 8px 20px; font-size: 13px; color: rgba(255,255,255,0.8); }
+    .tab-bar { background: #0d0d0f; border-bottom: 1px solid rgba(255,255,255,0.07); position: sticky; top: 64px; z-index: 90; padding: 12px 24px; display: flex; justify-content: center; }
+    .tab-bar-inner { display: flex; background: rgba(255,255,255,0.07); border-radius: var(--r-pill); padding: 3px; gap: 2px; }
+    .tab-btn { padding: 13px 48px; background: transparent; border: none; border-radius: var(--r-pill); color: rgba(255,255,255,0.48); font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.22s; font-family: var(--font-text); white-space: nowrap; letter-spacing: 0.01em; }
+    .tab-btn:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.05); }
+    .tab-btn.active { background: rgba(41,151,255,0.22); color: var(--primary-on-dark); font-weight: 600; box-shadow: 0 1px 6px rgba(0,0,0,0.35); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .section { padding: 80px 24px; }
+    .section-dark { background: var(--surface-tile-1); }
+    .section-dark-2 { background: var(--surface-tile-2); }
+    .section-parchment { background: var(--canvas-parchment); }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
+    .section-label-light { color: var(--primary-on-dark); }
+    .section-title { font-family: var(--font-display); font-size: 36px; font-weight: 600; color: var(--ink); line-height: 1.2; margin-bottom: 16px; }
+    .section-title-light { color: var(--on-dark); }
+    .section-body { font-size: 17px; color: var(--ink-muted-48); line-height: 1.7; max-width: 720px; }
+    .section-body-light { color: rgba(255,255,255,0.6); }
+    .feature-grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 40px; }
+    .feature-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 28px 24px; border: 1px solid rgba(255,255,255,0.08); }
+    .feature-icon { font-size: 28px; margin-bottom: 14px; }
+    .feature-card h3 { font-size: 17px; font-weight: 600; color: var(--on-dark); margin-bottom: 10px; }
+    .feature-card p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+    /* 비교 테이블 (라이트 배경) */
+    .compare-table-wrap { overflow-x: auto; margin-top: 40px; border-radius: var(--r-lg); border: 1px solid var(--hairline); }
+    .compare-table { width: 100%; border-collapse: collapse; }
+    .compare-table th { background: var(--canvas-parchment); padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--ink-muted-80); text-align: left; border-bottom: 1px solid var(--hairline); }
+    .compare-table th.highlight { background: rgba(0,102,204,0.08); color: var(--primary); }
+    .compare-table td { padding: 13px 20px; font-size: 14px; color: var(--ink-muted-80); border-bottom: 1px solid var(--hairline); }
+    .compare-table td.highlight { background: rgba(0,102,204,0.04); color: var(--ink); font-weight: 500; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .order-diagram { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding: 40px 0 16px; }
+    .order-seg { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .order-seg-code { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--on-dark); white-space: nowrap; padding: 0 14px 10px; border-bottom: 2.5px solid var(--primary-on-dark); text-align: center; }
+    .order-seg-arrow { color: var(--primary-on-dark); font-size: 20px; line-height: 1; margin: 8px 0 4px; }
+    .order-seg-num { font-size: 20px; color: var(--primary-on-dark); }
+    .order-dash { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.4); padding: 0 2px 10px; align-self: flex-start; flex-shrink: 0; }
+    .order-steps { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 32px; }
+    .order-step { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--r-md); padding: 20px; }
+    .order-step-num { font-size: 13px; font-weight: 700; color: var(--primary-on-dark); margin-bottom: 6px; }
+    .order-step-title { font-size: 14px; font-weight: 600; color: var(--on-dark); margin-bottom: 8px; }
+    .order-step-opts { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+    .spec-table-wrap { overflow-x: auto; margin-top: 40px; border-radius: var(--r-lg); border: 1px solid rgba(255,255,255,0.08); }
+    .spec-table { width: 100%; border-collapse: collapse; }
+    .spec-table th { background: rgba(255,255,255,0.06); padding: 14px 20px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .spec-table td { padding: 14px 20px; font-size: 14px; color: rgba(255,255,255,0.8); border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: top; }
+    .spec-table tr:last-child td { border-bottom: none; }
+    .spec-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .related-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 40px; }
+    .related-card { background: var(--canvas); border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--hairline); text-decoration: none; transition: box-shadow 0.2s, transform 0.2s; display: flex; flex-direction: column; }
+    .related-card:hover { box-shadow: rgba(0,0,0,0.12) 0 8px 24px; transform: translateY(-2px); }
+    .related-card-img { width: 100%; aspect-ratio: 3/4; background: var(--surface-black); overflow: hidden; }
+    .related-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+    .related-card:hover .related-card-img img { transform: scale(1.03); }
+    .related-card-body { padding: 20px; }
+    .related-card h4 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+    .related-card p { font-size: 13px; color: var(--ink-muted-48); }
+    .related-arrow { color: var(--primary); font-size: 18px; margin-top: 12px; display: block; }
+    footer { background: var(--canvas-parchment); padding: 60px 24px 40px; border-top: 1px solid var(--hairline); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand p { font-size: 13px; color: var(--ink-muted-48); line-height: 1.8; margin-top: 12px; }
+    .footer-logo { display: block; margin-bottom: 0; } .footer-logo img { height: 32px; width: auto; display: block; }
+    .footer-col h5 { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li a { font-size: 13px; color: var(--ink-muted-48); text-decoration: none; }
+    .footer-col ul li a:hover { color: var(--primary); }
+    .footer-bottom { border-top: 1px solid var(--hairline); padding-top: 20px; font-size: 12px; color: var(--ink-muted-48); }
+    @media (max-width: 768px) {
+      .product-hero h1 { font-size: 40px; }
+      .feature-grid-2, .order-steps, .related-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .tab-bar { padding: 10px 16px; }
+      .tab-btn { padding: 11px 28px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo"><img src="../assets/images/logo-white.png" alt="Paraent"></a>
+    <div class="nav-menu">
+      <div class="nav-item"><a href="#" class="nav-link">회사소개<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./company-overview.html">회사개요</a><a href="./history.html">회사연혁</a><a href="./certifications.html">인증현황</a><a href="./location.html">오시는길</a><a href="./quality.html">품질혁신</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">제품소개<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./product-pll.html">Pll 전력조정기</a><a href="./product-smart.html">SMART 전력조정기</a><a href="./product-flex.html">FLEX 전력조정기</a><a href="./product-mini.html" class="active">MINI 전력조정기</a><a href="./product-etype.html">E-TYPE 전력조정기</a><a href="./product-multi.html">MULTI 전력조정기</a><a href="./product-ptype.html">P-TYPE 전력조정기</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">자료실<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./resources.html">기술자료</a><a href="./resources.html">메뉴얼</a><a href="./resources.html">캐드도면</a><a href="./resources.html">카다로그</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">고객센터<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./inquiry.html">온라인상담</a><a href="./notice.html">공지사항</a></div></div>
+    </div>
+    <div class="nav-right"><button class="lang-btn">KO</button><button class="lang-btn">EN</button><button class="lang-btn">中</button><a href="./inquiry.html" class="btn-primary">온라인 문의</a></div>
+  </div>
+</nav>
+
+<section class="product-hero">
+  <div class="product-hero-inner">
+    <div class="product-tag">국내 최소형 · SSR 대체</div>
+    <h1>MINI</h1>
+    <p class="product-hero-sub">단상 26mm · 삼상 115mm<br>국내 최소형 SCR 디지털 전력조정기</p>
+    <div class="hero-actions">
+      <a href="./inquiry.html" class="btn-primary" style="font-size:15px;padding:12px 28px;">제품 문의하기</a>
+      <div class="btn-dl-wrap">
+        <button class="btn-dl btn-dl-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>메뉴얼 다운로드<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="btn-dl-menu">
+          <a href="../files/manual/manual-mini-1p.pdf" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>단상 (1P)</a>
+          <a href="../files/manual/manual-mini-3p.pdf" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>삼상 (3P)</a>
+        </div>
+      </div>
+      <div class="btn-dl-wrap">
+        <button class="btn-dl btn-dl-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>캐드 다운로드<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="btn-dl-menu">
+          <a href="../files/cad/Mini 단상-Type-20250124.dwg" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>단상 (1P)</a>
+          <a href="../files/cad/Mini 3상-치수도면.dwg" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>삼상 (3P)</a>
+        </div>
+      </div>
+      <a href="../files/catalog/catalog-general.pdf" download class="btn-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>카다로그 다운로드</a>
+    </div>
+    <div class="hero-badge-row">
+      <span class="hero-badge">단상 가로 26mm</span>
+      <span class="hero-badge">SCR 소자 탑재</span>
+      <span class="hero-badge">전력소자 소손 감지</span>
+      <span class="hero-badge">SSR 완전 대체</span>
+    </div>
+  </div>
+</section>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <button class="tab-btn active" data-tab="tab-features">특장점</button>
+    <button class="tab-btn" data-tab="tab-order">주문형식</button>
+    <button class="tab-btn" data-tab="tab-spec">사양</button>
+  </div>
+</div>
+
+<!-- TAB: 특장점 -->
+<div id="tab-features" class="tab-panel active">
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label section-label-light">특장점</div>
+      <h2 class="section-title section-title-light">MINI의 핵심 장점</h2>
+      <p class="section-body section-body-light">보호 장치 없는 SSR을 대체하는 안전하고 신뢰할 수 있는 초소형 디지털 전력조정기</p>
+      <div class="feature-grid-2">
+        <div class="feature-card">
+          <div class="feature-icon">📐</div>
+          <h3>국내 최소형 디자인</h3>
+          <p>단상 제품 가로 26mm, 삼상 제품 가로 115mm로 국내에서 가장 작은 디지털 전력조정기입니다. 협소한 제어반에도 손쉽게 설치할 수 있습니다.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💪</div>
+          <h3>고신뢰성 SCR 소자</h3>
+          <p>SSR에 사용되는 TRIAC 대신 내구성과 신뢰성이 뛰어난 SCR 소자를 사용합니다. 더 긴 수명과 안정적인 동작을 보장합니다.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h3>전력소자 소손 감지</h3>
+          <p>전력 소자의 소손 여부를 감지하여 알람으로 알려줍니다. SSR은 이 기능이 없어 화재 위험이 있지만, MINI는 이상을 즉시 감지하여 안전을 확보합니다.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>안전성 · 신뢰성 · 편의성</h3>
+          <p>파형손실 보상 제어와 오랜 디지털 전력 기술 축적으로 높은 정밀성과 안정성을 확보합니다. 3색 LED로 상태를 한눈에 파악할 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--canvas);">
+    <div class="container">
+      <div class="section-label">MINI vs SSR 비교</div>
+      <h2 class="section-title">MINI가 SSR보다 뛰어난 이유</h2>
+      <div class="compare-table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th class="highlight">MINI 전력조정기</th>
+              <th>SSR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>부하단선 알람</td><td class="highlight">기본 탑재 (자체 C/T)</td><td>외부 장치 별도 설치 필요</td></tr>
+            <tr><td>OC 알람 (과전류 보호)</td><td class="highlight">과전류 보호 기본 탑재</td><td>보호 기능 없음</td></tr>
+            <tr><td>방열판 과열</td><td class="highlight">60℃ 경고, 80℃ 알람</td><td>접점만 출력</td></tr>
+            <tr><td>전력소자 이상 감지</td><td class="highlight">판단 기능 기본 탑재</td><td>확인 기능 없음</td></tr>
+            <tr><td>제어입력 신호</td><td class="highlight">4~20mA / 0~10VDC / SSR 중 선택</td><td>SSR 입력만 가능</td></tr>
+            <tr><td>디스플레이</td><td class="highlight">3색 LED</td><td>단색 LED</td></tr>
+            <tr><td>상시전원</td><td class="highlight">10~30VDC</td><td>없음</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label section-label-light">안전성 · 정밀성 · 편의성</div>
+      <h2 class="section-title section-title-light">안전성, 정밀성 및 편의성 확보</h2>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:16px;max-width:860px;">
+        <li style="display:flex;gap:16px;align-items:flex-start;">
+          <span style="flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#2997ff;margin-top:8px;"></span>
+          <p style="font-size:15px;color:rgba(255,255,255,0.75);line-height:1.75;margin:0;">전력소자가 소손이 되면, 제어가 되지 않고 메인 전원이 그대로 히터로 출력되어 화재사고가 발생할 수 있습니다.</p>
+        </li>
+        <li style="display:flex;gap:16px;align-items:flex-start;">
+          <span style="flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#2997ff;margin-top:8px;"></span>
+          <p style="font-size:15px;color:rgba(255,255,255,0.75);line-height:1.75;margin:0;">이러한 전력소자의 소손 여부 확인은 안전성과 직접적으로 관련이 있으며, 전력소자의 소손 여부를 확인할 수 없는 SSR과는 달리, Mini 전력조정기는 CPU 구동 및 자체 CT를 이용하여 전력소자의 이상 여부를 확인할 수 있어 안전성을 확보하였습니다.</p>
+        </li>
+        <li style="display:flex;gap:16px;align-items:flex-start;">
+          <span style="flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#2997ff;margin-top:8px;"></span>
+          <p style="font-size:15px;color:rgba(255,255,255,0.75);line-height:1.75;margin:0;">SSR의 경우 부하단선을 검출하기 위해 외부에 CT나 부하단선 확인 장치를 별도로 장착해야 하나, Mini는 자체 CT를 내장하고 있어 계장 결선의 공수를 줄이고, 오배선의 실수 또한 줄여서 고객의 편의성을 증대시켰습니다.</p>
+        </li>
+        <li style="display:flex;gap:16px;align-items:flex-start;">
+          <span style="flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#2997ff;margin-top:8px;"></span>
+          <p style="font-size:15px;color:rgba(255,255,255,0.75);line-height:1.75;margin:0;">파형손실 보상 제어가 기본 탑재되어 있어 제어의 정밀성을 향상시켰습니다.</p>
+        </li>
+        <li style="display:flex;gap:16px;align-items:flex-start;">
+          <span style="flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#2997ff;margin-top:8px;"></span>
+          <p style="font-size:15px;color:rgba(255,255,255,0.75);line-height:1.75;margin:0;">디지털 전력조정기 개발 및 출시 이후 오랫동안의 디지털 전력기술이 포함되어 있어 안정성과 신뢰성이 매우 높습니다.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section-parchment">
+    <div class="container">
+      <div class="section-label">관련 제품</div>
+      <h2 class="section-title">함께 보면 좋은 제품</h2>
+      <div class="related-grid">
+        <a href="./product-ptype.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/ptype.png" alt="P-TYPE 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>P-TYPE 전력조정기</h4><p>디지털 전력조정기의 Steady Seller</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-pll.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/pll.png" alt="Pll 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>Pll 전력조정기</h4><p>Free Voltage 지원, P-TYPE 계승 차세대 제품</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-smart.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/smart.png" alt="SMART 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>SMART 전력조정기</h4><p>Nothing is smarter than SMART — 스마트한 고급 제어</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-flex.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/flex.png" alt="FLEX 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>FLEX 전력조정기</h4><p>EtherCAT 지원, 최첨단 산업 네트워크 연동</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-etype.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/etype.png" alt="E-TYPE 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>E-TYPE 전력조정기</h4><p>경제적이고 실용적인 올인원 전력조정기</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-multi.html" class="related-card"><div class="related-card-img"><img src="../assets/images/products/multi.png" alt="MULTI 전력조정기" loading="lazy"></div><div class="related-card-body"><h4>MULTI 전력조정기</h4><p>Three in One — 공간절약 · 경제성 겸비</p><span class="related-arrow">→</span></div></a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TAB: 주문형식 -->
+<div id="tab-order" class="tab-panel">
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label section-label-light">주문형식</div>
+      <h2 class="section-title section-title-light">MINI 주문 코드 구성</h2>
+      <p class="section-body section-body-light">아래 코드 구성 순서에 따라 원하는 사양을 선택하십시오.</p>
+      <div class="order-diagram">
+        <div class="order-seg"><div class="order-seg-code">PS/TS</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">①</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">정격전류</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">②</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">냉각팬 옵션</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
+      </div>
+      <div class="order-steps">
+        <div class="order-step">
+          <div class="order-step-num">① 입력상</div>
+          <div class="order-step-title">제품 구분</div>
+          <div class="order-step-opts">PS — 단상 MINI<br>TS — 삼상 MINI</div>
+        </div>
+        <div class="order-step">
+          <div class="order-step-num">② 정격전류</div>
+          <div class="order-step-title">전류 용량</div>
+          <div class="order-step-opts">단상: 10A / 25A / 40A<br>삼상: 25A / 40A / 55A / 70A</div>
+        </div>
+        <div class="order-step">
+          <div class="order-step-num">③ 냉각팬</div>
+          <div class="order-step-title">냉각 방식</div>
+          <div class="order-step-opts">단상 10A·25A — 자연공냉 (팬 없음)<br>단상 40A — 강제공냉 (옵션)<br>삼상 25A·40A — 강제공냉 (옵션)<br>삼상 55A·70A — 강제공냉 (기본)</div>
+        </div>
+        <div class="order-step">
+          <div class="order-step-num">제어입력 신호</div>
+          <div class="order-step-title">입력 신호 선택</div>
+          <div class="order-step-opts">4~20mA / 0~10VDC / SSR 입력<br>3가지 중 1개 선택</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TAB: 사양 -->
+<div id="tab-spec" class="tab-panel">
+  <section class="section section-dark-2">
+    <div class="container">
+      <div class="section-label section-label-light">사양</div>
+      <h2 class="section-title section-title-light">MINI 제품 사양</h2>
+      <div class="spec-table-wrap">
+        <table class="spec-table">
+          <thead>
+            <tr><th>모델명</th><th>Mini 단상 디지털 전력조정기</th><th>Mini 삼상 디지털 전력조정기</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>사용전압</td><td>50~500VAC</td><td>50~500VAC</td></tr>
+            <tr><td>정격전류</td><td>10A / 25A / 40A</td><td>25A / 40A / 55A / 70A</td></tr>
+            <tr><td>정격 주파수</td><td>50/60Hz (자동선택)</td><td>50/60Hz (자동선택)</td></tr>
+            <tr><td>최소부하전류</td><td>1A</td><td>1A</td></tr>
+            <tr><td>출력범위</td><td>제로크로싱 제어 0~98%</td><td>제로크로싱 제어 0~98%</td></tr>
+            <tr><td>제어전원</td><td>10~30VDC</td><td>10~30VDC</td></tr>
+            <tr><td>제어입력 신호</td><td>4~20mA / 0~10VDC / SSR입력 중 1개 선택</td><td>4~20mA / 0~10VDC / SSR입력 중 1개 선택</td></tr>
+            <tr><td>출력 접점</td><td>NPN Open collector 2CH (Vc ≤ 30V, Ic ≤ 50mA)</td><td>NPN Open collector 2CH (Vc ≤ 30V, Ic ≤ 50mA)</td></tr>
+            <tr><td>제어방법</td><td>보상 알고리즘을 탑재한 제로크로싱 제어방식</td><td>보상 알고리즘을 탑재한 제로크로싱 제어방식</td></tr>
+            <tr><td>냉각방식</td><td>10A, 25A, 40A : 자연냉각 / 40A 강제냉각(냉각팬 옵션)</td><td>25A : 자연냉각(냉각팬 옵션) / 40A, 55A, 70A : 강제냉각</td></tr>
+            <tr><td>알림기능</td><td>과전류, 부하단선, 방열판 과열(60℃/80℃), SCR 소자소손</td><td>과전류, 부하단선, 방열판 과열(60℃/80℃), SCR 소자소손, 부하불평형</td></tr>
+            <tr><td>동작 보증 온도(환경온도)</td><td>0 ~ 40℃</td><td>0 ~ 40℃</td></tr>
+            <tr><td>사용습도 범위</td><td>40% ~ 85% RH (결로가 없을 것)</td><td>40% ~ 85% RH (결로가 없을 것)</td></tr>
+            <tr><td>디스플레이</td><td>3색 LED 1개</td><td>3색 LED 1개, 단색 LED 3개</td></tr>
+            <tr><td>중량(Net WT)</td><td>10A, 25A : 287g / 40A(팬 없음) : 431g / 40A(팬 장착 시) : 454g</td><td>25A : 970g(팬 없음) / 40A, 55A, 70A : 1.4Kgs (팬 장착시)</td></tr>
+            <tr><td>취부방식</td><td>볼트 또는 DIN-RAIL 고정</td><td>볼트로 고정</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../assets/images/logo.png" alt="Paraent"></a><p>(주)파라이엔티<br>경기도 화성시 동탄기흥로 64-14<br>TEL: 031-357-0680 · FAX: 031-357-0679<br>E-mail: paraent@paraent.com</p></div>
+      <div class="footer-col"><h5>회사소개</h5><ul><li><a href="./company-overview.html">회사개요</a></li><li><a href="./history.html">회사연혁</a></li><li><a href="./certifications.html">인증현황</a></li><li><a href="./location.html">오시는길</a></li><li><a href="./quality.html">품질혁신</a></li></ul></div>
+      <div class="footer-col"><h5>제품소개</h5><ul><li><a href="./product-pll.html">Pll 전력조정기</a></li><li><a href="./product-smart.html">SMART 전력조정기</a></li><li><a href="./product-flex.html">FLEX 전력조정기</a></li><li><a href="./product-mini.html">MINI 전력조정기</a></li><li><a href="./product-etype.html">E-TYPE 전력조정기</a></li><li><a href="./product-multi.html">MULTI 전력조정기</a></li><li><a href="./product-ptype.html">P-TYPE 전력조정기</a></li></ul></div>
+      <div class="footer-col"><h5>고객센터</h5><ul><li><a href="./resources.html">자료실</a></li><li><a href="./inquiry.html">온라인상담</a></li><li><a href="./notice.html">공지사항</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">© 2025 (주)파라이엔티. All rights reserved.</div>
+  </div>
+</footer>
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+
+<!-- FLOATING BUTTONS -->
+<div class="float-btns">
+  <a href="./inquiry.html" class="float-btn float-inquiry-btn" aria-label="문의하기">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="float-btn-label">문의</span>
+  </a>
+  <button id="scrollTopBtn" class="float-btn scroll-top-btn" aria-label="맨 위로">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+</div>
+<style>
+.float-btns{position:fixed;bottom:32px;right:32px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:9999}
+.float-btn{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,transform .2s;gap:2px}
+.float-btn svg{width:18px;height:18px;flex-shrink:0}
+.float-btn-label{font-size:9px;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;letter-spacing:0.2px;line-height:1}
+.float-btn:hover{background:rgba(0,0,0,0.9);transform:translateY(-2px)}
+.float-btn:active{transform:scale(0.92)}
+.float-inquiry-btn{background:rgba(0,102,204,0.85)}
+.float-inquiry-btn:hover{background:rgba(0,82,170,0.95)}
+.scroll-top-btn{opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .3s,transform .3s,visibility .3s,background .2s}
+.scroll-top-btn.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.scroll-top-btn:hover{transform:translateY(-2px)}
+</style>
+<script>
+(function(){var b=document.getElementById('scrollTopBtn');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>300)},{passive:true});b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})})})();
+</script>
+</body>
+</html>

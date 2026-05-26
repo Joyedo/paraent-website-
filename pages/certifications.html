@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>인증현황 — Paraent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0066cc;
+      --primary-focus: #0071e3;
+      --primary-on-dark: #2997ff;
+      --ink: #1d1d1f;
+      --ink-muted-80: #333333;
+      --ink-muted-48: #7a7a7a;
+      --body-muted: #cccccc;
+      --hairline: #e0e0e0;
+      --canvas: #ffffff;
+      --canvas-parchment: #f5f5f7;
+      --surface-tile-1: #272729;
+      --surface-tile-2: #2a2a2c;
+      --surface-black: #000000;
+      --on-dark: #ffffff;
+      --r-pill: 9999px;
+      --r-lg: 18px;
+      --r-sm: 8px;
+      --r-md: 11px;
+      --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+      --font-text: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-text); color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 200;
+      height: 64px;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      display: flex; align-items: center;
+      padding: 0 32px;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px;
+    }
+    .nav-logo { display: flex; align-items: center; flex-shrink: 0; }
+    .nav-logo img { height: 34px; width: auto; display: block; }
+    .nav-menu { display: flex; align-items: center; }
+    .nav-item { position: relative; }
+    .nav-link {
+      display: flex; align-items: center; gap: 3px;
+      padding: 0 15px; height: 64px;
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 13px; font-weight: 400; white-space: nowrap;
+      letter-spacing: -0.12px;
+      transition: color 0.15s;
+    }
+    .nav-link:hover { color: #fff; }
+    .nav-link svg { opacity: 0.5; transition: transform 0.2s, opacity 0.15s; }
+    .nav-item:hover .nav-link svg { transform: rotate(180deg); opacity: 1; }
+    .nav-dropdown {
+      position: absolute; top: 100%; left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: rgba(22,22,24,0.98);
+      backdrop-filter: blur(24px);
+      border-radius: var(--r-md);
+      padding: 8px;
+      min-width: 200px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s 0.1s, transform 0.2s 0.1s;
+      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+    }
+    .nav-item:hover .nav-dropdown {
+      opacity: 1; pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+      transition: opacity 0.15s 0s, transform 0.15s 0s;
+    }
+    .nav-dropdown a {
+      display: block; font-size: 13px;
+      color: rgba(255,255,255,0.62);
+      padding: 10px 14px;
+      border-radius: var(--r-sm);
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+    .nav-dropdown a + a { border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-dropdown a:hover {
+      background: rgba(41,151,255,0.13);
+      color: var(--primary-on-dark);
+      box-shadow: inset 3px 0 0 var(--primary-on-dark);
+    }
+    .nav-dropdown a.active { color: var(--primary-on-dark); }
+    .nav-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .lang-btn {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      padding: 4px 7px; border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: none; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lang-btn:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    .lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); }
+    .btn-primary {
+      font-family: var(--font-text);
+      font-size: 12px; color: #fff;
+      background: var(--primary); border: none;
+      border-radius: var(--r-pill); padding: 7px 15px;
+      margin-left: 4px;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { background: var(--primary-focus); }
+    .btn-primary:active { transform: scale(0.95); }
+
+    /* PAGE HEADER */
+    .page-header {
+      background: linear-gradient(160deg, #080810 0%, #10111a 45%, #181b26 100%);
+      padding: 0; position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: ''; position: absolute;
+      top: -60px; left: -80px; width: 520px; height: 520px;
+      background: radial-gradient(circle, rgba(0,102,204,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-header::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent 0%, var(--primary) 25%, var(--primary-on-dark) 60%, transparent 100%);
+    }
+    .page-header-inner {
+      max-width: 1100px; margin: 0 auto;
+      padding: 88px 24px 76px; position: relative; z-index: 1;
+    }
+    .page-header-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--primary-on-dark); margin-bottom: 22px;
+    }
+    .page-header-eyebrow::before {
+      content: ''; display: block; width: 24px; height: 2px;
+      background: var(--primary-on-dark); flex-shrink: 0;
+    }
+    .page-header h1 {
+      font-family: var(--font-display); font-size: 64px; font-weight: 700;
+      color: var(--on-dark); letter-spacing: -0.03em; line-height: 1; margin-bottom: 18px;
+    }
+    .page-header-sub {
+      font-size: 15px; color: rgba(255,255,255,0.45);
+      line-height: 1.7; max-width: 460px; margin-bottom: 36px;
+    }
+    .breadcrumb { font-size: 12px; color: rgba(255,255,255,0.3); }
+    .breadcrumb a { color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: rgba(255,255,255,0.65); }
+    .breadcrumb span { margin: 0 6px; }
+
+    /* SECTIONS */
+    .section { padding: 80px 24px; }
+    .section-parchment { background: var(--canvas-parchment); }
+    .section-dark { background: var(--surface-tile-1); }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
+    .section-label-light { color: var(--primary-on-dark); }
+    .section-title { font-family: var(--font-display); font-size: 32px; font-weight: 600; color: var(--ink); margin-bottom: 32px; }
+    .section-title-light { color: var(--on-dark); }
+
+    /* CERT GRID */
+    .cert-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .cert-card {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: var(--r-lg);
+      padding: 28px 24px;
+      display: flex; flex-direction: column; align-items: flex-start;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .cert-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    .cert-icon {
+      width: 52px; height: 52px; border-radius: var(--r-md);
+      background: linear-gradient(135deg, rgba(0,102,204,0.12) 0%, rgba(41,151,255,0.08) 100%);
+      border: 1px solid rgba(0,102,204,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 16px;
+    }
+    .cert-card h4 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+    .cert-card p { font-size: 13px; color: var(--ink-muted-48); line-height: 1.5; }
+    .cert-badge {
+      display: inline-block; margin-top: 12px;
+      background: var(--canvas-parchment); border-radius: var(--r-pill);
+      padding: 3px 10px; font-size: 11px; color: var(--ink-muted-48);
+    }
+
+    /* DARK CERT GRID */
+    .cert-card-dark {
+      background: var(--surface-tile-2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--r-lg);
+      padding: 28px 24px;
+    }
+    .cert-card-dark h4 { font-size: 15px; font-weight: 600; color: var(--on-dark); margin-bottom: 6px; }
+    .cert-card-dark p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+    .cert-icon-dark {
+      width: 52px; height: 52px; border-radius: var(--r-md);
+      background: rgba(41,151,255,0.15);
+      border: 1px solid rgba(41,151,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 16px;
+    }
+    .cert-badge-dark {
+      display: inline-block; margin-top: 12px;
+      background: rgba(255,255,255,0.08); border-radius: var(--r-pill);
+      padding: 3px 10px; font-size: 11px; color: rgba(255,255,255,0.45);
+    }
+    .grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+
+    /* UL CERT GALLERY */
+    .ul-section { margin-top: 40px; }
+    .ul-product-block { margin-bottom: 40px; }
+    .ul-product-block:last-child { margin-bottom: 0; }
+    .ul-product-label {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+    }
+    .ul-product-label-badge {
+      flex-shrink: 0;
+      background: rgba(41,151,255,0.15); border: 1px solid rgba(41,151,255,0.3);
+      border-radius: 6px; padding: 4px 12px;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+      color: #5ab3ff;
+    }
+    .ul-product-label-sub {
+      font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 0.02em;
+    }
+    .ul-product-label::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+    }
+    .ul-thumb-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    }
+    .ul-thumb {
+      aspect-ratio: 3/4; border-radius: 10px; overflow: hidden;
+      background: #ffffff; border: 1px solid rgba(255,255,255,0.15);
+      cursor: pointer; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .ul-thumb:hover { transform: translateY(-3px); border-color: rgba(41,151,255,0.5); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .ul-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; background: #ffffff; }
+
+    /* LIGHTBOX */
+    .lightbox-overlay {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.92); backdrop-filter: blur(12px);
+      align-items: center; justify-content: center;
+    }
+    .lightbox-overlay.open { display: flex; }
+    .lightbox-img {
+      max-width: min(90vw, 700px); max-height: 90vh;
+      border-radius: 12px; box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+      object-fit: contain;
+    }
+    .lightbox-close {
+      position: fixed; top: 20px; right: 24px;
+      background: rgba(255,255,255,0.12); border: none; color: #fff;
+      width: 40px; height: 40px; border-radius: 50%; font-size: 20px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .lightbox-close:hover { background: rgba(255,255,255,0.22); }
+    .lightbox-nav {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.12); border: none; color: #fff;
+      width: 44px; height: 44px; border-radius: 50%; font-size: 20px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.22); }
+    .lightbox-prev { left: 16px; }
+    .lightbox-next { right: 16px; }
+    .lightbox-counter {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      font-size: 12px; color: rgba(255,255,255,0.45); letter-spacing: 0.06em;
+    }
+
+    /* CERT IMAGE CARDS */
+    .cert-img-card {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: flex; flex-direction: column;
+    }
+    .cert-img-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); transform: translateY(-2px); }
+    .cert-img-preview {
+      width: 100%; aspect-ratio: 3/4;
+      background: #fff;
+      overflow: hidden; border-bottom: 1px solid var(--hairline);
+    }
+    .cert-img-preview img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .cert-img-info { padding: 18px 20px; display: flex; flex-direction: column; gap: 4px; }
+    .cert-img-info h4 { font-size: 14px; font-weight: 600; color: var(--ink); }
+    .cert-img-info p { font-size: 12px; color: var(--ink-muted-48); line-height: 1.5; }
+    .cert-img-badge {
+      display: inline-block; margin-top: 6px; align-self: flex-start;
+      background: var(--canvas-parchment); border-radius: var(--r-pill);
+      padding: 3px 10px; font-size: 11px; color: var(--ink-muted-48);
+    }
+
+    .cert-img-card-dark {
+      background: var(--surface-tile-2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: flex; flex-direction: column;
+    }
+    .cert-img-card-dark:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.4); transform: translateY(-2px); border-color: rgba(41,151,255,0.25); }
+    .cert-img-preview-dark {
+      width: 100%; aspect-ratio: 3/4;
+      background: #fff;
+      overflow: hidden; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .cert-img-preview-dark img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .cert-img-info-dark { padding: 18px 20px; display: flex; flex-direction: column; gap: 4px; }
+    .cert-img-info-dark h4 { font-size: 14px; font-weight: 600; color: var(--on-dark); }
+    .cert-img-info-dark p { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+    .cert-img-badge-dark {
+      display: inline-block; margin-top: 6px; align-self: flex-start;
+      background: rgba(255,255,255,0.08); border-radius: var(--r-pill);
+      padding: 3px 10px; font-size: 11px; color: rgba(255,255,255,0.4);
+    }
+
+    @media (max-width: 700px) { .ul-thumb-grid { grid-template-columns: repeat(2,1fr); } }
+
+    /* CE Gallery */
+    .cert-gallery-divider {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+    }
+    .cert-gallery-divider span {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35); white-space: nowrap;
+    }
+    .cert-gallery-divider::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07);
+    }
+    .ce-doc-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    }
+    .ce-doc-item { display: flex; flex-direction: column; gap: 6px; }
+    .ce-pdf-link {
+      display: block; text-align: center; font-size: 11px; font-weight: 600;
+      color: #5ab3ff; text-decoration: none;
+      background: rgba(41,151,255,0.1); border: 1px solid rgba(41,151,255,0.18);
+      border-radius: 6px; padding: 5px 8px; transition: background 0.15s;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ce-pdf-link:hover { background: rgba(41,151,255,0.2); }
+    .ce-no-img-card {
+      aspect-ratio: 3/4; border-radius: 10px;
+      background: rgba(41,151,255,0.05); border: 1px solid rgba(41,151,255,0.12);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; padding: 16px 12px; text-align: center; text-decoration: none;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .ce-no-img-card:hover {
+      background: rgba(41,151,255,0.1); border-color: rgba(41,151,255,0.3); transform: translateY(-3px);
+    }
+    .ce-no-img-card-flag { font-size: 22px; }
+    .ce-no-img-card-type {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #5ab3ff; line-height: 1.4;
+    }
+    .ce-no-img-card-model { font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.4; }
+    .ce-no-img-card-btn {
+      margin-top: 4px; font-size: 10px; font-weight: 600;
+      background: rgba(41,151,255,0.15); color: #5ab3ff;
+      padding: 3px 10px; border-radius: 4px; border: 1px solid rgba(41,151,255,0.25);
+    }
+    @media (max-width: 700px) { .ce-doc-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* FOOTER */
+    footer { background: var(--canvas-parchment); padding: 60px 24px 40px; border-top: 1px solid var(--hairline); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand p { font-size: 13px; color: var(--ink-muted-48); line-height: 1.8; margin-top: 12px; }
+    .footer-logo { display: block; margin-bottom: 0; } .footer-logo img { height: 32px; width: auto; display: block; }
+    .footer-col h5 { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li a { font-size: 13px; color: var(--ink-muted-48); text-decoration: none; }
+    .footer-col ul li a:hover { color: var(--primary); }
+    .footer-bottom { border-top: 1px solid var(--hairline); padding-top: 20px; font-size: 12px; color: var(--ink-muted-48); }
+
+    @media (max-width: 900px) { .cert-grid, .grid-3 { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 600px) { .cert-grid, .grid-3, .grid-2 { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } .page-header h1 { font-size: 40px; } }
+
+    /* CATEGORY TAB NAV */
+    .cert-tab-nav {
+      position: sticky; top: 64px; z-index: 90;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border-bottom: 1px solid var(--hairline);
+      padding: 0 24px;
+    }
+    .cert-tab-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; gap: 4px; align-items: center;
+      height: 52px;
+    }
+    .cert-tab {
+      display: inline-flex; align-items: center;
+      padding: 6px 16px; border-radius: var(--r-pill);
+      font-size: 13px; font-weight: 500; white-space: nowrap;
+      color: var(--ink-muted-48); text-decoration: none;
+      border: 1px solid transparent;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .cert-tab:hover { background: var(--canvas-parchment); color: var(--ink); border-color: var(--hairline); }
+    .cert-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* scroll offset for sticky bars (52px nav + 52px tab nav) */
+    #patents, #cert-ce, #cert-ul, #other-certs { scroll-margin-top: 110px; }
+
+    @media (max-width: 600px) {
+      .cert-tab-inner { gap: 4px; overflow-x: auto; padding-bottom: 2px; }
+      .cert-tab { font-size: 12px; padding: 5px 13px; }
+    }
+
+    /* PATENT IMAGE GRID */
+    .cert-patent-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+    @media (max-width: 900px) { .cert-patent-grid { grid-template-columns: repeat(2,1fr); } }
+
+    /* PDF INLINE PREVIEW */
+    .cert-doc-preview {
+      width: 100%; aspect-ratio: 3/4;
+      background: #fff;
+      overflow: hidden; border-bottom: 1px solid var(--hairline);
+      position: relative;
+    }
+    .cert-doc-preview::after {
+      content: ''; position: absolute; inset: 0;
+      box-shadow: inset 0 0 0 10px #fff;
+      pointer-events: none; z-index: 2;
+    }
+    .cert-doc-preview embed {
+      position: absolute; top: 0; left: -12%;
+      width: 124%; height: calc(100% + 50px);
+      border: none; pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo"><img src="../assets/images/logo-white.png" alt="Paraent"></a>
+    <div class="nav-menu">
+      <div class="nav-item">
+        <a href="#" class="nav-link">회사소개<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="nav-dropdown">
+          <a href="./company-overview.html">회사개요</a>
+          <a href="./history.html">회사연혁</a>
+          <a href="./certifications.html" class="active">인증현황</a>
+          <a href="./location.html">오시는길</a>
+          <a href="./quality.html">품질혁신</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">제품소개<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="nav-dropdown">
+          <a href="./product-pll.html">Pll 전력조정기</a>
+          <a href="./product-smart.html">SMART 전력조정기</a>
+          <a href="./product-flex.html">FLEX 전력조정기</a>
+          <a href="./product-mini.html">MINI 전력조정기</a>
+          <a href="./product-etype.html">E-TYPE 전력조정기</a>
+          <a href="./product-multi.html">MULTI 전력조정기</a>
+          <a href="./product-ptype.html">P-TYPE 전력조정기</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">자료실<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="nav-dropdown">
+          <a href="./resources.html">기술자료</a>
+          <a href="./resources.html">메뉴얼</a>
+          <a href="./resources.html">캐드도면</a>
+          <a href="./resources.html">카다로그</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">고객센터<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="nav-dropdown">
+          <a href="./inquiry.html">온라인상담</a>
+          <a href="./notice.html">공지사항</a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="lang-btn">KO</button>
+      <button class="lang-btn">EN</button>
+      <button class="lang-btn">中</button>
+      <a href="./inquiry.html" class="btn-primary">온라인 문의</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-eyebrow">Certifications</div>
+    <h1>인증현황</h1>
+    <p class="page-header-sub">국내외 다양한 품질 인증으로 기술력과 신뢰성을 입증하고 있습니다.</p>
+    <div class="breadcrumb">
+      <a href="../index.html">홈</a>
+      <span>›</span>
+      <a href="#">회사소개</a>
+      <span>›</span>
+      인증현황
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORY TAB NAV -->
+<div class="cert-tab-nav">
+  <div class="cert-tab-inner">
+    <a href="#patents" class="cert-tab active">특허 및 상표등록증</a>
+    <a href="#cert-ce" class="cert-tab">해외인증 CE</a>
+    <a href="#cert-ul" class="cert-tab">해외인증 UL</a>
+    <a href="#other-certs" class="cert-tab">기타인증</a>
+  </div>
+</div>
+
+<!-- 특허 및 상표등록증 -->
+<section class="section" id="patents">
+  <div class="container">
+    <div class="section-label">Patents &amp; Trademarks</div>
+    <h2 class="section-title">특허 및 상표등록증</h2>
+    <div class="cert-patent-grid">
+
+      <!-- 디자인등록증 (PDF 인라인) -->
+      <a href="../assets/certifications/patents/patent-design.pdf" target="_blank" rel="noopener" style="text-decoration:none; display:block;">
+        <div class="cert-img-card">
+          <div class="cert-doc-preview">
+            <embed src="../assets/certifications/patents/patent-design.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf">
+          </div>
+          <div class="cert-img-info">
+            <h4>디자인등록증</h4>
+            <p>전력조정기 외관 디자인 등록증</p>
+            <span class="cert-img-badge">Design · PDF</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 상표등록증 영문 (PDF 인라인) -->
+      <a href="../assets/certifications/patents/trademark-en.pdf" target="_blank" rel="noopener" style="text-decoration:none; display:block;">
+        <div class="cert-img-card">
+          <div class="cert-doc-preview">
+            <embed src="../assets/certifications/patents/trademark-en.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf">
+          </div>
+          <div class="cert-img-info">
+            <h4>상표등록증</h4>
+            <p>PARAENT 영문 브랜드 로고 상표 등록증</p>
+            <span class="cert-img-badge">Trademark (EN) · PDF</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 상표등록증 한글 (PDF 인라인) -->
+      <a href="../assets/certifications/patents/trademark-ko.pdf" target="_blank" rel="noopener" style="text-decoration:none; display:block;">
+        <div class="cert-img-card">
+          <div class="cert-doc-preview">
+            <embed src="../assets/certifications/patents/trademark-ko.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf">
+          </div>
+          <div class="cert-img-info">
+            <h4>상표등록증</h4>
+            <p>파라이엔티 한글 브랜드 로고 상표 등록증</p>
+            <span class="cert-img-badge">Trademark (KO) · PDF</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 특허증 멀티채널 (이미지 + 라이트박스) -->
+      <div class="cert-img-card" onclick="openLightbox('patents', 0)" style="cursor:pointer;">
+        <div class="cert-img-preview">
+          <img src="../assets/certifications/patents/patent-multichannel.jpg" alt="멀티채널 전력조정기 특허증">
+        </div>
+        <div class="cert-img-info">
+          <h4>특허증</h4>
+          <p>멀티채널 전력조정기 — 복수 채널 독립 제어 기술</p>
+          <span class="cert-img-badge">Patent · 멀티채널</span>
+        </div>
+      </div>
+
+      <!-- 특허증 PLF (이미지 + 라이트박스) -->
+      <div class="cert-img-card" onclick="openLightbox('patents', 1)" style="cursor:pointer;">
+        <div class="cert-img-preview">
+          <img src="../assets/certifications/patents/patent-plf.jpg" alt="부분부하단선 검출기 특허증">
+        </div>
+        <div class="cert-img-info">
+          <h4>특허증</h4>
+          <p>부분부하단선 검출기 — 병렬 부하 단선 자동 감지 기술</p>
+          <span class="cert-img-badge">Patent · PLF</span>
+        </div>
+      </div>
+
+      <!-- 특허증 파형손실 (이미지 + 라이트박스) -->
+      <div class="cert-img-card" onclick="openLightbox('patents', 2)" style="cursor:pointer;">
+        <div class="cert-img-preview">
+          <img src="../assets/certifications/patents/patent-waveform.jpg" alt="파형손실 보상 방법 특허증">
+        </div>
+        <div class="cert-img-info">
+          <h4>특허증</h4>
+          <p>파형손실 보상 방법 및 파형손실 보상을 구현하는 전력 공급장치</p>
+          <span class="cert-img-badge">Patent · 파형보상</span>
+        </div>
+      </div>
+
+      <!-- 특허증 MPD (이미지 + 라이트박스) -->
+      <div class="cert-img-card" onclick="openLightbox('patents', 3)" style="cursor:pointer;">
+        <div class="cert-img-preview">
+          <img src="../assets/certifications/patents/patent-mpd.jpg" alt="피크전력 분배 특허증">
+        </div>
+        <div class="cert-img-info">
+          <h4>특허증</h4>
+          <p>피크전력 분배가 가능한 전력조정기 — 최대전력분산제어(MPD) 기술</p>
+          <span class="cert-img-badge">Patent · MPD</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 해외규격인증 -->
+<section class="section section-dark">
+  <div class="container">
+    <div id="cert-ce" style="position:relative; top:-10px;"></div>
+    <div class="section-label section-label-light">International Standards</div>
+    <h2 class="section-title section-title-light">해외규격인증</h2>
+    <div class="grid-2" style="margin-bottom: 48px;">
+      <div class="cert-card-dark">
+        <div class="cert-icon-dark">🇪🇺</div>
+        <h4>CE 인증</h4>
+        <p>유럽 전기전자 안전 규격 인증. Pll, SMART, FLEX, MINI, E-TYPE, P-TYPE 전 제품군 획득. LVD·EMC·RoHS DoC 및 CE CoC 보유.</p>
+        <span class="cert-badge-dark">CE Marking</span>
+      </div>
+      <div class="cert-card-dark">
+        <div class="cert-icon-dark">🇺🇸</div>
+        <h4>UL 인증</h4>
+        <p>미국 안전규격 UL 인증. SMART (2022), FLEX (2023), PII (2025) 제품 획득. 북미 시장 공급 적합성 인증.</p>
+        <span class="cert-badge-dark">UL Certification</span>
+      </div>
+    </div>
+
+    <!-- ─── CE 인증서 갤러리 ─── -->
+    <div class="cert-gallery-divider"><span>🇪🇺 CE 인증서 — 제품별</span></div>
+
+    <!-- PII -->
+    <div class="ul-product-block">
+      <div class="ul-product-label">
+        <span class="ul-product-label-badge">PII</span>
+        <span class="ul-product-label-sub">Pll 디지털 전력조정기 — CE Declaration / Certificate of Conformity</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-pii', 0)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/CE_CoC_PARA-ENT_Co., Ltd._Digital Power Regulator_[Model No. SPⅡ220A070PAF]_page-0001.jpg" alt="PII CE 단상 SPⅡ220A070"></div>
+          <div class="cert-img-info-dark"><h4>LVD·EMC DoC</h4><p>단상 SPⅡ220A07</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-pii', 1)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/CE_CoC_PARA-ENT_Co., Ltd._Digital Power Regulator_[Model No. SPⅡ220C040PA]_page-0001.jpg" alt="PII CE 단상 SPⅡ220C040"></div>
+          <div class="cert-img-info-dark"><h4>LVD·EMC DoC</h4><p>단상 SPⅡ220C04</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-pii', 2)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/CE_CoC_PARA-ENT_Co., Ltd._Digital Power Regulator_[Model No. TPII380A070PAF]_page-0001.jpg" alt="PII CE 삼상 TPII380A070"></div>
+          <div class="cert-img-info-dark"><h4>LVD·EMC DoC</h4><p>삼상 TPII380A07</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-pii', 3)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/CE_CoC_PARA-ENT_Co., Ltd._Digital Power Regulator_[Model No. TPII380C040PAF]_page-0001.jpg" alt="PII CE 삼상 TPII380C040"></div>
+          <div class="cert-img-info-dark"><h4>LVD·EMC DoC</h4><p>삼상 TPII380C04</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SMART -->
+    <div class="ul-product-block">
+      <div class="ul-product-label">
+        <span class="ul-product-label-badge">SMART</span>
+        <span class="ul-product-label-sub">SMART 디지털 전력조정기 — CE Declaration of Conformity</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-smart', 0)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Smart_Power_Regulator_[Model No. SMART seri~_page-0001.jpg" alt="SMART CE DoC"></div>
+          <div class="cert-img-info-dark"><h4>CE DoC</h4><p>SMART 시리즈</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLEX -->
+    <div class="ul-product-block">
+      <div class="ul-product-label">
+        <span class="ul-product-label-badge">FLEX</span>
+        <span class="ul-product-label-sub">FLEX 디지털 전력조정기 — CE Certificate of Conformity</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-flex', 0)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/CE_CoC_PARA-ENT Co.,Ltd._DIGITAL POWER REGULATOR_[Model No. FLEX4200-3P3..._page-0001.jpg" alt="FLEX CE CoC p.1"></div>
+          <div class="cert-img-info-dark"><h4>CE CoC p.1</h4><p>FLEX 시리즈</p><span class="cert-img-badge-dark">CE CoC</span></div>
+        </div>
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-flex', 1)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/CE_CoC_PARA-ENT Co.,Ltd._DIGITAL POWER REGULATOR_[Model No. FLEX4200-3P3..._page-0002.jpg" alt="FLEX CE CoC p.2"></div>
+          <div class="cert-img-info-dark"><h4>CE CoC p.2</h4><p>FLEX 시리즈</p><span class="cert-img-badge-dark">CE CoC</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MINI -->
+    <div class="ul-product-block">
+      <div class="ul-product-label">
+        <span class="ul-product-label-badge">MINI</span>
+        <span class="ul-product-label-sub">MINI 디지털 전력조정기 — CE Declaration of Conformity</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-mini', 0)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. Mini ser~_page-0001.jpg" alt="MINI CE DoC 단상"></div>
+          <div class="cert-img-info-dark"><h4>CE DoC</h4><p>단상 MINI</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-mini', 1)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. Mini 3 s~_page-0001.jpg" alt="MINI CE DoC 삼상"></div>
+          <div class="cert-img-info-dark"><h4>CE DoC</h4><p>삼상 MINI 3</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E-TYPE -->
+    <div class="ul-product-block">
+      <div class="ul-product-label">
+        <span class="ul-product-label-badge">E-TYPE</span>
+        <span class="ul-product-label-sub">E-TYPE 디지털 전력조정기 — CE Declaration of Conformity</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-etype', 0)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. SE-TYPE ~_page-0001.jpg" alt="SE-TYPE CE DoC"></div>
+          <div class="cert-img-info-dark"><h4>CE DoC</h4><p>SE-TYPE</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-etype', 1)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. TE-TYPE ~_page-0001.jpg" alt="TE-TYPE CE DoC"></div>
+          <div class="cert-img-info-dark"><h4>CE DoC</h4><p>TE-TYPE</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P-TYPE -->
+    <div class="ul-product-block">
+      <div class="ul-product-label">
+        <span class="ul-product-label-badge">P-TYPE</span>
+        <span class="ul-product-label-sub">P-TYPE 디지털 전력조정기 — CE Declaration of Conformity</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-ptype', 0)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. SPM, SZM~_page-0001.jpg" alt="P-TYPE SPM/SZM CE DoC"></div>
+          <div class="cert-img-info-dark"><h4>CE DoC</h4><p>SPM/SZM</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-ptype', 1)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. SPM, SZM~ (1)_page-0001.jpg" alt="P-TYPE SPM/SZM (2) CE DoC"></div>
+          <div class="cert-img-info-dark"><h4>CE DoC</h4><p>SPM/SZM (2)</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-ptype', 2)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. SZ, SPP ~_page-0001.jpg" alt="P-TYPE SZ/SPP CE DoC"></div>
+          <div class="cert-img-info-dark"><h4>CE DoC</h4><p>SZ/SPP</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+        <div class="cert-img-card-dark" onclick="openLightbox('ce-ptype', 3)">
+          <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. SZ, SPP ~_page-0001.jpg" alt="P-TYPE TZ/TPP CE DoC"></div>
+          <div class="cert-img-info-dark"><h4>CE DoC</h4><p>TZ/TPP</p><span class="cert-img-badge-dark">CE DoC</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── UL 인증서 갤러리 ─── -->
+    <div id="cert-ul" style="position:relative; top:-10px;"></div>
+    <div class="cert-gallery-divider" style="margin-top: 56px;"><span>🇺🇸 UL 인증서 — 제품별</span></div>
+    <div class="ul-section">
+      <div class="ul-product-block">
+        <div class="ul-product-label">
+          <span class="ul-product-label-badge">PII</span>
+          <span class="ul-product-label-sub">UL Certification of Compliance</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 0)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/PII_UL인증서1.png" alt="PII UL 인증서 1"></div>
+            <div class="cert-img-info-dark"><h4>UL CoC p.1</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 1)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/PII_UL인증서2.png" alt="PII UL 인증서 2"></div>
+            <div class="cert-img-info-dark"><h4>UL CoC p.2</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 2)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/PII_UL인증서3.png" alt="PII UL 인증서 3"></div>
+            <div class="cert-img-info-dark"><h4>UL CoC p.3</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 3)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/PII_UL인증서4.png" alt="PII UL 인증서 4"></div>
+            <div class="cert-img-info-dark"><h4>UL CoC p.4</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ul-product-block">
+        <div class="ul-product-label">
+          <span class="ul-product-label-badge">FLEX</span>
+          <span class="ul-product-label-sub">UL Certification of Compliance</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 4)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/FLEX_UL_Certification_of_Compliance_202301051024_1 (2).jpg" alt="FLEX UL 인증서 1"></div>
+            <div class="cert-img-info-dark"><h4>UL CoC p.1</h4><p>FLEX 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 5)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/FLEX_UL_Certification_of_Compliance_202301051024_2.jpg" alt="FLEX UL 인증서 2"></div>
+            <div class="cert-img-info-dark"><h4>UL CoC p.2</h4><p>FLEX 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 6)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/FLEX_UL_Certification_of_Compliance_202301051024_3.jpg" alt="FLEX UL 인증서 3"></div>
+            <div class="cert-img-info-dark"><h4>UL CoC p.3</h4><p>FLEX 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 7)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/FLEX_UL_Certification_of_Compliance_202301051024_4 (1).jpg" alt="FLEX UL 인증서 4"></div>
+            <div class="cert-img-info-dark"><h4>UL CoC p.4</h4><p>FLEX 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ul-product-block">
+        <div class="ul-product-label">
+          <span class="ul-product-label-badge">SMART</span>
+          <span class="ul-product-label-sub">UL Certificate of Acceptability</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 8)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/SMART_UL_CofA_220622-1-4_page-0001.jpg" alt="SMART UL 인증서 1"></div>
+            <div class="cert-img-info-dark"><h4>UL CofA p.1</h4><p>SMART 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 9)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/SMART_UL_CofA_220622-1-4_page-0002.jpg" alt="SMART UL 인증서 2"></div>
+            <div class="cert-img-info-dark"><h4>UL CofA p.2</h4><p>SMART 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 10)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/SMART_UL_CofA_220622-1-4_page-0003.jpg" alt="SMART UL 인증서 3"></div>
+            <div class="cert-img-info-dark"><h4>UL CofA p.3</h4><p>SMART 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 11)">
+            <div class="cert-img-preview-dark"><img src="../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/SMART_UL_CofA_220622-1-4_page-0004.jpg" alt="SMART UL 인증서 4"></div>
+            <div class="cert-img-info-dark"><h4>UL CofA p.4</h4><p>SMART 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightboxOnOverlay(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">&#8249;</button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">&#8250;</button>
+  <div class="lightbox-counter" id="lightbox-counter"></div>
+</div>
+
+<script>
+const galleries = {
+  'patents': [
+    '../assets/certifications/patents/patent-multichannel.jpg',
+    '../assets/certifications/patents/patent-plf.jpg',
+    '../assets/certifications/patents/patent-waveform.jpg',
+    '../assets/certifications/patents/patent-mpd.jpg',
+  ],
+  'ul-all': [
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/PII_UL인증서1.png',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/PII_UL인증서2.png',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/PII_UL인증서3.png',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/PII_UL인증서4.png',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/FLEX_UL_Certification_of_Compliance_202301051024_1 (2).jpg',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/FLEX_UL_Certification_of_Compliance_202301051024_2.jpg',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/FLEX_UL_Certification_of_Compliance_202301051024_3.jpg',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/FLEX_UL_Certification_of_Compliance_202301051024_4 (1).jpg',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/SMART_UL_CofA_220622-1-4_page-0001.jpg',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/SMART_UL_CofA_220622-1-4_page-0002.jpg',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/SMART_UL_CofA_220622-1-4_page-0003.jpg',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/SMART_UL_CofA_220622-1-4_page-0004.jpg',
+  ],
+  'ce-pii': [
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/CE_CoC_PARA-ENT_Co., Ltd._Digital Power Regulator_[Model No. SPⅡ220A070PAF]_page-0001.jpg',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/CE_CoC_PARA-ENT_Co., Ltd._Digital Power Regulator_[Model No. SPⅡ220C040PA]_page-0001.jpg',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/CE_CoC_PARA-ENT_Co., Ltd._Digital Power Regulator_[Model No. TPII380A070PAF]_page-0001.jpg',
+    '../../파라이엔티 홈페이지/인증현황/UL인증 이걸로/CE_CoC_PARA-ENT_Co., Ltd._Digital Power Regulator_[Model No. TPII380C040PAF]_page-0001.jpg',
+  ],
+  'ce-smart': [
+    '../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Smart_Power_Regulator_[Model No. SMART seri~_page-0001.jpg',
+  ],
+  'ce-flex': [
+    '../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/CE_CoC_PARA-ENT Co.,Ltd._DIGITAL POWER REGULATOR_[Model No. FLEX4200-3P3..._page-0001.jpg',
+    '../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/CE_CoC_PARA-ENT Co.,Ltd._DIGITAL POWER REGULATOR_[Model No. FLEX4200-3P3..._page-0002.jpg',
+  ],
+  'ce-mini': [
+    '../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. Mini ser~_page-0001.jpg',
+    '../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. Mini 3 s~_page-0001.jpg',
+  ],
+  'ce-etype': [
+    '../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. SE-TYPE ~_page-0001.jpg',
+    '../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. TE-TYPE ~_page-0001.jpg',
+  ],
+  'ce-ptype': [
+    '../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. SPM, SZM~_page-0001.jpg',
+    '../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. SPM, SZM~ (1)_page-0001.jpg',
+    '../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. SZ, SPP ~_page-0001.jpg',
+    '../../파라이엔티 홈페이지/인증현황/해외규격인증/jpg/(Sign)CE_DoC_PARA-ENT_Co.,_Ltd._Digital_Power_Regulator_[Model No. SZ, SPP ~_page-0001.jpg',
+  ],
+  'iso': [
+    '../assets/images/certifications/other/iso-9001.jpg',
+    '../assets/images/certifications/other/iso-14001.jpg',
+  ],
+  'other': [
+    '../assets/images/certifications/other/innobiz.jpg',
+    '../assets/images/certifications/other/venture.jpg',
+    '../assets/images/certifications/other/materials.jpg',
+    '../assets/images/certifications/other/research-institute.jpg',
+  ],
+};
+let currentGallery = [], currentIndex = 0;
+
+function openLightbox(gallery, idx) {
+  currentGallery = galleries[gallery];
+  currentIndex = idx;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeLightboxOnOverlay(e) {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+}
+function lightboxNav(dir) {
+  currentIndex = (currentIndex + dir + currentGallery.length) % currentGallery.length;
+  updateLightbox();
+}
+function updateLightbox() {
+  document.getElementById('lightbox-img').src = currentGallery[currentIndex];
+  document.getElementById('lightbox-counter').textContent = (currentIndex + 1) + ' / ' + currentGallery.length;
+}
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') lightboxNav(-1);
+  if (e.key === 'ArrowRight') lightboxNav(1);
+});
+
+// Category tab active state on scroll
+(function() {
+  const tabs = document.querySelectorAll('.cert-tab');
+  const anchors = ['patents', 'cert-ce', 'cert-ul', 'other-certs'];
+  const OFFSET = 120;
+
+  function getScrollTop(id) {
+    const el = document.getElementById(id);
+    return el ? el.getBoundingClientRect().top + window.scrollY : Infinity;
+  }
+
+  function updateTabs() {
+    const scrollY = window.scrollY + OFFSET + 1;
+    let active = 0;
+    for (let i = 0; i < anchors.length; i++) {
+      if (getScrollTop(anchors[i]) <= scrollY) active = i;
+    }
+    tabs.forEach((t, i) => t.classList.toggle('active', i === active));
+  }
+
+  window.addEventListener('scroll', updateTabs, { passive: true });
+  updateTabs();
+})();
+</script>
+
+<!-- ISO 인증 -->
+<section class="section section-dark" id="other-certs">
+  <div class="container">
+    <div class="section-label section-label-light">Quality Management</div>
+    <h2 class="section-title section-title-light">ISO 인증</h2>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+      <div class="cert-img-card-dark" onclick="openLightbox('iso', 0)">
+        <div class="cert-img-preview-dark">
+          <img src="../assets/images/certifications/other/iso-9001.jpg" alt="ISO 9001 인증서">
+        </div>
+        <div class="cert-img-info-dark">
+          <h4>ISO 9001</h4>
+          <p>품질경영시스템 국제 표준 인증. 설계·생산·판매·사후관리 전 과정의 품질 시스템 적합성 확인. 2005년 최초 획득.</p>
+          <span class="cert-img-badge-dark">품질경영 시스템</span>
+        </div>
+      </div>
+      <div class="cert-img-card-dark" onclick="openLightbox('iso', 1)">
+        <div class="cert-img-preview-dark">
+          <img src="../assets/images/certifications/other/iso-14001.jpg" alt="ISO 14001 인증서">
+        </div>
+        <div class="cert-img-info-dark">
+          <h4>ISO 14001</h4>
+          <p>환경경영시스템 국제 표준 인증. 친환경 생산 공정 및 환경 영향 최소화 경영 시스템 인증. 2005년 최초 획득.</p>
+          <span class="cert-img-badge-dark">환경경영 시스템</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 기타 인증 -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-label section-label-light">Other Certifications</div>
+    <h2 class="section-title section-title-light">기타 인증</h2>
+    <div class="grid-3" style="grid-template-columns: repeat(4,1fr);">
+      <div class="cert-img-card-dark" onclick="openLightbox('other', 0)">
+        <div class="cert-img-preview-dark">
+          <img src="../assets/images/certifications/other/innobiz.jpg" alt="이노비즈 확인서">
+        </div>
+        <div class="cert-img-info-dark">
+          <h4>INNO-BIZ 기업</h4>
+          <p>중소기업청 기술혁신형 중소기업 선정.</p>
+          <span class="cert-img-badge-dark">기술혁신형 중소기업</span>
+        </div>
+      </div>
+      <div class="cert-img-card-dark" onclick="openLightbox('other', 1)">
+        <div class="cert-img-preview-dark">
+          <img src="../assets/images/certifications/other/venture.jpg" alt="벤처기업 확인서">
+        </div>
+        <div class="cert-img-info-dark">
+          <h4>벤처기업 인증</h4>
+          <p>중소벤처기업부 벤처기업 인증.</p>
+          <span class="cert-img-badge-dark">Venture Company</span>
+        </div>
+      </div>
+      <div class="cert-img-card-dark" onclick="openLightbox('other', 2)">
+        <div class="cert-img-preview-dark">
+          <img src="../assets/images/certifications/other/materials.jpg" alt="소재부품장비 확인서">
+        </div>
+        <div class="cert-img-info-dark">
+          <h4>소재·부품·장비 전문기업</h4>
+          <p>한국산업기술평가관리원 선정.</p>
+          <span class="cert-img-badge-dark">소부장 전문기업</span>
+        </div>
+      </div>
+      <div class="cert-img-card-dark" onclick="openLightbox('other', 3)">
+        <div class="cert-img-preview-dark">
+          <img src="../assets/images/certifications/other/research-institute.jpg" alt="기업부설연구소 인정서">
+        </div>
+        <div class="cert-img-info-dark">
+          <h4>기업부설연구소</h4>
+          <p>한국산업기술진흥협회 기업부설연구소 인정.</p>
+          <span class="cert-img-badge-dark">R&amp;D 연구소</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../index.html" class="footer-logo"><img src="../assets/images/logo.png" alt="Paraent"></a>
+        <p>(주)파라이엔티<br>경기도 화성시 동탄기흥로 64-14<br>TEL 031-831-8310 | FAX 031-831-8314</p>
+      </div>
+      <div class="footer-col">
+        <h5>회사소개</h5>
+        <ul>
+          <li><a href="./company-overview.html">회사개요</a></li>
+          <li><a href="./history.html">회사연혁</a></li>
+          <li><a href="./certifications.html">인증현황</a></li>
+          <li><a href="./location.html">오시는길</a></li>
+          <li><a href="./quality.html">품질혁신</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>제품소개</h5>
+        <ul>
+          <li><a href="./product-pll.html">PII</a></li>
+          <li><a href="./product-smart.html">SMART</a></li>
+          <li><a href="./product-flex.html">FLEX</a></li>
+          <li><a href="./product-mini.html">MINI</a></li>
+          <li><a href="./product-etype.html">E-TYPE</a></li>
+          <li><a href="./product-multi.html">MULTI</a></li>
+          <li><a href="./product-ptype.html">P-TYPE</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>고객센터</h5>
+        <ul>
+          <li><a href="./resources.html">자료실</a></li>
+          <li><a href="./inquiry.html">온라인상담</a></li>
+          <li><a href="./notice.html">공지사항</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2000–2025 (주)파라이엔티 Paraent Co., Ltd. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING BUTTONS -->
+<div class="float-btns">
+  <a href="./inquiry.html" class="float-btn float-inquiry-btn" aria-label="문의하기">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="float-btn-label">문의</span>
+  </a>
+  <button id="scrollTopBtn" class="float-btn scroll-top-btn" aria-label="맨 위로">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+</div>
+<style>
+.float-btns{position:fixed;bottom:32px;right:32px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:9999}
+.float-btn{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,transform .2s;gap:2px}
+.float-btn svg{width:18px;height:18px;flex-shrink:0}
+.float-btn-label{font-size:9px;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;letter-spacing:0.2px;line-height:1}
+.float-btn:hover{background:rgba(0,0,0,0.9);transform:translateY(-2px)}
+.float-btn:active{transform:scale(0.92)}
+.float-inquiry-btn{background:rgba(0,102,204,0.85)}
+.float-inquiry-btn:hover{background:rgba(0,82,170,0.95)}
+.scroll-top-btn{opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .3s,transform .3s,visibility .3s,background .2s}
+.scroll-top-btn.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.scroll-top-btn:hover{transform:translateY(-2px)}
+</style>
+<script>
+(function(){var b=document.getElementById('scrollTopBtn');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>300)},{passive:true});b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})})})();
+</script>
+</body>
+</html>
