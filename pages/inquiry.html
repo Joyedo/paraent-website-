@@ -326,12 +326,12 @@
   </div>
 </footer>
 
-<!-- Supabase JS Client -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Supabase JS Client (UMD) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
   const SUPABASE_URL = 'https://ttrxqfrzzwyrpgiyjwix.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0cnhxZnJ6end5cnBnaXlqd2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3OTM2MjcsImV4cCI6MjA5NTM2OTYyN30.xUJwYc7e4hir3zNEWT1JvEnWHLkxVlDB3P56XHUJ1eg';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </script>
 
 <script>
@@ -379,7 +379,7 @@ async function handleSubmit(e) {
   btn.textContent = '접수 중...';
   btn.disabled = true;
 
-  const { error } = await supabase.from('inquiries').insert({
+  const { error } = await _supabase.from('inquiries').insert({
     name:         document.getElementById('inp-name').value.trim(),
     company:      document.getElementById('inp-company').value.trim() || null,
     phone:        document.getElementById('inp-phone').value.trim(),
