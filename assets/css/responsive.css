@@ -509,7 +509,26 @@ body.menu-open { overflow: hidden; }
 }
 
 /* ══════════════════════════════════════════════════
-   FIX 5 — 메인 히어로 배경 이미지 잘림 수정
+   FIX 5 — SMART PSD 이미지 그리드 반응형
+══════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  /* 3열 → 1열로 */
+  .psd-img-grid {
+    grid-template-columns: 1fr !important;
+  }
+  /* 이미지 래퍼 높이 조정 */
+  .psd-img-grid .graph-box > div {
+    height: 200px !important;
+  }
+}
+@media (max-width: 480px) {
+  .psd-img-grid .graph-box > div {
+    height: 160px !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   FIX 6 — 메인 히어로 배경 이미지 잘림 수정
 ══════════════════════════════════════════════════ */
 @media (max-width: 767px) {
   /* 슬라이드 높이 제한 — 과도한 세로 크롭 방지 */
