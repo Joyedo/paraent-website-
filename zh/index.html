@@ -564,6 +564,161 @@
     resetTimer(); updateNavTheme();
   </script>
 
+  <script>
+    (function () {
+      const carousel = document.getElementById('carousel');
+      const light    = document.getElementById('heroMouseLight');
+      if (!carousel || !light) return;
+
+      let rafLight = null;
+
+      const productPos = [
+        [0.71, 0.50, 0.26],
+        [0.72, 0.52, 0.28],
+        [0.65, 0.50, 0.30],
+        [0.68, 0.48, 0.32],
+        [0.68, 0.50, 0.28],
+        [0.66, 0.50, 0.30],
+        [0.70, 0.52, 0.34],
+      ];
+
+      let currentSlide = 0;
+      const track = document.getElementById('slidesTrack');
+      if (track) {
+        const observer = new MutationObserver(function() {
+          const tx = new DOMMatrix(getComputedStyle(track).transform).m41;
+          currentSlide = Math.round(Math.abs(tx) / (carousel.offsetWidth || 1));
+        });
+        observer.observe(track, { attributes: true, attributeFilter: ['style'] });
+      }
+
+      carousel.addEventListener('mousemove', function (e) {
+        cancelAnimationFrame(rafLight);
+        rafLight = requestAnimationFrame(function () {
+          const rect = carousel.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const w = rect.width;
+          const h = rect.height;
+
+          const pos   = productPos[Math.min(currentSlide, productPos.length - 1)];
+          const px    = w * pos[0];
+          const py    = h * pos[1];
+          const pr    = h * pos[2];
+
+          const dx   = x - px;
+          const dy   = y - py;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          const maxDist = pr * 1.7;
+          const shadow  = dist < maxDist ? (1 - dist / maxDist) * 0.38 : 0;
+
+          if (shadow > 0.01) {
+            light.style.background =
+              'radial-gradient(700px circle at ' + x + 'px ' + y + 'px, ' +
+                'rgba(41,151,255,0.10) 0%, rgba(41,151,255,0.03) 40%, transparent 70%), ' +
+              'radial-gradient(' + (pr * 1.05).toFixed(0) + 'px circle at ' + px.toFixed(0) + 'px ' + py.toFixed(0) + 'px, ' +
+                'rgba(0,0,0,' + shadow.toFixed(3) + ') 0%, ' +
+                'rgba(0,0,0,' + (shadow * 0.4).toFixed(3) + ') 55%, ' +
+                'rgba(41,151,255,' + (shadow * 0.12).toFixed(3) + ') 85%, ' +
+                'transparent 100%)';
+          } else {
+            light.style.background =
+              'radial-gradient(700px circle at ' + x + 'px ' + y + 'px, ' +
+              'rgba(41,151,255,0.11) 0%, rgba(41,151,255,0.03) 40%, transparent 70%)';
+          }
+          light.style.opacity = '1';
+        });
+      });
+
+      carousel.addEventListener('mouseleave', function () {
+        light.style.opacity = '0';
+      });
+    }());
+  </script>
+
+<!-- WAVE CANVAS ANIMATION -->
+<script>
+(function () {
+  const canvas = document.getElementById('waveCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = canvas.parentElement.offsetWidth  || window.innerWidth;
+    canvas.height = canvas.parentElement.offsetHeight || Math.round(window.innerHeight * 0.92);
+  }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  const waves = [
+    { cy: 0.28, amp: 0.10, freq: 1.6, phOff: 0.0,  speed: 0.42, r: 41,  g: 151, b: 255 },
+    { cy: 0.54, amp: 0.13, freq: 2.1, phOff: 2.3,  speed: 0.30, r: 100, g: 55,  b: 235 },
+    { cy: 0.74, amp: 0.09, freq: 1.4, phOff: 4.7,  speed: 0.55, r: 0,   g: 185, b: 170 },
+  ];
+
+  const layers = [
+    [0.085, 0.03],
+    [0.058, 0.05],
+    [0.038, 0.08],
+    [0.022, 0.11],
+    [0.009, 0.15],
+  ];
+
+  const STEPS = 100;
+
+  function frame(ts) {
+    const t = ts * 0.001;
+    const W = canvas.width;
+    const H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, W * 0.62, H);
+    ctx.clip();
+
+    const maxX = W * 0.62;
+
+    waves.forEach(wave => {
+      const phase = wave.phOff + t * wave.speed;
+      const cy    = wave.cy * H;
+      const amp   = wave.amp * H;
+
+      const pts = [];
+      for (let i = 0; i <= STEPS; i++) {
+        pts.push({
+          x: (i / STEPS) * maxX,
+          y: cy + Math.sin((i / STEPS) * Math.PI * 2 * wave.freq + phase) * amp
+        });
+      }
+
+      layers.forEach(([hwRatio, alpha]) => {
+        const hw = hwRatio * H;
+        const grad = ctx.createLinearGradient(0, 0, maxX, 0);
+        grad.addColorStop(0,    `rgba(${wave.r},${wave.g},${wave.b},0)`);
+        grad.addColorStop(0.05, `rgba(${wave.r},${wave.g},${wave.b},${alpha})`);
+        grad.addColorStop(0.55, `rgba(${wave.r},${wave.g},${wave.b},${alpha})`);
+        grad.addColorStop(1.0,  `rgba(${wave.r},${wave.g},${wave.b},0)`);
+
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y - hw);
+        for (let i = 1; i <= STEPS; i++) ctx.lineTo(pts[i].x, pts[i].y - hw);
+        for (let i = STEPS; i >= 0; i--) ctx.lineTo(pts[i].x, pts[i].y + hw);
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+      });
+    });
+
+    ctx.restore();
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+}());
+</script>
+
 <!-- FLOATING BUTTONS -->
 <div class="float-btns">
   <a href="pages/inquiry.html" class="float-btn float-inquiry-btn" aria-label="在线咨询">
