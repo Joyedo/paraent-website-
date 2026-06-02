@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>회사개요 — Paraent</title>
+  <title>Company Overview — Paraent</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
@@ -90,6 +90,7 @@
       padding: 10px 14px;
       border-radius: var(--r-sm);
       transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+      text-decoration: none;
     }
     .nav-dropdown a + a { border-top: 1px solid rgba(255,255,255,0.07); }
     .nav-dropdown a:hover {
@@ -103,8 +104,10 @@
       font-size: 11px; color: rgba(255,255,255,0.55);
       padding: 4px 7px; border-radius: 5px;
       border: 1px solid rgba(255,255,255,0.18);
-      background: none; cursor: pointer;
+      cursor: pointer;
       transition: all 0.15s;
+      text-decoration: none;
+      display: inline-block;
     }
     .lang-btn:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
     .lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); }
@@ -117,6 +120,7 @@
       cursor: pointer; text-decoration: none;
       transition: background 0.15s, transform 0.1s;
       white-space: nowrap;
+      display: inline-block;
     }
     .btn-primary:hover { background: var(--primary-focus); }
     .btn-primary:active { transform: scale(0.95); }
@@ -163,23 +167,6 @@
     .breadcrumb a:hover { color: rgba(255,255,255,0.65); }
     .breadcrumb span { margin: 0 6px; }
 
-    /* PHOTO PLACEHOLDER */
-    .photo-placeholder {
-      width: 100%; border-radius: var(--r-lg);
-      background: #ebebef;
-      border: 2px dashed #c5c5cc;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 10px;
-      color: #a0a0aa; font-size: 13px; font-weight: 500; letter-spacing: 0.03em;
-    }
-    .photo-placeholder svg { opacity: 0.45; }
-    .photo-placeholder-dark {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.35);
-    }
-
     /* SPLIT LAYOUT */
     .split-section { padding: 100px 24px; }
     .split-section-alt { background: var(--canvas-parchment); }
@@ -191,7 +178,6 @@
     }
     .split-grid.flip .split-photo { order: 2; }
     .split-grid.flip .split-text { order: 1; }
-    .split-photo .photo-placeholder { aspect-ratio: 4/3; }
 
     .split-eyebrow {
       font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
@@ -220,7 +206,7 @@
       font-size: 14px;
     }
     .company-info-row:first-child { border-top: 1px solid var(--hairline); }
-    .company-info-label { width: 80px; flex-shrink: 0; color: var(--ink-muted-48); font-weight: 500; }
+    .company-info-label { width: 100px; flex-shrink: 0; color: var(--ink-muted-48); font-weight: 500; }
     .company-info-value { color: var(--ink); font-weight: 400; }
 
     /* STATS BAR */
@@ -345,58 +331,58 @@
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
-  <link rel="stylesheet" href="../assets/css/responsive.css" /></head>
+  <link rel="stylesheet" href="../../assets/css/responsive.css" /></head>
 <body>
 
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-inner">
-    <a href="../index.html" class="nav-logo"><img src="../assets/images/logo-white.png" alt="Paraent"></a>
+    <a href="../index.html" class="nav-logo"><img src="../../assets/images/logo-white.png" alt="Paraent"></a>
     <div class="nav-menu">
       <div class="nav-item">
-        <a href="#" class="nav-link">회사소개<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="#" class="nav-link">About Us<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         <div class="nav-dropdown">
-          <a href="./company-overview.html" class="active">회사개요</a>
-          <a href="./history.html">회사연혁</a>
-          <a href="./certifications.html">인증현황</a>
-          <a href="./location.html">오시는길</a>
-          <a href="./quality.html">품질혁신</a>
+          <a href="./company-overview.html" class="active">Company Overview</a>
+          <a href="./history.html">Company History</a>
+          <a href="./certifications.html">Certifications</a>
+          <a href="./location.html">Location</a>
+          <a href="./quality.html">Quality Innovation</a>
         </div>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link">제품소개<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="#" class="nav-link">Products<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         <div class="nav-dropdown">
-          <a href="./product-pll.html">Pll 전력조정기</a>
-          <a href="./product-smart.html">SMART 전력조정기</a>
-          <a href="./product-flex.html">FLEX 전력조정기</a>
-          <a href="./product-mini.html">MINI 전력조정기</a>
-          <a href="./product-etype.html">E-TYPE 전력조정기</a>
-          <a href="./product-multi.html">MULTI 전력조정기</a>
-          <a href="./product-ptype.html">P-TYPE 전력조정기</a>
+          <a href="./product-pll.html">Pll Power Regulator</a>
+          <a href="./product-smart.html">SMART Power Regulator</a>
+          <a href="./product-flex.html">FLEX Power Regulator</a>
+          <a href="./product-mini.html">MINI Power Regulator</a>
+          <a href="./product-etype.html">E-TYPE Power Regulator</a>
+          <a href="./product-multi.html">MULTI Power Regulator</a>
+          <a href="./product-ptype.html">P-TYPE Power Regulator</a>
         </div>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link">자료실<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="#" class="nav-link">Resources<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         <div class="nav-dropdown">
-          <a href="./resources.html">기술자료</a>
-          <a href="./resources.html">메뉴얼</a>
-          <a href="./resources.html">캐드도면</a>
-          <a href="./resources.html">카다로그</a>
+          <a href="./resources.html">Technical Data</a>
+          <a href="./resources.html">Manuals</a>
+          <a href="./resources.html">CAD Drawings</a>
+          <a href="./resources.html">Catalogs</a>
         </div>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link">고객센터<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="#" class="nav-link">Support<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         <div class="nav-dropdown">
-          <a href="./inquiry.html">온라인상담</a>
-          <a href="./notice.html">공지사항</a>
+          <a href="./inquiry.html">Online Inquiry</a>
+          <a href="./notice.html">Notice</a>
         </div>
       </div>
     </div>
     <div class="nav-right">
-      <a href="./company-overview.html" class="lang-btn active">KO</a>
-      <a href="../en/pages/company-overview.html" class="lang-btn">EN</a>
-      <a href="../zh/pages/company-overview.html" class="lang-btn">中</a>
-      <a href="./inquiry.html" class="btn-primary">온라인 문의</a>
+      <a href="../../pages/company-overview.html" class="lang-btn">KO</a>
+      <a href="./company-overview.html" class="lang-btn active">EN</a>
+      <a href="../../zh/pages/company-overview.html" class="lang-btn">中</a>
+      <a href="./inquiry.html" class="btn-primary">Contact Us</a>
     </div>
   </div>
 </nav>
@@ -405,14 +391,14 @@
 <div class="page-header">
   <div class="page-header-inner">
     <div class="page-header-eyebrow">Company Overview</div>
-    <h1>회사개요</h1>
-    <p class="page-header-sub">파라이엔티의 핵심 기술력과 글로벌 사업 역량을 소개합니다.</p>
+    <h1>Company Overview</h1>
+    <p class="page-header-sub">Introducing Paraent's core technology and global business capabilities.</p>
     <div class="breadcrumb">
-      <a href="../index.html">홈</a>
+      <a href="../index.html">Home</a>
       <span>›</span>
-      <a href="#">회사소개</a>
+      <a href="#">About Us</a>
       <span>›</span>
-      회사개요
+      Company Overview
     </div>
   </div>
 </div>
@@ -422,24 +408,24 @@
   <div class="split-container">
     <div class="split-grid">
       <div class="split-photo">
-        <img src="../assets/images/company-intro.png" alt="파라이엔티 현장" style="width:100%;border-radius:var(--r-lg);display:block;object-fit:cover;object-position:left center;aspect-ratio:4/3;">
+        <img src="../../assets/images/company-intro.png" alt="Paraent Facility" style="width:100%;border-radius:var(--r-lg);display:block;object-fit:cover;object-position:left center;aspect-ratio:4/3;">
       </div>
       <div class="split-text">
         <div class="split-eyebrow">About Paraent</div>
-        <h2 class="split-title">정밀 온도제어의<br><em>최적 솔루션</em> 기업</h2>
-        <p class="split-body">2000년 국내 최초로 디지털 전력조정기를 디자인·개발·판매한 이래 정밀 온도제어에 최적의 솔루션을 제공하는 기업입니다. 21세기 그린 에너지 시대를 맞이하여 시대가 요구하는 전력전자 기술의 개발과 혁신을 지속하고 있습니다.</p>
+        <h2 class="split-title">The <em>Optimal Solution</em><br>for Precision Temperature Control</h2>
+        <p class="split-body">Since designing, developing, and marketing Korea's first digital power regulator in 2000, Paraent has been providing optimal solutions for precision temperature control. Embracing the 21st-century green energy era, we continuously develop and innovate in power electronics technology.</p>
         <div class="company-info-table">
           <div class="company-info-row">
-            <div class="company-info-label">회사명</div>
-            <div class="company-info-value">(주)파라이엔티</div>
+            <div class="company-info-label">Company</div>
+            <div class="company-info-value">Paraent Co., Ltd.</div>
           </div>
           <div class="company-info-row">
-            <div class="company-info-label">설립</div>
-            <div class="company-info-value">2000년 8월</div>
+            <div class="company-info-label">Founded</div>
+            <div class="company-info-value">August 2000</div>
           </div>
           <div class="company-info-row">
-            <div class="company-info-label">주소</div>
-            <div class="company-info-value">경기도 화성시 동탄기흥로 64-14</div>
+            <div class="company-info-label">Address</div>
+            <div class="company-info-value">64-14 Dongtan-gihung-ro, Hwaseong-si, Gyeonggi-do</div>
           </div>
           <div class="company-info-row">
             <div class="company-info-label">TEL</div>
@@ -450,8 +436,8 @@
             <div class="company-info-value">031-831-8314</div>
           </div>
           <div class="company-info-row">
-            <div class="company-info-label">수출</div>
-            <div class="company-info-value">세계 30여 개국</div>
+            <div class="company-info-label">Export</div>
+            <div class="company-info-value">Over 30 countries worldwide</div>
           </div>
         </div>
       </div>
@@ -464,20 +450,20 @@
   <div class="stats-container">
     <div class="stats-grid">
       <div class="stat-item">
-        <div class="stat-number">25<sup>년</sup></div>
-        <div class="stat-label">기술 축적 연수</div>
+        <div class="stat-number">25<sup>yrs</sup></div>
+        <div class="stat-label">Years of Technology</div>
       </div>
       <div class="stat-item">
         <div class="stat-number">30<sup>+</sup></div>
-        <div class="stat-label">수출 국가 수</div>
+        <div class="stat-label">Export Countries</div>
       </div>
       <div class="stat-item">
         <div class="stat-number">7</div>
-        <div class="stat-label">전력조정기 제품군</div>
+        <div class="stat-label">Product Lines</div>
       </div>
       <div class="stat-item">
         <div class="stat-number">2000</div>
-        <div class="stat-label">설립연도</div>
+        <div class="stat-label">Year Founded</div>
       </div>
     </div>
   </div>
@@ -487,8 +473,8 @@
 <section class="vision-section">
   <div class="vision-container">
     <div class="vision-eyebrow">Vision</div>
-    <p class="vision-quote">"21세기 그린 에너지 시대를 맞이하여<br>시대가 요구하는 전력전자 기술의 개발"</p>
-    <p class="vision-sub">에너지 효율과 정밀 제어 기술로 지속 가능한 산업 미래를 선도합니다.</p>
+    <p class="vision-quote">"Developing power electronics technology<br>demanded by the 21st-century green energy era"</p>
+    <p class="vision-sub">Leading a sustainable industrial future with energy efficiency and precision control technology.</p>
   </div>
 </section>
 
@@ -497,12 +483,12 @@
   <div class="split-container">
     <div class="split-grid">
       <div class="split-photo">
-        <img src="../assets/images/business-digital-power.png" alt="디지털 전력조정기 개발·판매" style="width:100%;border-radius:var(--r-lg);display:block;object-fit:cover;aspect-ratio:4/3;">
+        <img src="../../assets/images/business-digital-power.png" alt="Digital Power Regulator Development" style="width:100%;border-radius:var(--r-lg);display:block;object-fit:cover;aspect-ratio:4/3;">
       </div>
       <div class="split-text">
         <div class="split-eyebrow">Core Business 01</div>
-        <h2 class="split-title"><em>디지털 전력조정기</em><br>개발·판매</h2>
-        <p class="split-body">국내 최초 디지털 전력조정기 개발 이래 25년간 축적된 기술력으로 최고 품질의 제품을 공급합니다. PLC 기반 디지털 제어 방식으로 아날로그 방식 대비 월등한 정밀도와 신뢰성을 제공하며, 다양한 산업 현장의 요구에 맞춘 맞춤형 솔루션을 구현합니다.</p>
+        <h2 class="split-title"><em>Digital Power Regulator</em><br>Development &amp; Sales</h2>
+        <p class="split-body">Since developing Korea's first digital power regulator, we have supplied the highest quality products with 25 years of accumulated expertise. Our PLC-based digital control provides far superior precision and reliability compared to analog methods, delivering customized solutions for diverse industrial applications.</p>
       </div>
     </div>
   </div>
@@ -513,12 +499,12 @@
   <div class="split-container">
     <div class="split-grid flip">
       <div class="split-photo">
-        <img src="../assets/images/business-temperature-control.png" alt="정밀 온도 제어 솔루션" style="width:100%;border-radius:var(--r-lg);display:block;object-fit:cover;aspect-ratio:4/3;">
+        <img src="../../assets/images/business-temperature-control.png" alt="Precision Temperature Control" style="width:100%;border-radius:var(--r-lg);display:block;object-fit:cover;aspect-ratio:4/3;">
       </div>
       <div class="split-text">
         <div class="split-eyebrow">Core Business 02</div>
-        <h2 class="split-title"><em>정밀 온도 제어</em><br>솔루션</h2>
-        <p class="split-body">산업 현장의 요구에 맞는 정밀한 온도제어 솔루션을 제공하여 생산 효율을 극대화합니다. 반도체, 디스플레이, 화학·제조업 등 온도 정밀도가 핵심인 분야에서 검증된 기술로 신뢰받고 있습니다.</p>
+        <h2 class="split-title"><em>Precision Temperature Control</em><br>Solutions</h2>
+        <p class="split-body">We maximize production efficiency by providing precise temperature control solutions tailored to industrial needs. Our proven technology is trusted in semiconductor, display, chemical, and manufacturing sectors where temperature precision is critical.</p>
       </div>
     </div>
   </div>
@@ -529,12 +515,12 @@
   <div class="split-container">
     <div class="split-grid">
       <div class="split-photo">
-        <img src="../assets/images/business-power-electronics.png" alt="전력전자 기술 연구 개발" style="width:100%;border-radius:var(--r-lg);display:block;object-fit:cover;aspect-ratio:4/3;">
+        <img src="../../assets/images/business-power-electronics.png" alt="Power Electronics R&D" style="width:100%;border-radius:var(--r-lg);display:block;object-fit:cover;aspect-ratio:4/3;">
       </div>
       <div class="split-text">
         <div class="split-eyebrow split-eyebrow-light">Core Business 03</div>
-        <h2 class="split-title split-title-light">전력전자 기술<br><em>연구 개발</em></h2>
-        <p class="split-body split-body-light">지속적인 R&D 투자와 특허 획득으로 전력전자 기술 분야의 선두를 유지합니다. 스마트그리드·그린 에너지 시대에 맞는 에너지 효율 최적화 및 변환 솔루션을 연구·개발합니다.</p>
+        <h2 class="split-title split-title-light">Power Electronics<br><em>Research &amp; Development</em></h2>
+        <p class="split-body split-body-light">We maintain leadership in power electronics through continuous R&D investment and patent acquisition. We research and develop energy efficiency optimization and conversion solutions suited for the smart grid and green energy era.</p>
       </div>
     </div>
   </div>
@@ -544,23 +530,23 @@
 <section class="tech-section">
   <div class="tech-container">
     <div class="section-label">Core Technology</div>
-    <h2 class="section-title">핵심 기술</h2>
-    <p class="section-body">파라이엔티는 25년간의 기술 축적을 바탕으로 독자적인 핵심 기술을 보유하고 있습니다.</p>
+    <h2 class="section-title">Core Technologies</h2>
+    <p class="section-body">Paraent possesses proprietary core technologies built on 25 years of accumulated expertise.</p>
     <div class="tech-grid">
       <div class="tech-card">
         <div class="tech-num">1</div>
-        <h4>디지털 전력제어 기술</h4>
-        <p>마이크로프로세서 기반의 정밀 디지털 연산 제어로 아날로그 방식 대비 월등한 정밀도를 실현합니다.</p>
+        <h4>Digital Power Control Technology</h4>
+        <p>Achieves far superior precision compared to analog methods through microprocessor-based precise digital computation and control.</p>
       </div>
       <div class="tech-card">
         <div class="tech-num">2</div>
-        <h4>최대전력분산 제어 기술</h4>
-        <p>다수의 전력조정기를 동시 제어하여 피크 전력을 저감하고 전력 효율을 극대화하는 특허 기술입니다.</p>
+        <h4>Max Power Distribution Control Technology</h4>
+        <p>Patented technology that simultaneously controls multiple power regulators to reduce peak power and maximize power efficiency.</p>
       </div>
       <div class="tech-card">
         <div class="tech-num">3</div>
-        <h4>스마트그리드 통신 기술</h4>
-        <p>EtherCAT, RS-485, Modbus 등 다양한 통신 프로토콜을 지원하는 스마트그리드 연동 기술입니다.</p>
+        <h4>Smart Grid Communication Technology</h4>
+        <p>Smart grid integration technology supporting various communication protocols including EtherCAT, RS-485, and Modbus.</p>
       </div>
     </div>
   </div>
@@ -570,16 +556,16 @@
 <section class="products-section">
   <div class="products-container">
     <div class="products-label">Products</div>
-    <h2 class="products-title">제품군</h2>
-    <p class="products-body">파라이엔티는 다양한 산업 환경에 최적화된 7가지 전력조정기 제품군을 공급합니다.</p>
+    <h2 class="products-title">Product Lineup</h2>
+    <p class="products-body">Paraent supplies 7 power regulator product lines optimized for diverse industrial environments.</p>
     <div class="products-grid">
-      <a href="./product-pll.html" class="product-chip">PII<span>차세대 전력조정기</span></a>
-      <a href="./product-smart.html" class="product-chip">SMART<span>기술 집약형</span></a>
-      <a href="./product-flex.html" class="product-chip">FLEX<span>EtherCAT 통신</span></a>
-      <a href="./product-mini.html" class="product-chip">MINI<span>국내 최소형</span></a>
-      <a href="./product-etype.html" class="product-chip">E-TYPE<span>경제형</span></a>
+      <a href="./product-pll.html" class="product-chip">PII<span>Next-gen Power Regulator</span></a>
+      <a href="./product-smart.html" class="product-chip">SMART<span>Technology Flagship</span></a>
+      <a href="./product-flex.html" class="product-chip">FLEX<span>EtherCAT Communication</span></a>
+      <a href="./product-mini.html" class="product-chip">MINI<span>Smallest in Korea</span></a>
+      <a href="./product-etype.html" class="product-chip">E-TYPE<span>Economy Model</span></a>
       <a href="./product-multi.html" class="product-chip">MULTI<span>Three in One</span></a>
-      <a href="./product-ptype.html" class="product-chip">P-TYPE<span>베스트셀러</span></a>
+      <a href="./product-ptype.html" class="product-chip">P-TYPE<span>Best Seller</span></a>
     </div>
   </div>
 </section>
@@ -589,21 +575,21 @@
   <div class="footer-inner">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="../index.html" class="footer-logo"><img src="../assets/images/logo.png" alt="Paraent"></a>
-        <p>(주)파라이엔티<br>경기도 화성시 동탄기흥로 64-14<br>TEL 031-831-8310 | FAX 031-831-8314</p>
+        <a href="../index.html" class="footer-logo"><img src="../../assets/images/logo.png" alt="Paraent"></a>
+        <p>Paraent Co., Ltd.<br>64-14 Dongtan-gihung-ro, Hwaseong-si, Gyeonggi-do<br>TEL 031-831-8310 | FAX 031-831-8314</p>
       </div>
       <div class="footer-col">
-        <h5>회사소개</h5>
+        <h5>About Us</h5>
         <ul>
-          <li><a href="./company-overview.html">회사개요</a></li>
-          <li><a href="./history.html">회사연혁</a></li>
-          <li><a href="./certifications.html">인증현황</a></li>
-          <li><a href="./location.html">오시는길</a></li>
-          <li><a href="./quality.html">품질혁신</a></li>
+          <li><a href="./company-overview.html">Company Overview</a></li>
+          <li><a href="./history.html">Company History</a></li>
+          <li><a href="./certifications.html">Certifications</a></li>
+          <li><a href="./location.html">Location</a></li>
+          <li><a href="./quality.html">Quality Innovation</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h5>제품소개</h5>
+        <h5>Products</h5>
         <ul>
           <li><a href="./product-pll.html">PII</a></li>
           <li><a href="./product-smart.html">SMART</a></li>
@@ -615,27 +601,27 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h5>고객센터</h5>
+        <h5>Support</h5>
         <ul>
-          <li><a href="./resources.html">자료실</a></li>
-          <li><a href="./inquiry.html">온라인상담</a></li>
-          <li><a href="./notice.html">공지사항</a></li>
+          <li><a href="./resources.html">Resources</a></li>
+          <li><a href="./inquiry.html">Online Inquiry</a></li>
+          <li><a href="./notice.html">Notice</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2000–2025 (주)파라이엔티 Paraent Co., Ltd. All rights reserved.</p>
+      <p>© 2000–2025 Paraent Co., Ltd. All rights reserved.</p>
     </div>
   </div>
 </footer>
 
 <!-- FLOATING BUTTONS -->
 <div class="float-btns">
-  <a href="./inquiry.html" class="float-btn float-inquiry-btn" aria-label="문의하기">
+  <a href="./inquiry.html" class="float-btn float-inquiry-btn" aria-label="Contact Us">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-    <span class="float-btn-label">문의</span>
+    <span class="float-btn-label">Inquiry</span>
   </a>
-  <button id="scrollTopBtn" class="float-btn scroll-top-btn" aria-label="맨 위로">
+  <button id="scrollTopBtn" class="float-btn scroll-top-btn" aria-label="Back to top">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
   </button>
 </div>
@@ -643,7 +629,7 @@
 .float-btns{position:fixed;bottom:32px;right:32px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:9999}
 .float-btn{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,transform .2s;gap:2px}
 .float-btn svg{width:18px;height:18px;flex-shrink:0}
-.float-btn-label{font-size:9px;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;letter-spacing:0.2px;line-height:1}
+.float-btn-label{font-size:9px;font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;letter-spacing:0.2px;line-height:1}
 .float-btn:hover{background:rgba(0,0,0,0.9);transform:translateY(-2px)}
 .float-btn:active{transform:scale(0.92)}
 .float-inquiry-btn{background:rgba(0,102,204,0.85)}
@@ -655,5 +641,5 @@
 <script>
 (function(){var b=document.getElementById('scrollTopBtn');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>300)},{passive:true});b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})})})();
 </script>
-  <script src="../assets/js/mobile-nav.js"></script></body>
+  <script src="../../assets/js/mobile-nav.js"></script></body>
 </html>

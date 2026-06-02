@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>资料室 — Paraent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0066cc; --primary-focus: #0071e3; --primary-on-dark: #2997ff;
+      --ink: #1d1d1f; --ink-muted-80: #333333; --ink-muted-48: #7a7a7a;
+      --hairline: #e0e0e0; --canvas: #ffffff; --canvas-parchment: #f5f5f7;
+      --surface-tile-1: #272729; --surface-tile-2: #2a2a2c; --on-dark: #ffffff;
+      --r-pill: 9999px; --r-lg: 18px; --r-sm: 8px; --r-md: 11px;
+      --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+      --font-text: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-text); color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; }
+    .nav { position: sticky; top: 0; z-index: 200; height: 64px; background: rgba(0,0,0,0.88); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); display: flex; align-items: center; padding: 0 32px; }
+    .nav-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .nav-logo { display: flex; align-items: center; flex-shrink: 0; }
+    .nav-logo img { height: 34px; width: auto; display: block; }
+    .nav-menu { display: flex; align-items: center; }
+    .nav-item { position: relative; }
+    .nav-link { display: flex; align-items: center; gap: 3px; padding: 0 15px; height: 64px; color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13px; font-weight: 400; white-space: nowrap; letter-spacing: -0.12px; transition: color 0.15s; }
+    .nav-link:hover { color: #fff; }
+    .nav-link svg { opacity: 0.5; transition: transform 0.2s, opacity 0.15s; }
+    .nav-item:hover .nav-link svg { transform: rotate(180deg); opacity: 1; }
+    .nav-dropdown { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(-4px); background: rgba(22,22,24,0.98); backdrop-filter: blur(24px); border-radius: var(--r-md); padding: 8px; min-width: 200px; opacity: 0; pointer-events: none; transition: opacity 0.2s 0.1s, transform 0.2s 0.1s; white-space: nowrap; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 32px rgba(0,0,0,0.45); }
+    .nav-item:hover .nav-dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); transition: opacity 0.15s 0s, transform 0.15s 0s; }
+    .nav-dropdown a { display: block; font-size: 13px; color: rgba(255,255,255,0.62); padding: 10px 14px; border-radius: var(--r-sm); transition: background 0.15s, color 0.15s, box-shadow 0.15s; text-decoration: none; }
+    .nav-dropdown a + a { border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-dropdown a:hover { background: rgba(41,151,255,0.13); color: var(--primary-on-dark); box-shadow: inset 3px 0 0 var(--primary-on-dark); }
+    .nav-dropdown a.active { color: var(--primary-on-dark); }
+    .nav-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .lang-btn { font-size: 11px; color: rgba(255,255,255,0.55); padding: 4px 7px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.18); cursor: pointer; transition: all 0.15s; text-decoration: none; display: inline-block; }
+    .lang-btn:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    .lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); }
+    .btn-primary { font-family: var(--font-text); font-size: 12px; color: #fff; background: var(--primary); border: none; border-radius: var(--r-pill); padding: 7px 15px; margin-left: 4px; cursor: pointer; text-decoration: none; transition: background 0.15s, transform 0.1s; white-space: nowrap; display: inline-block; }
+    .btn-primary:hover { background: var(--primary-focus); }
+    .page-header { background: var(--surface-tile-1); padding: 80px 24px; text-align: center; }
+    .page-header h1 { font-family: var(--font-display); font-size: 40px; font-weight: 600; color: var(--on-dark); margin-bottom: 12px; }
+    .breadcrumb { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .breadcrumb span { margin: 0 6px; }
+    .section { padding: 60px 24px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .tab-bar { display: flex; gap: 4px; border-bottom: 1px solid var(--hairline); margin-bottom: 40px; }
+    .tab-btn { background: none; border: none; cursor: pointer; padding: 12px 20px; font-size: 14px; font-weight: 500; color: var(--ink-muted-48); position: relative; font-family: var(--font-text); transition: color 0.2s; }
+    .tab-btn:hover { color: var(--ink); }
+    .tab-btn.active { color: var(--primary); }
+    .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--primary); border-radius: 2px 2px 0 0; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .file-table-wrap { border-radius: var(--r-lg); border: 1px solid var(--hairline); overflow: hidden; }
+    .file-table { width: 100%; border-collapse: collapse; }
+    .file-table thead th { background: var(--surface-tile-1); color: rgba(255,255,255,0.8); padding: 14px 20px; font-size: 13px; font-weight: 600; text-align: left; }
+    .file-table tbody td { padding: 14px 20px; font-size: 14px; color: var(--ink-muted-80); border-bottom: 1px solid var(--hairline); vertical-align: middle; }
+    .file-table tbody tr:last-child td { border-bottom: none; }
+    .file-table tbody tr:hover td { background: var(--canvas-parchment); }
+    .cad-jump-btn { display: inline-block; padding: 7px 16px; border-radius: var(--r-pill); border: 1px solid var(--hairline); background: var(--canvas); font-size: 13px; font-weight: 500; color: var(--ink-muted-80); text-decoration: none; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+    .cad-jump-btn:hover { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .file-name { font-weight: 500; color: var(--ink); display: flex; align-items: center; gap: 10px; }
+    .file-icon { width: 32px; height: 32px; background: rgba(0,102,204,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .file-size { font-size: 13px; color: var(--ink-muted-48); }
+    .file-date { font-size: 13px; color: var(--ink-muted-48); }
+    .dl-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: #fff; border: none; border-radius: var(--r-pill); padding: 7px 16px; font-size: 12px; font-weight: 500; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.1s; }
+    .dl-btn:hover { background: var(--primary-focus); }
+    .dl-btn:active { transform: scale(0.95); }
+    footer { background: var(--canvas-parchment); padding: 60px 24px 40px; border-top: 1px solid var(--hairline); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand p { font-size: 13px; color: var(--ink-muted-48); line-height: 1.8; margin-top: 12px; }
+    .footer-logo { display: block; margin-bottom: 0; } .footer-logo img { height: 32px; width: auto; display: block; }
+    .footer-col h5 { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li a { font-size: 13px; color: var(--ink-muted-48); text-decoration: none; }
+    .footer-col ul li a:hover { color: var(--primary); }
+    .footer-bottom { border-top: 1px solid var(--hairline); padding-top: 20px; font-size: 12px; color: var(--ink-muted-48); }
+    @media (max-width: 640px) { .tab-bar { flex-wrap: wrap; } .footer-grid { grid-template-columns: 1fr 1fr; } .file-table thead th:nth-child(2), .file-table tbody td:nth-child(2) { display: none; } }
+  </style>
+  <link rel="stylesheet" href="../../assets/css/responsive.css" />
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo"><img src="../../assets/images/logo-white.png" alt="Paraent"></a>
+    <div class="nav-menu">
+      <div class="nav-item"><a href="#" class="nav-link">关于我们<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./company-overview.html">公司概要</a><a href="./history.html">公司历史</a><a href="./certifications.html">认证情况</a><a href="./location.html">交通指南</a><a href="./quality.html">品质革新</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">产品<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./product-pll.html">Pll 功率调节器</a><a href="./product-smart.html">SMART 功率调节器</a><a href="./product-flex.html">FLEX 功率调节器</a><a href="./product-mini.html">MINI 功率调节器</a><a href="./product-etype.html">E-TYPE 功率调节器</a><a href="./product-multi.html">MULTI 功率调节器</a><a href="./product-ptype.html">P-TYPE 功率调节器</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">资料室<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./resources.html#tech">技术文件</a><a href="./resources.html#manual">使用手册</a><a href="./resources.html#cad">CAD图纸</a><a href="./resources.html#catalog">产品目录</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">客户支持<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./inquiry.html">在线咨询</a><a href="./notice.html">公告通知</a></div></div>
+    </div>
+    <div class="nav-right">
+      <a href="../../pages/resources.html" class="lang-btn">KO</a>
+      <a href="../../en/pages/resources.html" class="lang-btn">EN</a>
+      <a href="./resources.html" class="lang-btn active">中</a>
+      <a href="./inquiry.html" class="btn-primary">在线咨询</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>资料室</h1>
+  <div class="breadcrumb"><a href="../index.html">首页</a><span>›</span>资料室</div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('tech', this)">技术文件</button>
+      <button class="tab-btn" onclick="switchTab('manual', this)">使用手册</button>
+      <button class="tab-btn" onclick="switchTab('cad', this)">CAD图纸</button>
+      <button class="tab-btn" onclick="switchTab('catalog', this)">产品目录</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-tech">
+      <div class="file-table-wrap">
+        <table class="file-table">
+          <thead><tr><th>文件名称</th><th>大小</th><th>日期</th><th>下载</th></tr></thead>
+          <tbody>
+            <tr><td><div class="file-name"><div class="file-icon">📄</div>SMART功率调节器MPD功能</div></td><td><span class="file-size">3.0 MB</span></td><td><span class="file-date">2026-05-22</span></td><td><a href="../../files/tech/tech-mpd.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+            <tr><td><div class="file-name"><div class="file-icon">📄</div>相位角控制与过零控制对比</div></td><td><span class="file-size">3.1 MB</span></td><td><span class="file-date">2026-05-22</span></td><td><a href="../../files/tech/tech-phase-zerocross.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-manual">
+      <div class="file-table-wrap">
+        <table class="file-table">
+          <thead><tr><th>文件名称</th><th>大小</th><th>日期</th><th>下载</th></tr></thead>
+          <tbody>
+            <tr><td><div class="file-name"><div class="file-icon">📘</div>Pll功率调节器使用手册</div></td><td><span class="file-size">9.9 MB</span></td><td><span class="file-date">2026-01-27</span></td><td><a href="../../files/manual/manual-pll.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+            <tr><td><div class="file-name"><div class="file-icon">📘</div>SMART功率调节器使用手册</div></td><td><span class="file-size">9.7 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../../files/manual/manual-smart.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+            <tr><td><div class="file-name"><div class="file-icon">📘</div>FLEX功率调节器使用手册</div></td><td><span class="file-size">2.9 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../../files/manual/manual-flex.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+            <tr><td><div class="file-name"><div class="file-icon">📘</div>MINI单相功率调节器使用手册</div></td><td><span class="file-size">1.1 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../../files/manual/manual-mini-1p.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+            <tr><td><div class="file-name"><div class="file-icon">📘</div>MINI三相功率调节器使用手册</div></td><td><span class="file-size">1.3 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../../files/manual/manual-mini-3p.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+            <tr><td><div class="file-name"><div class="file-icon">📘</div>SE-TYPE功率调节器使用手册</div></td><td><span class="file-size">0.6 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../../files/manual/manual-se.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+            <tr><td><div class="file-name"><div class="file-icon">📘</div>TE-TYPE功率调节器使用手册</div></td><td><span class="file-size">0.7 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../../files/manual/manual-te.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+            <tr><td><div class="file-name"><div class="file-icon">📘</div>MULTI功率调节器使用手册</div></td><td><span class="file-size">1.8 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../../files/manual/manual-multi.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+            <tr><td><div class="file-name"><div class="file-icon">📘</div>P-TYPE功率调节器使用手册</div></td><td><span class="file-size">2.6 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../../files/manual/manual-ptype.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-cad">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px;">
+        <a href="#cad-pll" class="cad-jump-btn">Pll</a>
+        <a href="#cad-smart" class="cad-jump-btn">SMART</a>
+        <a href="#cad-flex" class="cad-jump-btn">FLEX</a>
+        <a href="#cad-mini" class="cad-jump-btn">MINI</a>
+        <a href="#cad-etype" class="cad-jump-btn">E-TYPE</a>
+        <a href="#cad-multi" class="cad-jump-btn">MULTI</a>
+        <a href="#cad-ptype" class="cad-jump-btn">P-TYPE</a>
+      </div>
+
+      <div id="cad-pll" style="margin-bottom:48px;">
+        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">Pll 功率调节器</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SPII单相 A 25A~70A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #Pll #单相 #step</div><a href="../../files/cad/SPII-A-025_070_외형도.step" class="dl-btn" download>↓ 下载</a></div></div>
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SPII单相 A 90A~110A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #Pll #单相 #step</div><a href="../../files/cad/SPII-A-090_110_외형도.step" class="dl-btn" download>↓ 下载</a></div></div>
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">TPII三相 A 25A~70A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #Pll #三相 #step</div><a href="../../files/cad/TPII-025_070_외형도.step" class="dl-btn" download>↓ 下载</a></div></div>
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">TPII三相 A 90A~200A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #Pll #三相 #step</div><a href="../../files/cad/TPII-090_200_외형도.stp" class="dl-btn" download>↓ 下载</a></div></div>
+        </div>
+      </div>
+
+      <div id="cad-smart" style="margin-bottom:48px;">
+        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">SMART 功率调节器</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SMART 10A~55A图纸</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #SMART #dwg</div><a href="../../files/cad/SMART-10A-치수도면.dwg" class="dl-btn" download>↓ 下载</a></div></div>
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SMART 70A~200A图纸</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #SMART #dwg</div><a href="../../files/cad/SMART-70A-치수도면.dwg" class="dl-btn" download>↓ 下载</a></div></div>
+        </div>
+      </div>
+
+      <div id="cad-flex" style="margin-bottom:48px;">
+        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">FLEX 功率调节器</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">FLEX功率调节器图纸</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #FLEX #dwg</div><a href="../../files/cad/FLEX-TYPE 치수도면.dwg" class="dl-btn" download>↓ 下载</a></div></div>
+        </div>
+      </div>
+
+      <div id="cad-mini" style="margin-bottom:48px;">
+        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">MINI 功率调节器</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">MINI单相(1φ)图纸</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #MINI #单相 #dwg</div><a href="../../files/cad/Mini 단상-Type-20250124.dwg" class="dl-btn" download>↓ 下载</a></div></div>
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">MINI三相(3φ)图纸</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #MINI #三相 #dwg</div><a href="../../files/cad/Mini 3상-치수도면.dwg" class="dl-btn" download>↓ 下载</a></div></div>
+        </div>
+      </div>
+
+      <div id="cad-etype" style="margin-bottom:48px;">
+        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">E-TYPE 功率调节器</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SE-TYPE图纸</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #E-TYPE #dwg</div><a href="../../files/cad/SE-Type-치수도면.dwg" class="dl-btn" download>↓ 下载</a></div></div>
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">TE-TYPE图纸</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #E-TYPE #dwg</div><a href="../../files/cad/TE-Type-치수도면-.dwg" class="dl-btn" download>↓ 下载</a></div></div>
+        </div>
+      </div>
+
+      <div id="cad-multi" style="margin-bottom:48px;">
+        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">MULTI 功率调节器</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">MULTI旧款图纸</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #MULTI #dwg</div><a href="../../files/cad/Multi-Type(구형)-치수도면.dwg" class="dl-btn" download>↓ 下载</a></div></div>
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">MULTI新款图纸</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #MULTI #dwg</div><a href="../../files/cad/Multi-Type(신형)-치수도면.dwg" class="dl-btn" download>↓ 下载</a></div></div>
+        </div>
+      </div>
+
+      <div id="cad-ptype" style="margin-bottom:48px;">
+        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">P-TYPE 功率调节器</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">P-TYPE单相 25A~70A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #P-TYPE #单相 #dwg</div><a href="../../files/cad/SP-025-치수도면.dwg" class="dl-btn" download>↓ 下载</a></div></div>
+          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">P-TYPE三相 25A~70A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD #P-TYPE #三相 #dwg</div><a href="../../files/cad/TP-025-치수도면.dwg" class="dl-btn" download>↓ 下载</a></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-catalog">
+      <div class="file-table-wrap">
+        <table class="file-table">
+          <thead><tr><th>文件名称</th><th>大小</th><th>日期</th><th>下载</th></tr></thead>
+          <tbody>
+            <tr><td><div class="file-name"><div class="file-icon">🗂️</div>产品综合目录</div></td><td><span class="file-size">—</span></td><td><span class="file-date">2024-07-02</span></td><td><a href="../../files/catalog/catalog-general.pdf" class="dl-btn" target="_blank">↓ 下载</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../../assets/images/logo.png" alt="Paraent"></a><p>Paraent Co., Ltd.<br>韩国京畿道华城市东滩起兴路64-14<br>TEL: +82-31-357-0680 · FAX: +82-31-357-0679<br>E-mail: paraent@paraent.com</p></div>
+      <div class="footer-col"><h5>关于我们</h5><ul><li><a href="./company-overview.html">公司概要</a></li><li><a href="./history.html">公司历史</a></li><li><a href="./certifications.html">认证情况</a></li><li><a href="./location.html">交通指南</a></li><li><a href="./quality.html">品质革新</a></li></ul></div>
+      <div class="footer-col"><h5>产品</h5><ul><li><a href="./product-pll.html">Pll</a></li><li><a href="./product-smart.html">SMART</a></li><li><a href="./product-flex.html">FLEX</a></li><li><a href="./product-mini.html">MINI</a></li><li><a href="./product-etype.html">E-TYPE</a></li><li><a href="./product-multi.html">MULTI</a></li><li><a href="./product-ptype.html">P-TYPE</a></li></ul></div>
+      <div class="footer-col"><h5>客户支持</h5><ul><li><a href="./resources.html">资料室</a></li><li><a href="./inquiry.html">在线咨询</a></li><li><a href="./notice.html">公告通知</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">© 2025 Paraent Co., Ltd. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+const TAB_IDS = ['tech', 'manual', 'cad', 'catalog'];
+function activateFromHash() {
+  const hash = location.hash.slice(1);
+  if (TAB_IDS.includes(hash)) {
+    const btn = document.querySelector(`.tab-btn[onclick*="'${hash}'"]`);
+    if (btn) switchTab(hash, btn);
+  }
+}
+window.addEventListener('DOMContentLoaded', activateFromHash);
+window.addEventListener('hashchange', activateFromHash);
+</script>
+
+<div class="float-btns">
+  <a href="./inquiry.html" class="float-btn float-inquiry-btn" aria-label="在线咨询">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="float-btn-label">咨询</span>
+  </a>
+  <button id="scrollTopBtn" class="float-btn scroll-top-btn" aria-label="返回顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+</div>
+<style>
+.float-btns{position:fixed;bottom:32px;right:32px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:9999}
+.float-btn{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,transform .2s;gap:2px}
+.float-btn svg{width:18px;height:18px;flex-shrink:0}
+.float-btn-label{font-size:9px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:0.2px;line-height:1}
+.float-btn:hover{background:rgba(0,0,0,0.9);transform:translateY(-2px)}
+.float-btn:active{transform:scale(0.92)}
+.float-inquiry-btn{background:rgba(0,102,204,0.85)}
+.float-inquiry-btn:hover{background:rgba(0,82,170,0.95)}
+.scroll-top-btn{opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .3s,transform .3s,visibility .3s,background .2s}
+.scroll-top-btn.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.scroll-top-btn:hover{transform:translateY(-2px)}
+</style>
+<script>
+(function(){var b=document.getElementById('scrollTopBtn');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>300)},{passive:true});b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})})})();
+</script>
+<script src="../../assets/js/mobile-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-TYPE Power Regulator — Paraent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0066cc; --primary-focus: #0071e3; --primary-on-dark: #2997ff;
+      --ink: #1d1d1f; --ink-muted-80: #333333; --ink-muted-48: #7a7a7a;
+      --hairline: #e0e0e0; --canvas: #ffffff; --canvas-parchment: #f5f5f7;
+      --surface-tile-1: #272729; --surface-tile-2: #2a2a2c; --surface-black: #000000;
+      --on-dark: #ffffff; --r-pill: 9999px; --r-lg: 18px; --r-sm: 8px; --r-md: 11px;
+      --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+      --font-text: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-text); color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+    .nav { position: sticky; top: 0; z-index: 200; height: 64px; background: rgba(0,0,0,0.88); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); display: flex; align-items: center; padding: 0 32px; }
+    .nav-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .nav-logo { display: flex; align-items: center; flex-shrink: 0; }
+    .nav-logo img { height: 34px; width: auto; display: block; }
+    .nav-menu { display: flex; align-items: center; }
+    .nav-item { position: relative; }
+    .nav-link { display: flex; align-items: center; gap: 3px; padding: 0 15px; height: 64px; color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13px; font-weight: 400; white-space: nowrap; letter-spacing: -0.12px; transition: color 0.15s; }
+    .nav-link:hover { color: #fff; }
+    .nav-link svg { opacity: 0.5; transition: transform 0.2s, opacity 0.15s; }
+    .nav-item:hover .nav-link svg { transform: rotate(180deg); opacity: 1; }
+    .nav-dropdown { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(-4px); background: rgba(22,22,24,0.98); backdrop-filter: blur(24px); border-radius: var(--r-md); padding: 8px; min-width: 200px; opacity: 0; pointer-events: none; transition: opacity 0.2s 0.1s, transform 0.2s 0.1s; white-space: nowrap; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 32px rgba(0,0,0,0.45); }
+    .nav-item:hover .nav-dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); transition: opacity 0.15s 0s, transform 0.15s 0s; }
+    .nav-dropdown a { display: block; font-size: 13px; color: rgba(255,255,255,0.62); padding: 10px 14px; border-radius: var(--r-sm); transition: background 0.15s, color 0.15s, box-shadow 0.15s; text-decoration: none; }
+    .nav-dropdown a + a { border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-dropdown a:hover { background: rgba(41,151,255,0.13); color: var(--primary-on-dark); box-shadow: inset 3px 0 0 var(--primary-on-dark); }
+    .nav-dropdown a.active { color: var(--primary-on-dark); }
+    .nav-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .lang-btn { font-size: 11px; color: rgba(255,255,255,0.55); padding: 4px 7px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.18); cursor: pointer; transition: all 0.15s; text-decoration: none; display: inline-block; }
+    .lang-btn:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    .lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); }
+    .btn-primary { font-family: var(--font-text); font-size: 12px; color: #fff; background: var(--primary); border: none; border-radius: var(--r-pill); padding: 7px 15px; margin-left: 4px; cursor: pointer; text-decoration: none; transition: background 0.15s, transform 0.1s; white-space: nowrap; display: inline-block; }
+    .btn-primary:hover { background: var(--primary-focus); }
+    .hero-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+    .btn-dl { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-text); font-size: 14px; color: rgba(255,255,255,0.82); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: var(--r-pill); padding: 11px 20px; cursor: pointer; text-decoration: none; transition: background 0.15s, border-color 0.15s, transform 0.1s; white-space: nowrap; }
+    .btn-dl:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.3); color: #fff; }
+    .btn-dl:active { transform: scale(0.95); }
+    .btn-dl-wrap{position:relative;display:inline-block}
+    .btn-dl-menu{position:absolute;top:calc(100% + 6px);left:0;background:rgba(18,18,18,0.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.15);border-radius:10px;min-width:190px;padding:5px;display:none;z-index:200}
+    .btn-dl-wrap.open .btn-dl-menu{display:block}
+    .btn-dl-item{display:flex;align-items:center;gap:8px;padding:8px 12px;color:rgba(255,255,255,0.82);font-size:13px;font-family:var(--font-text);text-decoration:none;border-radius:6px;transition:background 0.1s;white-space:nowrap}
+    .btn-dl-item:hover{background:rgba(255,255,255,0.1);color:#fff}
+    .product-hero { background: var(--surface-black); padding: 100px 24px 80px; text-align: center; position: relative; overflow: hidden; }
+    .product-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,102,204,0.18) 0%, transparent 70%); }
+    .product-hero-inner { position: relative; z-index: 1; }
+    .product-tag { display: inline-block; background: rgba(41,151,255,0.15); border: 1px solid rgba(41,151,255,0.3); border-radius: var(--r-pill); padding: 6px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary-on-dark); margin-bottom: 24px; }
+    .product-hero h1 { font-family: var(--font-display); font-size: 64px; font-weight: 700; color: var(--on-dark); line-height: 1.05; margin-bottom: 16px; letter-spacing: -0.02em; }
+    .product-hero-sub { font-size: 22px; color: rgba(255,255,255,0.6); max-width: 640px; margin: 0 auto 36px; line-height: 1.5; }
+    .hero-badge-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+    .hero-badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r-pill); padding: 8px 20px; font-size: 13px; color: rgba(255,255,255,0.8); }
+    .tab-bar { background: #0d0d0f; border-bottom: 1px solid rgba(255,255,255,0.07); position: sticky; top: 64px; z-index: 90; padding: 12px 24px; display: flex; justify-content: center; }
+    .tab-bar-inner { display: flex; background: rgba(255,255,255,0.07); border-radius: var(--r-pill); padding: 3px; gap: 2px; }
+    .tab-btn { padding: 13px 48px; background: transparent; border: none; border-radius: var(--r-pill); color: rgba(255,255,255,0.48); font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.22s; font-family: var(--font-text); white-space: nowrap; letter-spacing: 0.01em; }
+    .tab-btn:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.05); }
+    .tab-btn.active { background: rgba(41,151,255,0.22); color: var(--primary-on-dark); font-weight: 600; box-shadow: 0 1px 6px rgba(0,0,0,0.35); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .section { padding: 80px 24px; }
+    .section-dark { background: var(--surface-tile-1); }
+    .section-dark-2 { background: var(--surface-tile-2); }
+    .section-parchment { background: var(--canvas-parchment); }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
+    .section-label-light { color: var(--primary-on-dark); }
+    .section-title { font-family: var(--font-display); font-size: 36px; font-weight: 600; color: var(--ink); line-height: 1.2; margin-bottom: 16px; }
+    .section-title-light { color: var(--on-dark); }
+    .section-body { font-size: 17px; color: var(--ink-muted-48); line-height: 1.7; max-width: 720px; }
+    .section-body-light { color: rgba(255,255,255,0.6); }
+    .feature-grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 40px; }
+    .feature-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 28px 24px; border: 1px solid rgba(255,255,255,0.08); }
+    .feature-icon { font-size: 28px; margin-bottom: 14px; }
+    .feature-card h3 { font-size: 17px; font-weight: 600; color: var(--on-dark); margin-bottom: 10px; }
+    .feature-card p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+    .order-diagram { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding: 40px 0 16px; }
+    .order-seg { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .order-seg-code { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--on-dark); white-space: nowrap; padding: 0 14px 10px; border-bottom: 2.5px solid var(--primary-on-dark); text-align: center; }
+    .order-seg-arrow { color: var(--primary-on-dark); font-size: 20px; line-height: 1; margin: 8px 0 4px; }
+    .order-seg-num { font-size: 20px; color: var(--primary-on-dark); }
+    .order-dash { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.4); padding: 0 2px 10px; align-self: flex-start; flex-shrink: 0; }
+    .order-steps { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 32px; }
+    .order-step { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--r-md); padding: 20px; }
+    .order-step-num { font-size: 13px; font-weight: 700; color: var(--primary-on-dark); margin-bottom: 6px; }
+    .order-step-title { font-size: 14px; font-weight: 600; color: var(--on-dark); margin-bottom: 8px; }
+    .order-step-opts { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+    .spec-table-wrap { overflow-x: auto; margin-top: 40px; border-radius: var(--r-lg); border: 1px solid rgba(255,255,255,0.08); }
+    .spec-table { width: 100%; border-collapse: collapse; }
+    .spec-table th { background: rgba(255,255,255,0.06); padding: 14px 20px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .spec-table td { padding: 14px 20px; font-size: 14px; color: rgba(255,255,255,0.8); border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: top; }
+    .spec-table tr:last-child td { border-bottom: none; }
+    .spec-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .related-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 40px; }
+    .related-card { background: var(--canvas); border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--hairline); text-decoration: none; transition: box-shadow 0.2s, transform 0.2s; display: flex; flex-direction: column; }
+    .related-card:hover { box-shadow: rgba(0,0,0,0.12) 0 8px 24px; transform: translateY(-2px); }
+    .related-card-img { width: 100%; aspect-ratio: 3/4; background: var(--surface-black); overflow: hidden; }
+    .related-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+    .related-card:hover .related-card-img img { transform: scale(1.03); }
+    .related-card-body { padding: 20px; }
+    .related-card h4 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+    .related-card p { font-size: 13px; color: var(--ink-muted-48); }
+    .related-arrow { color: var(--primary); font-size: 18px; margin-top: 12px; display: block; }
+    footer { background: var(--canvas-parchment); padding: 60px 24px 40px; border-top: 1px solid var(--hairline); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand p { font-size: 13px; color: var(--ink-muted-48); line-height: 1.8; margin-top: 12px; }
+    .footer-logo { display: block; margin-bottom: 0; } .footer-logo img { height: 32px; width: auto; display: block; }
+    .footer-col h5 { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li a { font-size: 13px; color: var(--ink-muted-48); text-decoration: none; }
+    .footer-col ul li a:hover { color: var(--primary); }
+    .footer-bottom { border-top: 1px solid var(--hairline); padding-top: 20px; font-size: 12px; color: var(--ink-muted-48); }
+    @media (max-width: 768px) {
+      .product-hero h1 { font-size: 40px; }
+      .feature-grid-2, .order-steps, .related-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .tab-bar { padding: 10px 16px; }
+      .tab-btn { padding: 11px 28px; font-size: 13px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/css/responsive.css" />
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo"><img src="../../assets/images/logo-white.png" alt="Paraent"></a>
+    <div class="nav-menu">
+      <div class="nav-item"><a href="#" class="nav-link">About<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./company-overview.html">Overview</a><a href="./history.html">History</a><a href="./certifications.html">Certifications</a><a href="./location.html">Location</a><a href="./quality.html">Quality</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">Products<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./product-pll.html">Pll Power Regulator</a><a href="./product-smart.html">SMART Power Regulator</a><a href="./product-flex.html">FLEX Power Regulator</a><a href="./product-mini.html">MINI Power Regulator</a><a href="./product-etype.html" class="active">E-TYPE Power Regulator</a><a href="./product-multi.html">MULTI Power Regulator</a><a href="./product-ptype.html">P-TYPE Power Regulator</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">Resources<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./resources.html">Tech Docs</a><a href="./resources.html">Manuals</a><a href="./resources.html">CAD Drawings</a><a href="./resources.html">Catalogs</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">Support<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./inquiry.html">Inquiry</a><a href="./notice.html">Notice</a></div></div>
+    </div>
+    <div class="nav-right">
+      <a href="../../pages/product-etype.html" class="lang-btn">KO</a>
+      <a href="./product-etype.html" class="lang-btn active">EN</a>
+      <a href="../../zh/pages/product-etype.html" class="lang-btn">中</a>
+      <a href="./inquiry.html" class="btn-primary">Contact Us</a>
+    </div>
+  </div>
+</nav>
+
+<section class="product-hero">
+  <div class="product-hero-inner">
+    <div class="product-tag">Economic · Entry Level</div>
+    <h1>E-TYPE</h1>
+    <p class="product-hero-sub">Economical and practical digital power regulator<br>A smart choice with all the essential features</p>
+    <div class="hero-actions">
+      <a href="./inquiry.html" class="btn-primary" style="font-size:15px;padding:12px 28px;">Product Inquiry</a>
+      <div class="btn-dl-wrap">
+        <button class="btn-dl btn-dl-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Manual<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="btn-dl-menu">
+          <a href="../../files/manual/manual-se.pdf" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>SE-TYPE (Single-phase)</a>
+          <a href="../../files/manual/manual-te.pdf" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>TE-TYPE (Three-phase)</a>
+        </div>
+      </div>
+      <div class="btn-dl-wrap">
+        <button class="btn-dl btn-dl-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download CAD<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="btn-dl-menu">
+          <a href="../../files/cad/SE-Type-치수도면.dwg" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>SE-TYPE (Single-phase)</a>
+          <a href="../../files/cad/TE-Type-치수도면-.dwg" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>TE-TYPE (Three-phase)</a>
+        </div>
+      </div>
+      <a href="../../files/catalog/catalog-general.pdf" download class="btn-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Catalog</a>
+    </div>
+    <div class="hero-badge-row">
+      <span class="hero-badge">Zero-crossing &amp; Phase Angle</span>
+      <span class="hero-badge">Full Basic Alarms</span>
+      <span class="hero-badge">Soft Start Standard</span>
+      <span class="hero-badge">Test Mode</span>
+    </div>
+  </div>
+</section>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <button class="tab-btn active" data-tab="tab-features">Features</button>
+    <button class="tab-btn" data-tab="tab-order">Order Code</button>
+    <button class="tab-btn" data-tab="tab-spec">Specifications</button>
+  </div>
+</div>
+
+<!-- TAB: Features -->
+<div id="tab-features" class="tab-panel active">
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label section-label-light">Features</div>
+      <h2 class="section-title section-title-light">4 Key Advantages of E-TYPE</h2>
+      <p class="section-body section-body-light">An economical digital power regulator with all essential features, nothing missing</p>
+      <div class="feature-grid-2">
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3>Attractive — Economic Design</h3>
+          <p>Compact and elegant design engineered for easy wiring and use. Efficient installation even in limited spaces.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h3>Basic — Full Standard Alarms</h3>
+          <p>All basic alarm functions including over-current, heatsink overheat detection, load break, SCR element fault, load imbalance. Alarm message display via LED, soft start and current limiting functions standard.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Comprehensive — Dual Control</h3>
+          <p>Compatible with both zero-crossing and phase angle control, allowing customers to switch based on load type. Test mode allows testing with a small load instead of the actual load.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💻</div>
+          <h3>Digital — Digital Computation Control</h3>
+          <p>Stable control through microprocessor-based digital computation. Compatible with both resistive and inductive loads.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section section-parchment">
+    <div class="container">
+      <div class="section-label">Related Products</div>
+      <h2 class="section-title">You May Also Like</h2>
+      <div class="related-grid">
+        <a href="./product-ptype.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/ptype.png" alt="P-TYPE Power Regulator" loading="lazy"></div><div class="related-card-body"><h4>P-TYPE Power Regulator</h4><p>The steady seller of digital power regulators</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-pll.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/pll.png" alt="Pll Power Regulator" loading="lazy"></div><div class="related-card-body"><h4>Pll Power Regulator</h4><p>Free Voltage, more powerful next-generation product</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-smart.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/smart.png" alt="SMART Power Regulator" loading="lazy"></div><div class="related-card-body"><h4>SMART Power Regulator</h4><p>Nothing is smarter than SMART — advanced control</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-flex.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/flex.png" alt="FLEX Power Regulator" loading="lazy"></div><div class="related-card-body"><h4>FLEX Power Regulator</h4><p>EtherCAT support, seamless industrial network integration</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-mini.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/mini.png" alt="MINI Power Regulator" loading="lazy"></div><div class="related-card-body"><h4>MINI Power Regulator</h4><p>Ultra-compact 26mm width, high-reliability SCR type</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-multi.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/multi.png" alt="MULTI Power Regulator" loading="lazy"></div><div class="related-card-body"><h4>MULTI Power Regulator</h4><p>3-in-1 single-phase — space-saving three-phase product</p><span class="related-arrow">→</span></div></a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TAB: Order Code -->
+<div id="tab-order" class="tab-panel">
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label section-label-light">Order Code</div>
+      <h2 class="section-title section-title-light">E-TYPE Order Code Structure</h2>
+      <p class="section-body section-body-light">Select your desired specifications according to the code structure below.</p>
+      <div class="order-diagram">
+        <div class="order-seg"><div class="order-seg-code">S/T</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">①</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">E</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">②</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">1/2/3/4</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">25/40/55/70A</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">④</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">F/NONE</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑤</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">FN/NONE</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑥</div></div>
+      </div>
+      <div class="order-steps">
+        <div class="order-step">
+          <div class="order-step-num">① Input Phase</div>
+          <div class="order-step-title">Power Phase</div>
+          <div class="order-step-opts">S — Single-phase (SE)<br>T — Three-phase (TE)</div>
+        </div>
+        <div class="order-step">
+          <div class="order-step-num">② Model</div>
+          <div class="order-step-title">Product Model</div>
+          <div class="order-step-opts">E — E-TYPE Power Regulator</div>
+        </div>
+        <div class="order-step">
+          <div class="order-step-num">③ Rated Voltage</div>
+          <div class="order-step-title">Input Voltage Selection</div>
+          <div class="order-step-opts">1 — 110V<br>2 — 220V<br>3 — 380V<br>4 — 440V</div>
+        </div>
+        <div class="order-step">
+          <div class="order-step-num">④ Rated Current</div>
+          <div class="order-step-title">Current Capacity</div>
+          <div class="order-step-opts">25A / 40A / 55A / 70A</div>
+        </div>
+        <div class="order-step">
+          <div class="order-step-num">⑤ Fuse</div>
+          <div class="order-step-title">Optional Add-on</div>
+          <div class="order-step-opts">F — Internal fast fuse installed<br>NONE — Not installed</div>
+        </div>
+        <div class="order-step">
+          <div class="order-step-num">⑥ Cooling Fan</div>
+          <div class="order-step-title">Cooling Method</div>
+          <div class="order-step-opts">FN — Cooling fan installed<br>NONE — Not installed<br>※ TE (three-phase) 55A and above: FN standard</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TAB: Specifications -->
+<div id="tab-spec" class="tab-panel">
+  <section class="section section-dark-2">
+    <div class="container">
+      <div class="section-label section-label-light">Specifications</div>
+      <h2 class="section-title section-title-light">E-TYPE Specifications</h2>
+      <div class="spec-table-wrap">
+        <table class="spec-table">
+          <thead>
+            <tr><th>Model</th><th>SE (Single-phase) Digital Power Regulator</th><th>TE (Three-phase) Digital Power Regulator</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Operating Voltage</td><td>110V / 220V / 380V / 440V</td><td>110V / 220V / 380V / 440V</td></tr>
+            <tr><td>Allowable Voltage Variation</td><td>±10% of rated voltage</td><td>±10% of rated voltage</td></tr>
+            <tr><td>Rated Current</td><td>25A / 40A / 55A / 70A</td><td>25A / 40A / 55A / 70A</td></tr>
+            <tr><td>Rated Frequency</td><td>50/60Hz (auto-select)</td><td>50/60Hz (auto-select)</td></tr>
+            <tr><td>Minimum Load Current</td><td>1A</td><td>1A</td></tr>
+            <tr><td>Output Range</td><td>Zero-crossing 0~100% / Phase angle 0~97%</td><td>Zero-crossing 0~100% / Phase angle 0~97%</td></tr>
+            <tr><td>Control Power</td><td>Same as main power</td><td>Same as main power</td></tr>
+            <tr><td>Power Consumption</td><td>Under 5W (excluding cooling fan)</td><td>Under 8W (excluding cooling fan)</td></tr>
+            <tr><td>Control Input Signal</td><td>Auto: 4~20mA (Default) / 0~10VDC / 1~5VDC (option)<br>Manual: External 10KΩ potentiometer</td><td>Auto: 4~20mA (Default) / 0~10VDC / 1~5VDC (option)<br>Manual: External 10KΩ potentiometer</td></tr>
+            <tr><td>Output Contact</td><td>N.O. 1CH (N.C. available on order)</td><td>N.O. 1CH (N.C. available on order)</td></tr>
+            <tr><td>Control Method</td><td>Phase angle / Zero-crossing with compensation algorithm</td><td>Phase angle / Zero-crossing with compensation algorithm</td></tr>
+            <tr><td>Cooling Method</td><td>Cooling fan: option</td><td>25A, 40A: Natural (fan option)<br>55A, 70A: Forced (fan standard)</td></tr>
+            <tr><td>Alarm Functions</td><td>Over-current, Load break, Heatsink overheat (80°C), SCR fault</td><td>Over-current, Load break, Heatsink overheat (80°C), SCR fault, Load imbalance</td></tr>
+            <tr><td>Operating Temperature</td><td>0 ~ 40°C</td><td>0 ~ 40°C</td></tr>
+            <tr><td>Humidity Range</td><td>40% ~ 85% RH (non-condensing)</td><td>40% ~ 85% RH (non-condensing)</td></tr>
+            <tr><td>Display</td><td>3-color LED x1</td><td>3-color LED x1</td></tr>
+            <tr><td>Weight</td><td>1.5kg (no fan) / 1.7kg (with fan)</td><td>3.6kg (no fan) / 3.9kg (with fan)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../../assets/images/logo.png" alt="Paraent"></a><p>Paraent Co., Ltd.<br>64-14 Dongtan-giheung-ro, Hwaseong-si, Gyeonggi-do<br>TEL: +82-31-357-0680 · FAX: +82-31-357-0679<br>E-mail: paraent@paraent.com</p></div>
+      <div class="footer-col"><h5>About</h5><ul><li><a href="./company-overview.html">Overview</a></li><li><a href="./history.html">History</a></li><li><a href="./certifications.html">Certifications</a></li><li><a href="./location.html">Location</a></li><li><a href="./quality.html">Quality</a></li></ul></div>
+      <div class="footer-col"><h5>Products</h5><ul><li><a href="./product-pll.html">Pll</a></li><li><a href="./product-smart.html">SMART</a></li><li><a href="./product-flex.html">FLEX</a></li><li><a href="./product-mini.html">MINI</a></li><li><a href="./product-etype.html">E-TYPE</a></li><li><a href="./product-multi.html">MULTI</a></li><li><a href="./product-ptype.html">P-TYPE</a></li></ul></div>
+      <div class="footer-col"><h5>Support</h5><ul><li><a href="./resources.html">Resources</a></li><li><a href="./inquiry.html">Inquiry</a></li><li><a href="./notice.html">Notice</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">© 2025 Paraent Co., Ltd. All rights reserved.</div>
+  </div>
+</footer>
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+<script>
+(function(){
+  document.querySelectorAll('.btn-dl-toggle').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var wrap=btn.closest('.btn-dl-wrap');
+      document.querySelectorAll('.btn-dl-wrap.open').forEach(function(el){if(el!==wrap)el.classList.remove('open');});
+      wrap.classList.toggle('open');
+    });
+  });
+  document.addEventListener('click',function(){
+    document.querySelectorAll('.btn-dl-wrap.open').forEach(function(el){el.classList.remove('open');});
+  });
+})();
+</script>
+<!-- FLOATING BUTTONS -->
+<div class="float-btns">
+  <a href="./inquiry.html" class="float-btn float-inquiry-btn" aria-label="Contact">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="float-btn-label">Contact</span>
+  </a>
+  <button id="scrollTopBtn" class="float-btn scroll-top-btn" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+</div>
+<style>
+.float-btns{position:fixed;bottom:32px;right:32px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:9999}
+.float-btn{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,transform .2s;gap:2px}
+.float-btn svg{width:18px;height:18px;flex-shrink:0}
+.float-btn-label{font-size:9px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:0.2px;line-height:1}
+.float-btn:hover{background:rgba(0,0,0,0.9);transform:translateY(-2px)}
+.float-btn:active{transform:scale(0.92)}
+.float-inquiry-btn{background:rgba(0,102,204,0.85)}
+.float-inquiry-btn:hover{background:rgba(0,82,170,0.95)}
+.scroll-top-btn{opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .3s,transform .3s,visibility .3s,background .2s}
+.scroll-top-btn.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.scroll-top-btn:hover{transform:translateY(-2px)}
+</style>
+<script>
+(function(){var b=document.getElementById('scrollTopBtn');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>300)},{passive:true});b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})})})();
+</script>
+<script src="../../assets/js/mobile-nav.js"></script>
+</body>
+</html>

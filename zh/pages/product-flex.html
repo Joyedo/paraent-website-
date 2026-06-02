@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FLEX 数字功率调节器 — Paraent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+  <style>
+    :root { --primary: #0066cc; --primary-focus: #0071e3; --primary-on-dark: #2997ff; --ink: #1d1d1f; --ink-muted-80: #333333; --ink-muted-48: #7a7a7a; --hairline: #e0e0e0; --canvas: #ffffff; --canvas-parchment: #f5f5f7; --surface-tile-1: #272729; --surface-tile-2: #2a2a2c; --surface-black: #000000; --on-dark: #ffffff; --r-pill: 9999px; --r-lg: 18px; --r-sm: 8px; --r-md: 11px; --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif; --font-text: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-text); color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; }
+    .nav { position: sticky; top: 0; z-index: 200; height: 64px; background: rgba(0,0,0,0.88); backdrop-filter: saturate(180%) blur(20px); display: flex; align-items: center; padding: 0 32px; }
+    .nav-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .nav-logo { display: flex; align-items: center; flex-shrink: 0; }
+    .nav-logo img { height: 34px; width: auto; display: block; }
+    .nav-menu { display: flex; align-items: center; }
+    .nav-item { position: relative; }
+    .nav-link { display: flex; align-items: center; gap: 3px; padding: 0 15px; height: 64px; color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13px; white-space: nowrap; transition: color 0.15s; }
+    .nav-link:hover { color: #fff; }
+    .nav-link svg { opacity: 0.5; transition: transform 0.2s, opacity 0.15s; }
+    .nav-item:hover .nav-link svg { transform: rotate(180deg); opacity: 1; }
+    .nav-dropdown { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(-4px); background: rgba(22,22,24,0.98); backdrop-filter: blur(24px); border-radius: var(--r-md); padding: 8px; min-width: 200px; opacity: 0; pointer-events: none; transition: opacity 0.2s 0.1s, transform 0.2s 0.1s; white-space: nowrap; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 32px rgba(0,0,0,0.45); }
+    .nav-item:hover .nav-dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); transition: opacity 0.15s 0s, transform 0.15s 0s; }
+    .nav-dropdown a { display: block; font-size: 13px; color: rgba(255,255,255,0.62); padding: 10px 14px; border-radius: var(--r-sm); transition: background 0.15s, color 0.15s; text-decoration: none; }
+    .nav-dropdown a + a { border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-dropdown a:hover { background: rgba(41,151,255,0.13); color: var(--primary-on-dark); }
+    .nav-dropdown a.active { color: var(--primary-on-dark); }
+    .nav-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .lang-btn { font-size: 11px; color: rgba(255,255,255,0.55); padding: 4px 7px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.18); cursor: pointer; transition: all 0.15s; text-decoration: none; display: inline-block; }
+    .lang-btn:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    .lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); }
+    .btn-primary { font-family: var(--font-text); font-size: 12px; color: #fff; background: var(--primary); border: none; border-radius: var(--r-pill); padding: 7px 15px; margin-left: 4px; cursor: pointer; text-decoration: none; transition: background 0.15s; white-space: nowrap; display: inline-block; }
+    .btn-primary:hover { background: var(--primary-focus); }
+    .hero-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+    .btn-dl { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-text); font-size: 14px; color: rgba(255,255,255,0.82); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: var(--r-pill); padding: 11px 20px; cursor: pointer; text-decoration: none; transition: background 0.15s; white-space: nowrap; }
+    .btn-dl:hover { background: rgba(255,255,255,0.14); color: #fff; }
+    .product-hero { background: var(--surface-black); padding: 100px 24px 80px; text-align: center; position: relative; overflow: hidden; }
+    .product-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,102,204,0.18) 0%, transparent 70%); }
+    .product-hero-inner { position: relative; z-index: 1; }
+    .product-tag { display: inline-block; background: rgba(41,151,255,0.15); border: 1px solid rgba(41,151,255,0.3); border-radius: var(--r-pill); padding: 6px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary-on-dark); margin-bottom: 24px; }
+    .product-hero h1 { font-family: var(--font-display); font-size: 64px; font-weight: 700; color: var(--on-dark); line-height: 1.05; margin-bottom: 16px; }
+    .product-hero-sub { font-size: 22px; color: rgba(255,255,255,0.6); max-width: 640px; margin: 0 auto 36px; line-height: 1.5; }
+    .hero-badge-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+    .hero-badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r-pill); padding: 8px 20px; font-size: 13px; color: rgba(255,255,255,0.8); }
+    .tab-bar { background: #0d0d0f; border-bottom: 1px solid rgba(255,255,255,0.07); position: sticky; top: 64px; z-index: 90; padding: 12px 24px; display: flex; justify-content: center; }
+    .tab-bar-inner { display: flex; background: rgba(255,255,255,0.07); border-radius: var(--r-pill); padding: 3px; gap: 2px; }
+    .tab-btn { padding: 13px 48px; background: transparent; border: none; border-radius: var(--r-pill); color: rgba(255,255,255,0.48); font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.22s; font-family: var(--font-text); white-space: nowrap; }
+    .tab-btn:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.05); }
+    .tab-btn.active { background: rgba(41,151,255,0.22); color: var(--primary-on-dark); font-weight: 600; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .section { padding: 80px 24px; }
+    .section-dark { background: var(--surface-tile-1); }
+    .section-dark-2 { background: var(--surface-tile-2); }
+    .section-parchment { background: var(--canvas-parchment); }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
+    .section-label-light { color: var(--primary-on-dark); }
+    .section-title { font-family: var(--font-display); font-size: 36px; font-weight: 600; color: var(--ink); line-height: 1.2; margin-bottom: 16px; }
+    .section-title-light { color: var(--on-dark); }
+    .section-body { font-size: 17px; color: var(--ink-muted-48); line-height: 1.7; max-width: 720px; }
+    .section-body-light { color: rgba(255,255,255,0.6); }
+    .feature-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 40px; }
+    .feature-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 28px 24px; border: 1px solid rgba(255,255,255,0.08); }
+    .feature-icon { font-size: 28px; margin-bottom: 14px; }
+    .feature-card h3 { font-size: 16px; font-weight: 600; color: var(--on-dark); margin-bottom: 10px; }
+    .feature-card p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+    .order-diagram { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding: 40px 0 16px; }
+    .order-seg { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .order-seg-code { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--on-dark); white-space: nowrap; padding: 0 14px 10px; border-bottom: 2.5px solid var(--primary-on-dark); text-align: center; }
+    .order-seg-arrow { color: var(--primary-on-dark); font-size: 20px; line-height: 1; margin: 8px 0 4px; }
+    .order-seg-num { font-size: 20px; color: var(--primary-on-dark); }
+    .order-dash { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.4); padding: 0 2px 10px; align-self: flex-start; flex-shrink: 0; }
+    .order-steps { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 32px; }
+    .order-step { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--r-md); padding: 20px; }
+    .order-step-num { font-size: 13px; font-weight: 700; color: var(--primary-on-dark); margin-bottom: 6px; }
+    .order-step-title { font-size: 14px; font-weight: 600; color: var(--on-dark); margin-bottom: 8px; }
+    .order-step-opts { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+    .spec-table-wrap { overflow-x: auto; margin-top: 40px; border-radius: var(--r-lg); border: 1px solid rgba(255,255,255,0.08); }
+    .spec-table { width: 100%; border-collapse: collapse; }
+    .spec-table th { background: rgba(255,255,255,0.06); padding: 14px 20px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .spec-table td { padding: 14px 20px; font-size: 14px; color: rgba(255,255,255,0.8); border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: top; }
+    .spec-table tr:last-child td { border-bottom: none; }
+    .related-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 40px; }
+    .related-card { background: var(--canvas); border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--hairline); text-decoration: none; transition: box-shadow 0.2s, transform 0.2s; display: flex; flex-direction: column; }
+    .related-card:hover { box-shadow: rgba(0,0,0,0.12) 0 8px 24px; transform: translateY(-2px); }
+    .related-card-img { width: 100%; aspect-ratio: 3/4; background: var(--surface-black); overflow: hidden; }
+    .related-card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .related-card-body { padding: 20px; }
+    .related-card h4 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+    .related-card p { font-size: 13px; color: var(--ink-muted-48); }
+    .related-arrow { color: var(--primary); font-size: 18px; margin-top: 12px; display: block; }
+    footer { background: var(--canvas-parchment); padding: 60px 24px 40px; border-top: 1px solid var(--hairline); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand p { font-size: 13px; color: var(--ink-muted-48); line-height: 1.8; margin-top: 12px; }
+    .footer-logo { display: block; margin-bottom: 0; } .footer-logo img { height: 32px; width: auto; display: block; }
+    .footer-col h5 { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li a { font-size: 13px; color: var(--ink-muted-48); text-decoration: none; }
+    .footer-col ul li a:hover { color: var(--primary); }
+    .footer-bottom { border-top: 1px solid var(--hairline); padding-top: 20px; font-size: 12px; color: var(--ink-muted-48); }
+    @media (max-width: 768px) { .product-hero h1 { font-size: 40px; } .feature-grid-3, .order-steps, .related-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } .tab-btn { padding: 11px 28px; font-size: 13px; } }
+  </style>
+  <link rel="stylesheet" href="../../assets/css/responsive.css" />
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo"><img src="../../assets/images/logo-white.png" alt="Paraent"></a>
+    <div class="nav-menu">
+      <div class="nav-item"><a href="#" class="nav-link">关于我们<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./company-overview.html">公司概要</a><a href="./history.html">公司历史</a><a href="./certifications.html">认证情况</a><a href="./location.html">交通指南</a><a href="./quality.html">品质革新</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">产品<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./product-pll.html">Pll 功率调节器</a><a href="./product-smart.html">SMART 功率调节器</a><a href="./product-flex.html" class="active">FLEX 功率调节器</a><a href="./product-mini.html">MINI 功率调节器</a><a href="./product-etype.html">E-TYPE 功率调节器</a><a href="./product-multi.html">MULTI 功率调节器</a><a href="./product-ptype.html">P-TYPE 功率调节器</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">资料室<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./resources.html#tech">技术文件</a><a href="./resources.html#manual">使用手册</a><a href="./resources.html#cad">CAD图纸</a><a href="./resources.html#catalog">产品目录</a></div></div>
+      <div class="nav-item"><a href="#" class="nav-link">客户支持<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./inquiry.html">在线咨询</a><a href="./notice.html">公告通知</a></div></div>
+    </div>
+    <div class="nav-right">
+      <a href="../../pages/product-flex.html" class="lang-btn">KO</a>
+      <a href="../../en/pages/product-flex.html" class="lang-btn">EN</a>
+      <a href="./product-flex.html" class="lang-btn active">中</a>
+      <a href="./inquiry.html" class="btn-primary">在线咨询</a>
+    </div>
+  </div>
+</nav>
+
+<section class="product-hero">
+  <div class="product-hero-inner">
+    <div class="product-tag">支持EtherCAT</div>
+    <h1>FLEX</h1>
+    <p class="product-hero-sub">搭载EtherCAT通信的数字功率调节器<br>无缝对接先进工业网络</p>
+    <div class="hero-actions">
+      <a href="./inquiry.html" class="btn-primary" style="font-size:15px;padding:12px 28px;">产品咨询</a>
+      <a href="../../files/manual/manual-flex.pdf" download class="btn-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>下载手册</a>
+      <a href="../../files/cad/FLEX-TYPE 치수도면.dwg" download class="btn-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>下载CAD</a>
+      <a href="../../files/catalog/catalog-general.pdf" download class="btn-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>下载目录</a>
+    </div>
+    <div class="hero-badge-row">
+      <span class="hero-badge">EtherCAT READ&amp;WRITE</span>
+      <span class="hero-badge">内置RS-485</span>
+      <span class="hero-badge">MPD功率分配</span>
+      <span class="hero-badge">PLF局部负载故障</span>
+    </div>
+  </div>
+</section>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <button class="tab-btn active" data-tab="tab-features">产品特点</button>
+    <button class="tab-btn" data-tab="tab-order">订购代码</button>
+    <button class="tab-btn" data-tab="tab-spec">技术规格</button>
+  </div>
+</div>
+
+<div id="tab-features" class="tab-panel active">
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label section-label-light">产品特点</div>
+      <h2 class="section-title section-title-light">FLEX 核心功能</h2>
+      <p class="section-body section-body-light">搭载EtherCAT通信和先进控制功能的工业高性能功率调节器</p>
+      <div class="feature-grid-3">
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>EtherCAT + RS-485通信</h3>
+          <p>标准配备EtherCAT READ&amp;WRITE和RS-485通信。采用MODBUS（RTU）协议，支持最高115,200bps高速通信。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>MPD功率分配控制</h3>
+          <p>通过过零控制多台功率调节器时，在调节器间分配功率以平滑主电源，改善功率因数并降低峰值功率。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3>智能PLF局部负载故障</h3>
+          <p>检测并联负载配置中的断线故障。自动调谐获取负载特性模式，实现精确的局部负载故障检测。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>报警历史 — 6条记录</h3>
+          <p>记录最近6条报警，提升维护便利性。轻松追溯异常原因，用于预防性维护。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🖥️</div>
+          <h3>PSD集成管理</h3>
+          <p>利用COPY &amp; PASTE功能进行参数设置、报警设置，并批量配置多台设备。最大化多机管理效率。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛠️</div>
+          <h3>自诊断 &amp; 测试模式</h3>
+          <p>自动检查参数值、报警及信号接线状态。测试模式无需实际负载即可验证输出。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section section-parchment">
+    <div class="container">
+      <div class="section-label">相关产品</div>
+      <h2 class="section-title">您可能还喜欢</h2>
+      <div class="related-grid">
+        <a href="./product-ptype.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/ptype.png" alt="P-TYPE" loading="lazy"></div><div class="related-card-body"><h4>P-TYPE 功率调节器</h4><p>数字功率调节器的畅销产品</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-pll.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/pll.png" alt="Pll" loading="lazy"></div><div class="related-card-body"><h4>Pll 功率调节器</h4><p>支持自由电压，P-TYPE新一代接替产品</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-smart.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/smart.png" alt="SMART" loading="lazy"></div><div class="related-card-body"><h4>SMART 功率调节器</h4><p>彩色LCD显示屏，搭载智能MPD技术</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-mini.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/mini.png" alt="MINI" loading="lazy"></div><div class="related-card-body"><h4>MINI 功率调节器</h4><p>超紧凑26mm宽度，高可靠性SCR型</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-etype.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/etype.png" alt="E-TYPE" loading="lazy"></div><div class="related-card-body"><h4>E-TYPE 功率调节器</h4><p>经济实惠的全功能一体化功率调节器</p><span class="related-arrow">→</span></div></a>
+        <a href="./product-multi.html" class="related-card"><div class="related-card-img"><img src="../../assets/images/products/multi.png" alt="MULTI" loading="lazy"></div><div class="related-card-body"><h4>MULTI 功率调节器</h4><p>三合一 — 节省空间且经济高效</p><span class="related-arrow">→</span></div></a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="tab-order" class="tab-panel">
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label section-label-light">订购代码</div>
+      <h2 class="section-title section-title-light">FLEX 订购代码构成</h2>
+      <p class="section-body section-body-light">请按照以下代码构成选择所需规格。</p>
+      <div class="order-diagram">
+        <div class="order-seg"><div class="order-seg-code">FLEX</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">①</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">电压</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">②</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">电流</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">接线</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">④</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">PSD(opt)</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑤</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">RS-485(std)</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑥</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">EtherCAT(opt)</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑦</div></div>
+        <div class="order-dash">-</div>
+        <div class="order-seg"><div class="order-seg-code">MPD(opt)</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑧</div></div>
+      </div>
+      <div class="order-steps">
+        <div class="order-step"><div class="order-step-num">① 型号</div><div class="order-step-title">产品型号</div><div class="order-step-opts">FLEX</div></div>
+        <div class="order-step"><div class="order-step-num">② 额定电压</div><div class="order-step-title">输入电压选择</div><div class="order-step-opts">1 — 110VAC<br>2 — 220VAC<br>3 — 380VAC<br>4 — 440VAC</div></div>
+        <div class="order-step"><div class="order-step-num">③ 额定电流</div><div class="order-step-title">电流容量</div><div class="order-step-opts">025(25A) / 040(40A) / 055(55A) / 070(70A)<br>090(90A) / 110(110A) / 130(130A) / 160(160A) / 200(200A)</div></div>
+        <div class="order-step"><div class="order-step-num">④ 接线</div><div class="order-step-title">电气接线配置</div><div class="order-step-opts">1P3L — 单相×3<br>3P3L — 三相×1</div></div>
+        <div class="order-step"><div class="order-step-num">⑤ PSD</div><div class="order-step-title">显示单元</div><div class="order-step-opts">PSD — 含显示单元<br>NONE — 不含</div></div>
+        <div class="order-step"><div class="order-step-num">⑥ RS-485</div><div class="order-step-title">串行通信（标准）</div><div class="order-step-opts">RS-485通信标准<br>Modbus-RTU协议</div></div>
+        <div class="order-step"><div class="order-step-num">⑦ EtherCAT</div><div class="order-step-title">工业以太网（选项）</div><div class="order-step-opts">E — 含EtherCAT<br>NONE — 不含</div></div>
+        <div class="order-step"><div class="order-step-num">⑧ MPD</div><div class="order-step-title">最大功率分配（选项）</div><div class="order-step-opts">MPD — 含MPD功能<br>NONE — 不含</div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="tab-spec" class="tab-panel">
+  <section class="section section-dark-2">
+    <div class="container">
+      <div class="section-label section-label-light">技术规格</div>
+      <h2 class="section-title section-title-light">FLEX 产品规格</h2>
+      <div class="spec-table-wrap">
+        <table class="spec-table">
+          <thead><tr><th>项目</th><th>规格</th></tr></thead>
+          <tbody>
+            <tr><td>工作电压</td><td>110V / 220V / 380V / 440V</td></tr>
+            <tr><td>允许电压变动</td><td>额定电压 ±10%</td></tr>
+            <tr><td>额定电流</td><td>25A ~ 200A</td></tr>
+            <tr><td>额定频率</td><td>50/60Hz兼容</td></tr>
+            <tr><td>最小负载电流</td><td>1A</td></tr>
+            <tr><td>输出范围</td><td>0 ~ 94%</td></tr>
+            <tr><td>控制电源</td><td>DC 24V</td></tr>
+            <tr><td>功耗</td><td>MAX 13W（含风扇）</td></tr>
+            <tr><td>控制输入信号</td><td>4~20mA（默认）3CH / 0~5V, 1~5V, 0~10V（选项）</td></tr>
+            <tr><td>输出接点</td><td>N.O.（2ch, Ic ≤ 1A）</td></tr>
+            <tr><td>D/I接点</td><td>1ch</td></tr>
+            <tr><td>控制方式</td><td>相位角（电流反馈）/ 过零（MPD选项）</td></tr>
+            <tr><td>绝缘强度</td><td>2.3KVAC（1分钟）</td></tr>
+            <tr><td>绝缘电阻</td><td>220MΩ</td></tr>
+            <tr><td>冷却方式</td><td>标准冷却风扇</td></tr>
+            <tr><td>报警功能</td><td>过流(OC)、过流预警(WC)、散热器过热60°C/80°C、风扇故障、SCR故障、局部负载故障(PLF)、主电源断开(MPF)、负载断开(LINE)、保险丝断开(FUSE)</td></tr>
+            <tr><td>工作温度</td><td>0 ~ 40°C</td></tr>
+            <tr><td>湿度范围</td><td>40% ~ 85% RH（无结露）</td></tr>
+            <tr><td>通信</td><td>EtherCAT从站（选项）/ RS-485（标准），Modbus-RTU</td></tr>
+            <tr><td>显示</td><td>3色LED（1EA导频，1EA/每通道）</td></tr>
+            <tr><td>重量</td><td>25A ~ 70A: 4.2 kg / 90A ~ 200A: 9.0 kg</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../../assets/images/logo.png" alt="Paraent"></a><p>Paraent Co., Ltd.<br>韩国京畿道华城市东滩起兴路64-14<br>TEL: +82-31-357-0680<br>E-mail: paraent@paraent.com</p></div>
+      <div class="footer-col"><h5>关于我们</h5><ul><li><a href="./company-overview.html">公司概要</a></li><li><a href="./history.html">公司历史</a></li><li><a href="./certifications.html">认证情况</a></li><li><a href="./location.html">交通指南</a></li><li><a href="./quality.html">品质革新</a></li></ul></div>
+      <div class="footer-col"><h5>产品</h5><ul><li><a href="./product-pll.html">Pll</a></li><li><a href="./product-smart.html">SMART</a></li><li><a href="./product-flex.html">FLEX</a></li><li><a href="./product-mini.html">MINI</a></li><li><a href="./product-etype.html">E-TYPE</a></li><li><a href="./product-multi.html">MULTI</a></li><li><a href="./product-ptype.html">P-TYPE</a></li></ul></div>
+      <div class="footer-col"><h5>客户支持</h5><ul><li><a href="./resources.html">资料室</a></li><li><a href="./inquiry.html">在线咨询</a></li><li><a href="./notice.html">公告通知</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">© 2025 Paraent Co., Ltd. All rights reserved.</div>
+  </div>
+</footer>
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+<div class="float-btns">
+  <a href="./inquiry.html" class="float-btn float-inquiry-btn" aria-label="在线咨询"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="float-btn-label">咨询</span></a>
+  <button id="scrollTopBtn" class="float-btn scroll-top-btn" aria-label="返回顶部"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></button>
+</div>
+<style>
+.float-btns{position:fixed;bottom:32px;right:32px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:9999}
+.float-btn{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,transform .2s;gap:2px}
+.float-btn svg{width:18px;height:18px;flex-shrink:0}
+.float-btn-label{font-size:9px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:0.2px;line-height:1}
+.float-btn:hover{background:rgba(0,0,0,0.9);transform:translateY(-2px)}
+.float-inquiry-btn{background:rgba(0,102,204,0.85)}
+.float-inquiry-btn:hover{background:rgba(0,82,170,0.95)}
+.scroll-top-btn{opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .3s,transform .3s,visibility .3s,background .2s}
+.scroll-top-btn.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.scroll-top-btn:hover{transform:translateY(-2px)}
+</style>
+<script>(function(){var b=document.getElementById('scrollTopBtn');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>300)},{passive:true});b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})})})();</script>
+<script src="../../assets/js/mobile-nav.js"></script>
+</body>
+</html>
