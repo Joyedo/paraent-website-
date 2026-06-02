@@ -56,7 +56,8 @@
     .main { max-width: 1300px; margin: 0 auto; padding: 28px 24px; }
 
     /* STATS */
-    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+    .stats-row-lang { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
     .stat-card {
       background: #fff;
       border-radius: 12px;
@@ -68,6 +69,10 @@
     .stat-value.blue { color: #0066cc; }
     .stat-value.green { color: #16a34a; }
     .stat-value.orange { color: #ea580c; }
+    .stat-value.ko { color: #7c3aed; }
+    .stat-value.en { color: #0284c7; }
+    .stat-value.zh { color: #dc2626; }
+    .stat-flag { font-size: 18px; margin-bottom: 6px; }
 
     /* TABLE CARD */
     .table-card {
@@ -108,6 +113,20 @@
       cursor: pointer;
       background: #fff;
     }
+
+    /* LANG BADGE */
+    .lang-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .lang-badge.ko { background: #ede9fe; color: #7c3aed; }
+    .lang-badge.en { background: #e0f2fe; color: #0284c7; }
+    .lang-badge.zh { background: #fee2e2; color: #dc2626; }
+    .lang-badge.unknown { background: #f3f4f6; color: #6b7280; }
 
     /* TABLE */
     .table-wrap { overflow-x: auto; }
@@ -293,6 +312,23 @@
       <div class="stat-value" id="statToday">—</div>
     </div>
   </div>
+  <div class="stats-row-lang">
+    <div class="stat-card">
+      <div class="stat-flag">🇰🇷</div>
+      <div class="stat-label">한국어 문의</div>
+      <div class="stat-value ko" id="statKo">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-flag">🇺🇸</div>
+      <div class="stat-label">영어 문의 (EN)</div>
+      <div class="stat-value en" id="statEn">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-flag">🇨🇳</div>
+      <div class="stat-label">중국어 문의 (ZH)</div>
+      <div class="stat-value zh" id="statZh">—</div>
+    </div>
+  </div>
 
   <!-- TABLE -->
   <div class="table-card">
@@ -300,8 +336,14 @@
       <h2>문의 목록</h2>
       <div class="table-controls">
         <input type="text" class="search-input" id="searchInput" placeholder="이름, 제목, 이메일 검색..." oninput="onSearch()" />
-        <select class="filter-select" id="statusFilter" onchange="loadInquiries()">
-          <option value="">전체</option>
+        <select class="filter-select" id="langFilter" onchange="loadInquiries(1)">
+          <option value="">🌐 전체 언어</option>
+          <option value="ko">🇰🇷 한국어</option>
+          <option value="en">🇺🇸 영어</option>
+          <option value="zh">🇨🇳 중국어</option>
+        </select>
+        <select class="filter-select" id="statusFilter" onchange="loadInquiries(1)">
+          <option value="">전체 상태</option>
           <option value="pending">미처리</option>
           <option value="done">처리완료</option>
         </select>
@@ -313,6 +355,7 @@
         <thead>
           <tr>
             <th>No.</th>
+            <th>언어</th>
             <th>제목 / 제품</th>
             <th>이름</th>
             <th>전화번호</th>
@@ -323,7 +366,7 @@
           </tr>
         </thead>
         <tbody id="tableBody">
-          <tr class="loading-row"><td colspan="8">불러오는 중...</td></tr>
+          <tr class="loading-row"><td colspan="9">불러오는 중...</td></tr>
         </tbody>
       </table>
     </div>
@@ -369,14 +412,29 @@
   // 통계 로드
   async function loadStats() {
     const today = new Date().toISOString().split('T')[0];
-    const { count: total } = await _supabase.from('inquiries').select('*', { count: 'exact', head: true });
-    const { count: done } = await _supabase.from('inquiries').select('*', { count: 'exact', head: true }).eq('status', 'done');
-    const { count: todayCount } = await _supabase.from('inquiries').select('*', { count: 'exact', head: true }).gte('created_at', today);
+    const [
+      { count: total },
+      { count: done },
+      { count: todayCount },
+      { count: koCount },
+      { count: enCount },
+      { count: zhCount },
+    ] = await Promise.all([
+      _supabase.from('inquiries').select('*', { count: 'exact', head: true }),
+      _supabase.from('inquiries').select('*', { count: 'exact', head: true }).eq('status', 'done'),
+      _supabase.from('inquiries').select('*', { count: 'exact', head: true }).gte('created_at', today),
+      _supabase.from('inquiries').select('*', { count: 'exact', head: true }).eq('language', 'ko'),
+      _supabase.from('inquiries').select('*', { count: 'exact', head: true }).eq('language', 'en'),
+      _supabase.from('inquiries').select('*', { count: 'exact', head: true }).eq('language', 'zh'),
+    ]);
 
     document.getElementById('statTotal').textContent = total ?? 0;
     document.getElementById('statDone').textContent = done ?? 0;
     document.getElementById('statPending').textContent = (total ?? 0) - (done ?? 0);
     document.getElementById('statToday').textContent = todayCount ?? 0;
+    document.getElementById('statKo').textContent = koCount ?? 0;
+    document.getElementById('statEn').textContent = enCount ?? 0;
+    document.getElementById('statZh').textContent = zhCount ?? 0;
   }
 
   // 문의 목록 로드
@@ -384,6 +442,7 @@
     currentPage = page;
     const keyword = document.getElementById('searchInput').value.trim();
     const statusFilter = document.getElementById('statusFilter').value;
+    const langFilter = document.getElementById('langFilter').value;
 
     let query = _supabase
       .from('inquiries')
@@ -392,6 +451,7 @@
       .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
 
     if (statusFilter) query = query.eq('status', statusFilter);
+    if (langFilter) query = query.eq('language', langFilter);
     if (keyword) query = query.or(`name.ilike.%${keyword}%,title.ilike.%${keyword}%,email.ilike.%${keyword}%`);
 
     const { data, count, error } = await query;
@@ -411,14 +471,21 @@
     }
 
     const offset = (currentPage - 1) * PAGE_SIZE;
+    const langMeta = {
+      ko: { label: 'KO', cls: 'ko', flag: '🇰🇷' },
+      en: { label: 'EN', cls: 'en', flag: '🇺🇸' },
+      zh: { label: '中', cls: 'zh', flag: '🇨🇳' },
+    };
     tbody.innerHTML = rows.map((r, i) => {
       const no = totalCount - offset - i;
       const isDone = r.status === 'done';
       const date = new Date(r.created_at);
       const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}<br>${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+      const lang = langMeta[r.language] ?? { label: '?', cls: 'unknown', flag: '' };
 
       return `<tr>
         <td class="td-no">${no}</td>
+        <td><span class="lang-badge ${lang.cls}" title="${lang.flag}">${lang.flag} ${lang.label}</span></td>
         <td class="td-title">
           <span class="td-title-text" onclick="showDetail(${r.id})" title="${escHtml(r.title)}">${escHtml(r.title)}</span>
           ${r.product ? `<div class="td-product">${escHtml(r.product)}</div>` : ''}
@@ -500,7 +567,9 @@
     if (error || !data) return;
 
     const date = new Date(data.created_at).toLocaleString('ko-KR');
+    const langLabel = { ko: '🇰🇷 한국어', en: '🇺🇸 영어 (EN)', zh: '🇨🇳 중국어 (ZH)' }[data.language] ?? '—';
     document.getElementById('modalContent').innerHTML = `
+      <div class="modal-row"><div class="modal-label">문의 언어</div><div class="modal-value">${langLabel}</div></div>
       <div class="modal-row"><div class="modal-label">이름</div><div class="modal-value">${escHtml(data.name)}</div></div>
       ${data.company ? `<div class="modal-row"><div class="modal-label">회사명</div><div class="modal-value">${escHtml(data.company)}</div></div>` : ''}
       <div class="modal-row"><div class="modal-label">연락처</div><div class="modal-value">${escHtml(data.phone ?? '—')}</div></div>

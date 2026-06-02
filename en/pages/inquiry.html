@@ -314,6 +314,7 @@ async function handleSubmit(e) {
     inquiry_type: document.getElementById('inp-inquiry-type').value || null,
     title:        document.getElementById('inp-title').value.trim(),
     content:      document.getElementById('inp-content').value.trim(),
+    language:     'en',
   });
 
   if (error) {
