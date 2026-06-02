@@ -97,18 +97,24 @@
   if (langBtns.length > 0) {
     var langRow = document.createElement('div');
     langRow.className = 'mobile-lang-row';
+    langRow.style.cssText = 'display:flex;gap:8px;margin-bottom:4px;';
     langBtns.forEach(function (lb) {
+      var isActive = lb.classList.contains('active');
       var a = document.createElement('a');
-      a.className = 'mobile-lang-btn' + (lb.classList.contains('active') ? ' active' : '');
+      a.className = 'mobile-lang-btn' + (isActive ? ' active' : '');
       a.href = lb.getAttribute('href');
       a.textContent = lb.textContent.trim();
+      a.style.cssText = 'flex:1;text-align:center;padding:11px 8px;border-radius:10px;font-size:13px;font-weight:600;text-decoration:none;letter-spacing:0.03em;transition:all 0.15s;' +
+        (isActive
+          ? 'color:#fff;border:1px solid rgba(255,255,255,0.45);background:rgba(255,255,255,0.12);'
+          : 'color:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.18);background:transparent;');
       langRow.appendChild(a);
     });
     ctaArea.appendChild(langRow);
   }
 
   /* 문의 버튼 */
-  var primaryBtn = navRight ? navRight.querySelector('.btn-primary') : null;
+  var primaryBtn = navRight ? (navRight.querySelector('.btn-primary') || navRight.querySelector('.nav-cta-btn')) : null;
   var ctaBtn = document.createElement('a');
   ctaBtn.className = 'mobile-cta-btn';
   ctaBtn.href = primaryBtn ? primaryBtn.getAttribute('href') : '#';
