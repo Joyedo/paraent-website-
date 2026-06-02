@@ -98,6 +98,28 @@ body.menu-open { overflow: hidden; }
   flex-direction: column;
   gap: 10px;
 }
+
+/* 언어 선택 버튼 행 */
+.mobile-lang-row {
+  display: flex;
+  gap: 8px;
+}
+.mobile-lang-btn {
+  flex: 1;
+  text-align: center;
+  padding: 11px 8px;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 10px;
+  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: all 0.15s;
+}
+.mobile-lang-btn:hover { color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.06); }
+.mobile-lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.1); }
+
 .mobile-cta-btn {
   display: block;
   text-align: center;

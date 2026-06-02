@@ -87,15 +87,32 @@
     });
   }
 
-  /* 문의 CTA 버튼 */
+  /* 문의 CTA + 언어 버튼 영역 */
   var ctaArea = document.createElement('div');
   ctaArea.className = 'mobile-menu-cta';
   var navRight = navInner.querySelector('.nav-right');
-  var inquiryAnchor = navRight ? navRight.querySelector('a') : null;
+
+  /* 언어 선택 버튼 */
+  var langBtns = navRight ? Array.from(navRight.querySelectorAll('.lang-btn')) : [];
+  if (langBtns.length > 0) {
+    var langRow = document.createElement('div');
+    langRow.className = 'mobile-lang-row';
+    langBtns.forEach(function (lb) {
+      var a = document.createElement('a');
+      a.className = 'mobile-lang-btn' + (lb.classList.contains('active') ? ' active' : '');
+      a.href = lb.getAttribute('href');
+      a.textContent = lb.textContent.trim();
+      langRow.appendChild(a);
+    });
+    ctaArea.appendChild(langRow);
+  }
+
+  /* 문의 버튼 */
+  var primaryBtn = navRight ? navRight.querySelector('.btn-primary') : null;
   var ctaBtn = document.createElement('a');
   ctaBtn.className = 'mobile-cta-btn';
-  ctaBtn.href = inquiryAnchor ? inquiryAnchor.href : '#';
-  ctaBtn.textContent = '온라인 문의';
+  ctaBtn.href = primaryBtn ? primaryBtn.getAttribute('href') : '#';
+  ctaBtn.textContent = primaryBtn ? primaryBtn.textContent.trim() : '온라인 문의';
   ctaArea.appendChild(ctaBtn);
   mobileMenu.appendChild(ctaArea);
 
