@@ -272,6 +272,125 @@
       cursor: pointer;
     }
     .btn-modal-close:hover { background: #e5e7eb; }
+
+    /* NOTES SECTION */
+    .notes-section {
+      margin-top: 24px;
+      border-top: 2px solid #f3f4f6;
+      padding-top: 20px;
+    }
+    .notes-section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .notes-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111;
+    }
+    .notes-count-badge {
+      background: #0066cc;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 20px;
+    }
+    .notes-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+    .note-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .note-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .note-author {
+      font-size: 12px;
+      font-weight: 600;
+      color: #0066cc;
+    }
+    .note-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .note-time {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .btn-note-delete {
+      padding: 2px 8px;
+      background: transparent;
+      color: #9ca3af;
+      border: none;
+      font-size: 11px;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .btn-note-delete:hover { background: #fee2e2; color: #dc2626; }
+    .note-content {
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .notes-empty {
+      font-size: 13px;
+      color: #9ca3af;
+      text-align: center;
+      padding: 12px 0;
+    }
+    .note-composer {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .note-textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      color: #111;
+      transition: border-color 0.2s;
+    }
+    .note-textarea:focus { border-color: #0066cc; }
+    .note-composer-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .note-composer-hint {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .btn-note-save {
+      padding: 8px 18px;
+      background: #0066cc;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-note-save:hover { background: #0052a3; }
+    .btn-note-save:disabled { opacity: 0.5; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -383,6 +502,23 @@
   <div class="modal">
     <div class="modal-title">문의 상세</div>
     <div id="modalContent"></div>
+
+    <!-- 대응 메모 섹션 -->
+    <div class="notes-section">
+      <div class="notes-section-header">
+        <span class="notes-section-title">대응 메모</span>
+        <span class="notes-count-badge" id="notesCountBadge">0</span>
+      </div>
+      <div class="notes-list" id="notesList"></div>
+      <div class="note-composer">
+        <textarea class="note-textarea" id="noteInput" placeholder="누가, 어떻게 대응했는지 기록하세요 (예: 김담당 — 이메일 회신 완료, 견적서 첨부)"></textarea>
+        <div class="note-composer-footer">
+          <span class="note-composer-hint" id="noteAuthorHint"></span>
+          <button class="btn-note-save" id="noteSaveBtn" onclick="saveNote()">메모 저장</button>
+        </div>
+      </div>
+    </div>
+
     <div class="modal-footer">
       <button class="btn-modal-close" onclick="closeModal()">닫기</button>
     </div>
@@ -399,12 +535,16 @@
   let currentPage = 1;
   let totalCount = 0;
   let searchTimer = null;
+  let currentDetailId = null;
+  let currentAdminEmail = '';
 
   // 인증 확인
   async function checkAuth() {
     const { data: { session } } = await _supabase.auth.getSession();
     if (!session) { window.location.href = './index.html'; return; }
-    document.getElementById('adminEmail').textContent = session.user.email;
+    currentAdminEmail = session.user.email;
+    document.getElementById('adminEmail').textContent = currentAdminEmail;
+    document.getElementById('noteAuthorHint').textContent = `작성자: ${currentAdminEmail}`;
     loadInquiries();
     loadStats();
   }
@@ -566,6 +706,9 @@
     const { data, error } = await _supabase.from('inquiries').select('*').eq('id', id).single();
     if (error || !data) return;
 
+    currentDetailId = id;
+    document.getElementById('noteInput').value = '';
+
     const date = new Date(data.created_at).toLocaleString('ko-KR');
     const langLabel = { ko: '🇰🇷 한국어', en: '🇺🇸 영어 (EN)', zh: '🇨🇳 중국어 (ZH)' }[data.language] ?? '—';
     document.getElementById('modalContent').innerHTML = `
@@ -582,10 +725,83 @@
       ${data.ip_address ? `<div class="modal-row"><div class="modal-label">IP</div><div class="modal-value" style="font-family:monospace">${escHtml(data.ip_address)}</div></div>` : ''}
     `;
     document.getElementById('detailModal').classList.add('open');
+    loadNotes(id);
+  }
+
+  // 메모 로드
+  async function loadNotes(inquiryId) {
+    const notesList = document.getElementById('notesList');
+    notesList.innerHTML = '<div class="notes-empty">불러오는 중...</div>';
+
+    const { data, error } = await _supabase
+      .from('inquiry_notes')
+      .select('*')
+      .eq('inquiry_id', inquiryId)
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      notesList.innerHTML = '<div class="notes-empty" style="color:#dc2626">메모를 불러오지 못했습니다.<br><small>inquiry_notes 테이블이 생성되지 않았을 수 있습니다.</small></div>';
+      document.getElementById('notesCountBadge').textContent = '0';
+      return;
+    }
+
+    document.getElementById('notesCountBadge').textContent = data.length;
+
+    if (data.length === 0) {
+      notesList.innerHTML = '<div class="notes-empty">아직 메모가 없습니다.</div>';
+      return;
+    }
+
+    notesList.innerHTML = data.map(note => {
+      const noteDate = new Date(note.created_at).toLocaleString('ko-KR');
+      const shortAuthor = note.author.split('@')[0];
+      return `<div class="note-item" id="note-${note.id}">
+        <div class="note-item-header">
+          <span class="note-author">✍️ ${escHtml(shortAuthor)}</span>
+          <div class="note-meta">
+            <span class="note-time">${noteDate}</span>
+            <button class="btn-note-delete" onclick="deleteNote(${note.id}, ${inquiryId})">삭제</button>
+          </div>
+        </div>
+        <div class="note-content">${escHtml(note.content)}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // 메모 저장
+  async function saveNote() {
+    const content = document.getElementById('noteInput').value.trim();
+    if (!content) { alert('메모 내용을 입력해 주세요.'); return; }
+    if (!currentDetailId) return;
+
+    const btn = document.getElementById('noteSaveBtn');
+    btn.disabled = true;
+    btn.textContent = '저장 중...';
+
+    const { error } = await _supabase.from('inquiry_notes').insert({
+      inquiry_id: currentDetailId,
+      author: currentAdminEmail,
+      content,
+    });
+
+    btn.disabled = false;
+    btn.textContent = '메모 저장';
+
+    if (error) { alert('저장에 실패했습니다: ' + error.message); return; }
+    document.getElementById('noteInput').value = '';
+    loadNotes(currentDetailId);
+  }
+
+  // 메모 삭제
+  async function deleteNote(noteId, inquiryId) {
+    if (!confirm('이 메모를 삭제하시겠습니까?')) return;
+    const { error } = await _supabase.from('inquiry_notes').delete().eq('id', noteId);
+    if (!error) loadNotes(inquiryId);
   }
 
   function closeModal() {
     document.getElementById('detailModal').classList.remove('open');
+    currentDetailId = null;
   }
 
   document.getElementById('detailModal').addEventListener('click', function(e) {
