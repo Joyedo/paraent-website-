@@ -784,12 +784,32 @@
       content,
     });
 
+    if (error) {
+      btn.disabled = false;
+      btn.textContent = '메모 저장';
+      alert('저장에 실패했습니다: ' + error.message);
+      return;
+    }
+
+    // 처리완료 상태로 변경 (직접 fetch로 안정적 처리)
+    const savedId = currentDetailId;
+    await fetch(`${SUPABASE_URL}/rest/v1/inquiries?id=eq.${savedId}`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify({ status: 'done' }),
+    });
+
     btn.disabled = false;
     btn.textContent = '메모 저장';
-
-    if (error) { alert('저장에 실패했습니다: ' + error.message); return; }
     document.getElementById('noteInput').value = '';
-    loadNotes(currentDetailId);
+    closeModal();
+    loadInquiries();
+    loadStats();
   }
 
   // 메모 삭제
