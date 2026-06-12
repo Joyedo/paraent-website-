@@ -112,9 +112,12 @@
     .products-title { font-family: var(--font-display); font-size: 38px; font-weight: 700; color: var(--on-dark); line-height: 1.2; margin-bottom: 12px; letter-spacing: -0.02em; }
     .products-body { font-size: 16px; color: rgba(255,255,255,0.45); line-height: 1.75; max-width: 640px; margin-bottom: 48px; }
     .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
-    .product-chip { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 28px 20px; text-align: center; border: 1px solid rgba(255,255,255,0.08); color: var(--on-dark); font-size: 16px; font-weight: 600; text-decoration: none; transition: background 0.2s, border-color 0.2s; }
+    .product-chip { position: relative; background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 28px 20px; text-align: center; border: 1px solid rgba(255,255,255,0.08); color: var(--on-dark); font-size: 16px; font-weight: 600; text-decoration: none; transition: background 0.2s, border-color 0.2s; }
     .product-chip:hover { background: rgba(41,151,255,0.14); border-color: rgba(41,151,255,0.3); }
     .product-chip span { display: block; font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.4); margin-top: 6px; }
+    .chip-preview { position: absolute; bottom: calc(100% + 14px); left: 50%; transform: translateX(-50%) translateY(6px) scale(0.94); width: 200px; background: #1c1c1e; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 16px 48px rgba(0,0,0,0.55); overflow: hidden; opacity: 0; pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200; }
+    .chip-preview img { width: 100%; height: 148px; object-fit: cover; display: block; }
+    .product-chip:hover .chip-preview { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 
     footer { background: var(--canvas-parchment); padding: 60px 24px 40px; border-top: 1px solid var(--hairline); }
     .footer-inner { max-width: 1100px; margin: 0 auto; }
@@ -363,12 +366,12 @@
     <h2 class="products-title">产品阵容</h2>
     <p class="products-body">Paraent提供7款针对多样化工业环境优化的功率调节器产品线。</p>
     <div class="products-grid">
-      <a href="./product-pll.html" class="product-chip">PII<span>新一代功率调节器</span></a>
-      <a href="./product-smart.html" class="product-chip">SMART<span>旗舰技术产品</span></a>
-      <a href="./product-flex.html" class="product-chip">FLEX<span>EtherCAT通信</span></a>
-      <a href="./product-mini.html" class="product-chip">MINI<span>韩国最小尺寸</span></a>
-      <a href="./product-etype.html" class="product-chip">E-TYPE<span>经济实惠型</span></a>
-      <a href="./product-ptype.html" class="product-chip">P-TYPE<span>畅销产品</span></a>
+      <a href="./product-pll.html" class="product-chip">PII<span>新一代功率调节器</span><div class="chip-preview"><img src="../../assets/images/products/pll-hq2.jpg" alt="PII" loading="lazy"></div></a>
+      <a href="./product-smart.html" class="product-chip">SMART<span>旗舰技术产品</span><div class="chip-preview"><img src="../../assets/images/products/smart-hq.png" alt="SMART" loading="lazy"></div></a>
+      <a href="./product-flex.html" class="product-chip">FLEX<span>EtherCAT通信</span><div class="chip-preview"><img src="../../assets/images/products/flex.png" alt="FLEX" loading="lazy"></div></a>
+      <a href="./product-mini.html" class="product-chip">MINI<span>韩国最小尺寸</span><div class="chip-preview"><img src="../../assets/images/products/mini.png" alt="MINI" loading="lazy"></div></a>
+      <a href="./product-etype.html" class="product-chip">E-TYPE<span>经济实惠型</span><div class="chip-preview"><img src="../../assets/images/products/etype-hq.jpg" alt="E-TYPE" loading="lazy"></div></a>
+      <a href="./product-ptype.html" class="product-chip">P-TYPE<span>畅销产品</span><div class="chip-preview"><img src="../../assets/images/products/ptype-hq.png" alt="P-TYPE" loading="lazy"></div></a>
     </div>
   </div>
 </section>
