@@ -42,7 +42,7 @@
     .lang-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); }
     .btn-primary { font-family: var(--font-text); font-size: 12px; color: #fff; background: var(--primary); border: none; border-radius: var(--r-pill); padding: 7px 15px; margin-left: 4px; cursor: pointer; text-decoration: none; transition: background 0.15s, transform 0.1s; white-space: nowrap; display: inline-block; }
     .btn-primary:hover { background: var(--primary-focus); }
-    .hero-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+    .hero-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
     .btn-dl { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-text); font-size: 14px; color: rgba(255,255,255,0.82); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: var(--r-pill); padding: 11px 20px; cursor: pointer; text-decoration: none; transition: background 0.15s, border-color 0.15s, transform 0.1s; white-space: nowrap; }
     .btn-dl:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.3); color: #fff; }
     .btn-dl-wrap{position:relative;display:inline-block}
@@ -50,13 +50,13 @@
     .btn-dl-wrap.open .btn-dl-menu{display:block}
     .btn-dl-item{display:flex;align-items:center;gap:8px;padding:8px 12px;color:rgba(255,255,255,0.82);font-size:13px;text-decoration:none;border-radius:6px;transition:background 0.1s;white-space:nowrap}
     .btn-dl-item:hover{background:rgba(255,255,255,0.1);color:#fff}
-    .product-hero { background: var(--surface-black); padding: 100px 24px 80px; text-align: center; position: relative; overflow: hidden; }
-    .product-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,102,204,0.18) 0%, transparent 70%); }
-    .product-hero-inner { position: relative; z-index: 1; }
+    .product-hero { background: var(--surface-black) url('../../assets/images/hero-bg-smart.png') 65% center / auto 100% no-repeat; padding: 100px 40px 90px; min-height: 660px; text-align: left; position: relative; overflow: hidden; }
+    .product-hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.68) 38%, rgba(0,0,0,0.18) 60%, transparent 76%); }
+    .product-hero-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; max-width: 1100px; margin: 0 auto; }
     .product-tag { display: inline-block; background: rgba(41,151,255,0.15); border: 1px solid rgba(41,151,255,0.3); border-radius: var(--r-pill); padding: 6px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary-on-dark); margin-bottom: 24px; }
     .product-hero h1 { font-family: var(--font-display); font-size: 64px; font-weight: 700; color: var(--on-dark); line-height: 1.05; margin-bottom: 16px; letter-spacing: -0.02em; }
-    .product-hero-sub { font-size: 22px; color: rgba(255,255,255,0.6); max-width: 640px; margin: 0 auto 36px; line-height: 1.5; }
-    .hero-badge-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+    .product-hero-sub { font-size: 22px; color: rgba(255,255,255,0.6); max-width: 640px; margin: 0 0 36px; line-height: 1.5; }
+    .hero-badge-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
     .hero-badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r-pill); padding: 8px 20px; font-size: 13px; color: rgba(255,255,255,0.8); }
     .tab-bar { background: #0d0d0f; border-bottom: 1px solid rgba(255,255,255,0.07); position: sticky; top: 64px; z-index: 90; padding: 12px 24px; display: flex; justify-content: center; }
     .tab-bar-inner { display: flex; background: rgba(255,255,255,0.07); border-radius: var(--r-pill); padding: 3px; gap: 2px; }
@@ -120,7 +120,7 @@
     .footer-col ul li a { font-size: 13px; color: var(--ink-muted-48); text-decoration: none; }
     .footer-col ul li a:hover { color: var(--primary); }
     .footer-bottom { border-top: 1px solid var(--hairline); padding-top: 20px; font-size: 12px; color: var(--ink-muted-48); }
-    @media (max-width: 768px) { .product-hero h1 { font-size: 40px; } .pillar-grid, .order-steps, .related-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } .tab-bar { padding: 10px 16px; } .tab-btn { padding: 11px 28px; font-size: 13px; } }
+    @media (max-width: 768px) { .product-hero { text-align: center; background-size: auto 60%; background-position: right bottom; } .product-hero-inner { grid-template-columns: 1fr; gap: 0; } .product-hero h1 { font-size: 40px; } .hero-badge-row { justify-content: center; } .pillar-grid, .order-steps, .related-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } .tab-bar { padding: 10px 16px; } .tab-btn { padding: 11px 28px; font-size: 13px; } }
   </style>
   <link rel="stylesheet" href="../../assets/css/responsive.css" />
 </head>
@@ -145,20 +145,14 @@
 
 <section class="product-hero">
   <div class="product-hero-inner">
+    <div class="product-hero-text">
     <div class="product-tag">旗舰产品 · 专利技术</div>
     <h1>SMART</h1>
     <p class="product-hero-sub">没有比SMART更智能的产品<br>智能MPD · PLF · 彩色LCD · 复合控制</p>
     <div class="hero-actions">
       <a href="./inquiry.html" class="btn-primary" style="font-size:15px;padding:12px 28px;">在线咨询</a>
       <a href="../../files/manual/manual-smart.pdf" download class="btn-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>下载手册</a>
-      <div class="btn-dl-wrap">
-        <button class="btn-dl btn-dl-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>下载CAD<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="btn-dl-menu">
-          <a href="../../files/cad/SMART-10A-치수도면.dwg" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>10A</a>
-          <a href="../../files/cad/SMART-70A-치수도면.dwg" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>70A</a>
-          <a href="../../files/cad/SMART-250A-치수도면.dwg" download class="btn-dl-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>250A</a>
-        </div>
-      </div>
+      <a href="./resources.html#cad-smart" class="btn-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>下载CAD</a>
       <a href="../../files/catalog/catalog-general.pdf" download class="btn-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>下载目录</a>
     </div>
     <div class="hero-badge-row">
@@ -167,6 +161,8 @@
       <span class="hero-badge">彩色LCD显示屏</span>
       <span class="hero-badge">RS-485 · Modbus-RTU</span>
     </div>
+    </div>
+    <div class="product-hero-visual"></div>
   </div>
 </section>
 

@@ -252,11 +252,19 @@ function switchTab(id, btn) {
 }
 
 const TAB_IDS = ['tech', 'manual', 'cad', 'catalog'];
+const CAD_PRODUCTS = ['pll', 'smart', 'flex', 'mini', 'etype', 'ptype'];
 function activateFromHash() {
   const hash = location.hash.slice(1);
   if (TAB_IDS.includes(hash)) {
     const btn = document.querySelector(`.tab-btn[onclick*="'${hash}'"]`);
     if (btn) switchTab(hash, btn);
+  } else if (CAD_PRODUCTS.some(p => hash === 'cad-' + p)) {
+    const cadBtn = document.querySelector(`.tab-btn[onclick*="'cad'"]`);
+    if (cadBtn) switchTab('cad', cadBtn);
+    setTimeout(() => {
+      const el = document.getElementById(hash);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
   }
 }
 window.addEventListener('DOMContentLoaded', activateFromHash);
