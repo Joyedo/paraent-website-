@@ -150,6 +150,11 @@
     }
     .tech-card:hover h4 { color: var(--primary); }
     .tech-card p { font-size: 14px; color: var(--ink-muted-48); line-height: 1.7; }
+    .tech-card-bg { position:absolute; inset:0; opacity:0; transition:opacity 0.5s ease; overflow:hidden; }
+    .tech-card-bg img { width:100%; height:100%; object-fit:cover; transform:scale(1.05); transition:transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+    .tech-card:hover .tech-card-bg { opacity:1; }
+    .tech-card:hover .tech-card-bg img { transform:scale(1); }
+    .tech-num, .tech-card h4, .tech-card p { position:relative; }
 
     .products-section { padding: 100px 24px; background: var(--surface-tile-1); }
     .products-container { max-width: 1100px; margin: 0 auto; }
@@ -419,16 +424,19 @@
     <p class="section-body">Paraent拥有以26年积累专业技术为基础的独有核心技术。</p>
     <div class="tech-grid">
       <div class="tech-card">
+        <div class="tech-card-bg"><img src="../../images/tech-hover-1.png" alt="" loading="lazy"></div>
         <div class="tech-num">1</div>
         <h4>数字电力控制技术</h4>
         <p>通过基于微处理器的精密数字运算与控制，实现远超模拟方式的精准度。</p>
       </div>
       <div class="tech-card">
+        <div class="tech-card-bg"><img src="../../images/tech-hover-2.png" alt="" loading="lazy"></div>
         <div class="tech-num">2</div>
         <h4>最大功率分配控制技术</h4>
         <p>同时控制多台功率调节器、降低峰值功率并最大化电力效率的专利技术。</p>
       </div>
       <div class="tech-card">
+        <div class="tech-card-bg"><img src="../../images/tech-hover-3.png" alt="" loading="lazy"></div>
         <div class="tech-num">3</div>
         <h4>智能电网通信技术</h4>
         <p>支持EtherCAT、RS-485、Modbus等多种通信协议的智能电网集成技术。</p>
@@ -524,6 +532,7 @@
 <script src="../../assets/js/mobile-nav.js"></script>
 </body>
 </html>
+
 
 
 
