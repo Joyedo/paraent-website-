@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -80,10 +80,12 @@
     .section-body { font-size: 17px; color: var(--ink-muted-48); line-height: 1.7; max-width: 720px; }
     .section-body-light { color: rgba(255,255,255,0.6); }
     .feature-grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 40px; }
-    .feature-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 32px 28px; border: 1px solid rgba(255,255,255,0.08); }
+    .feature-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 32px 28px; border: 1px solid rgba(255,255,255,0.08); transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), border-color 0.38s, box-shadow 0.38s, background 0.38s; cursor: default; }
     .feature-icon { font-size: 32px; margin-bottom: 16px; }
-    .feature-card h3 { font-size: 18px; font-weight: 600; color: var(--on-dark); margin-bottom: 10px; }
-    .feature-card p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+    .feature-card h3 { font-size: 18px; font-weight: 600; color: var(--on-dark); margin-bottom: 0; }
+    .feature-card p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; max-height: 0; overflow: hidden; opacity: 0; padding-top: 0; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease, padding-top 0.38s ease; }
+    .feature-card:hover { transform: translateY(-4px); border-color: rgba(41,151,255,0.5); box-shadow: 0 16px 48px rgba(0,102,204,0.25), inset 0 0 0 1px rgba(41,151,255,0.18); background: rgba(41,151,255,0.06); }
+    .feature-card:hover p { max-height: 300px; opacity: 1; padding-top: 12px; }
     .voltage-visual { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; margin-top: 40px; border-radius: var(--r-lg); overflow: hidden; box-shadow: rgba(0,0,0,0.22) 3px 5px 30px; }
     .voltage-block { background: rgba(255,255,255,0.06); padding: 48px 32px; text-align: center; }
     .voltage-range { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--primary-on-dark); }
@@ -257,7 +259,7 @@
         <div class="order-dash">-</div>
         <div class="order-seg"><div class="order-seg-code">Pll</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">②</div></div>
         <div class="order-dash">-</div>
-        <div class="order-seg"><div class="order-seg-code">LV/HV</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
+        <div class="order-seg"><div class="order-seg-code">220</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
         <div class="order-dash">-</div>
         <div class="order-seg"><div class="order-seg-code">D/A/C</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">④</div></div>
         <div class="order-dash">-</div>
@@ -267,7 +269,7 @@
         <div class="order-dash">-</div>
         <div class="order-seg"><div class="order-seg-code">F/X</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑦</div></div>
         <div class="order-dash">-</div>
-        <div class="order-seg"><div class="order-seg-code">RS-485/NET</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑧</div></div>
+        <div class="order-seg"><div class="order-seg-code">R/E/T</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑧</div></div>
         <div class="order-dash">-</div>
         <div class="order-seg"><div class="order-seg-code">U/X</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑨</div></div>
         <div class="order-dash">-</div>
@@ -287,17 +289,17 @@
         <div class="order-step">
           <div class="order-step-num">③ Rated Voltage</div>
           <div class="order-step-title">Free Voltage Range Selection</div>
-          <div class="order-step-opts">LV — Low Voltage (40 ~ 130 VAC)<br>HV — High Voltage (131 ~ 480 VAC)</div>
+          <div class="order-step-opts">LV — Low Voltage (40 ~ 130 VAC)<br>HV — High Voltage (131 ~ 480 VAC)<br><br>Specify voltage: 110, 220, 380, 440 (factory default values; customer may adjust within LV/HV range)</div>
         </div>
         <div class="order-step">
           <div class="order-step-num">④ Control Power</div>
           <div class="order-step-title">Device Power Type</div>
-          <div class="order-step-opts">D — DC Type (DC 24V)<br>A — AC Type (AC 110~220V)<br>C — DC Compact Type</div>
+          <div class="order-step-opts">D — DC Type (DC 24V)<br>A — AC Type (AC 110~220V)<br>C — DC Compact Type (DC 24V)</div>
         </div>
         <div class="order-step">
           <div class="order-step-num">⑤ Rated Current</div>
           <div class="order-step-title">Current Capacity</div>
-          <div class="order-step-opts">Select from 10A ~ 500A</div>
+          <div class="order-step-opts">Select from 10A ~ 500A (See specifications)</div>
         </div>
         <div class="order-step">
           <div class="order-step-num">⑥ Control Method</div>
@@ -310,9 +312,9 @@
           <div class="order-step-opts">F — With Fan<br>X — Without Fan</div>
         </div>
         <div class="order-step">
-          <div class="order-step-num">⑧ Communication</div>
+          <div class="order-step-num">⑧ Communication / Output</div>
           <div class="order-step-title">Communication Option</div>
-          <div class="order-step-opts">RS-485 (Standard)<br>EtherNET — D-type exclusive option<br>Transmission Output — A-type exclusive option</div>
+          <div class="order-step-opts">R : RS-485<br>E : EtherNET option — DC Type PCB power exclusive option<br>T : Transmission Output option — AC Type PCB power exclusive option</div>
         </div>
         <div class="order-step">
           <div class="order-step-num">⑨ UL Certification</div>
@@ -324,6 +326,44 @@
           <div class="order-step-title">Reserved</div>
           <div class="order-step-opts">XX</div>
         </div>
+      </div>
+      <div style="margin-top:40px;">
+        <div class="section-label section-label-light">Communication Compatibility</div>
+        <h3 style="font-size:20px;font-weight:700;color:var(--on-dark);margin-bottom:8px;">Communication Options by Control Power Type</h3>
+        <p style="font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:20px;">Available communication and output options vary depending on the selected type.</p>
+        <div style="overflow-x:auto;border-radius:var(--r-lg);border:1px solid rgba(255,255,255,0.08);">
+          <table style="width:100%;border-collapse:collapse;min-width:420px;">
+            <thead>
+              <tr style="background:rgba(255,255,255,0.06);">
+                <th style="padding:14px 20px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);text-align:left;border-bottom:1px solid rgba(255,255,255,0.08);">Control Power Type</th>
+                <th style="padding:14px 20px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);text-align:center;border-bottom:1px solid rgba(255,255,255,0.08);">RS-485 (R)</th>
+                <th style="padding:14px 20px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);text-align:center;border-bottom:1px solid rgba(255,255,255,0.08);">EtherNET (E)</th>
+                <th style="padding:14px 20px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);text-align:center;border-bottom:1px solid rgba(255,255,255,0.08);">Transmission Output (T)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:14px 20px;font-size:14px;color:rgba(255,255,255,0.8);border-bottom:1px solid rgba(255,255,255,0.05);">C — DC Compact Type (DC 24V)</td>
+                <td style="padding:14px 20px;font-size:20px;text-align:center;color:#34c759;border-bottom:1px solid rgba(255,255,255,0.05);">●</td>
+                <td style="padding:14px 20px;font-size:14px;text-align:center;color:rgba(255,255,255,0.2);border-bottom:1px solid rgba(255,255,255,0.05);">—</td>
+                <td style="padding:14px 20px;font-size:14px;text-align:center;color:rgba(255,255,255,0.2);border-bottom:1px solid rgba(255,255,255,0.05);">—</td>
+              </tr>
+              <tr>
+                <td style="padding:14px 20px;font-size:14px;color:rgba(255,255,255,0.8);border-bottom:1px solid rgba(255,255,255,0.05);">D — DC Type (DC 24V)</td>
+                <td style="padding:14px 20px;font-size:20px;text-align:center;color:#34c759;border-bottom:1px solid rgba(255,255,255,0.05);">●</td>
+                <td style="padding:14px 20px;font-size:20px;text-align:center;color:#34c759;border-bottom:1px solid rgba(255,255,255,0.05);">●</td>
+                <td style="padding:14px 20px;font-size:14px;text-align:center;color:rgba(255,255,255,0.2);border-bottom:1px solid rgba(255,255,255,0.05);">—</td>
+              </tr>
+              <tr>
+                <td style="padding:14px 20px;font-size:14px;color:rgba(255,255,255,0.8);">A — AC Type (AC 110~220V)</td>
+                <td style="padding:14px 20px;font-size:20px;text-align:center;color:#34c759;">●</td>
+                <td style="padding:14px 20px;font-size:14px;text-align:center;color:rgba(255,255,255,0.2);">—</td>
+                <td style="padding:14px 20px;font-size:20px;text-align:center;color:#34c759;">●</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:12px;">● Supported · — Not supported · EtherNET is exclusive to D-type · Transmission Output is exclusive to A-type</p>
       </div>
     </div>
   </section>
@@ -370,12 +410,12 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-grid">
-      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../../assets/images/logo.png" alt="Paraent"></a><p>Paraent Co., Ltd.<br>64-14 Dongtan-gihung-ro, Hwaseong-si, Gyeonggi-do<br>TEL: 031-357-0680 · FAX: 031-357-0679<br>E-mail: paraent@paraent.com</p></div>
+      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../../assets/images/logo.png" alt="Paraent"></a><p>PARA-ENT Co., Ltd.<br>64-14 Dongtan-gihung-ro, Hwaseong-si, Gyeonggi-do<br>TEL: 031-831-8310 · FAX: 031-831-8314<br>E-mail: paraent@paraent.com</p></div>
       <div class="footer-col"><h5>About Us</h5><ul><li><a href="./company-overview.html">Company Overview</a></li><li><a href="./history.html">Company History</a></li><li><a href="./certifications.html">Certifications</a></li><li><a href="./location.html">Location</a></li><li><a href="./quality.html">Quality Innovation</a></li></ul></div>
       <div class="footer-col"><h5>Products</h5><ul><li><a href="./product-pll.html">Pll Power Regulator</a></li><li><a href="./product-smart.html">SMART Power Regulator</a></li><li><a href="./product-flex.html">FLEX Power Regulator</a></li><li><a href="./product-mini.html">MINI Power Regulator</a></li><li><a href="./product-etype.html">E-TYPE Power Regulator</a></li><li><a href="./product-ptype.html">P-TYPE Power Regulator</a></li></ul></div>
       <div class="footer-col"><h5>Support</h5><ul><li><a href="./resources.html">Resources</a></li><li><a href="./inquiry.html">Online Inquiry</a></li><li><a href="./notice.html">Notice</a></li></ul></div>
     </div>
-    <div class="footer-bottom">© 2025 Paraent Co., Ltd. All rights reserved.</div>
+    <div class="footer-bottom">© 2025 PARA-ENT Co., Ltd. All rights reserved.</div>
   </div>
 </footer>
 
@@ -430,3 +470,5 @@
 <script>(function(){var b=document.getElementById('scrollTopBtn');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>300)},{passive:true});b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})})})();</script>
   <script src="../../assets/js/mobile-nav.js"></script></body>
 </html>
+
+

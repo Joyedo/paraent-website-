@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
@@ -77,12 +77,14 @@
     .section-body { font-size: 17px; color: var(--ink-muted-48); line-height: 1.7; max-width: 720px; }
     .section-body-light { color: rgba(255,255,255,0.6); }
     .pillar-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 40px; }
-    .pillar-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 36px 28px; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; }
+    .pillar-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 36px 28px; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), border-color 0.38s, box-shadow 0.38s, background 0.38s; cursor: default; }
     .pillar-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--primary-on-dark), transparent); }
     .pillar-num { font-family: var(--font-display); font-size: 48px; font-weight: 800; color: rgba(41,151,255,0.12); position: absolute; top: 16px; right: 20px; line-height: 1; }
     .pillar-tag { display: inline-block; background: rgba(41,151,255,0.15); border: 1px solid rgba(41,151,255,0.25); border-radius: var(--r-sm); padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--primary-on-dark); margin-bottom: 14px; }
-    .pillar-card h3 { font-size: 20px; font-weight: 700; color: var(--on-dark); margin-bottom: 10px; }
-    .pillar-card p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+    .pillar-card h3 { font-size: 20px; font-weight: 700; color: var(--on-dark); margin-bottom: 0; }
+    .pillar-card p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; max-height: 0; overflow: hidden; opacity: 0; padding-top: 0; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease, padding-top 0.38s ease; }
+    .pillar-card:hover { transform: translateY(-4px); border-color: rgba(41,151,255,0.5); box-shadow: 0 16px 48px rgba(0,102,204,0.25), inset 0 0 0 1px rgba(41,151,255,0.18); background: rgba(41,151,255,0.06); }
+    .pillar-card:hover p { max-height: 300px; opacity: 1; padding-top: 12px; }
     .order-diagram { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding: 40px 0 16px; }
     .order-seg { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
     .order-seg-code { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--on-dark); white-space: nowrap; padding: 0 14px 10px; border-bottom: 2.5px solid var(--primary-on-dark); text-align: center; }
@@ -156,8 +158,8 @@
       <a href="../../files/catalog/catalog-general.pdf" download class="btn-dl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>下载目录</a>
     </div>
     <div class="hero-badge-row">
-      <span class="hero-badge">SMART MPD专利</span>
-      <span class="hero-badge">PLF专利 #10-1405243</span>
+      <span class="hero-badge">MPD专利：第10-1405243号</span>
+      <span class="hero-badge">PLF专利：第10-1405244号</span>
       <span class="hero-badge">彩色LCD显示屏</span>
       <span class="hero-badge">RS-485 · Modbus-RTU</span>
     </div>
@@ -183,13 +185,13 @@
       <div class="pillar-grid">
         <div class="pillar-card">
           <span class="pillar-num">01</span>
-          <span class="pillar-tag">专利技术</span>
+          <span class="pillar-tag">MPD专利：第10-1405243号</span>
           <h3>SMART MPD</h3>
           <p>最大功率分配控制功能通过在多台功率调节器间分配功率（过零控制时），平滑主电源负荷，改善功率因数并降低峰值功率。</p>
         </div>
         <div class="pillar-card">
           <span class="pillar-num">02</span>
-          <span class="pillar-tag">专利 #10-1405243</span>
+          <span class="pillar-tag">PLF专利：第10-1405244号</span>
           <h3>SMART PLF</h3>
           <p>当多个并联负载连接到单台功率调节器时，检测局部负载断路的功能。自动调谐获取负载特性模式，实现精确检测。</p>
         </div>
@@ -203,7 +205,7 @@
           <span class="pillar-num">04</span>
           <span class="pillar-tag">复合控制</span>
           <h3>SMART COMBINATION</h3>
-          <p>在一个机体内安装最多3台单相功率调节器，节省成本和空间。支持多种接线方式，包括单相、三相、1P1L、1P2L、1P3L、3P3L等。</p>
+          <p>在一个机体内安装最多3台单相功率调节器，节省成本和空间。支持多种接线方式：1P1P、1P2L、1P3L、2P2L、3P2L、3P3L、3P4L、3P6L。</p>
         </div>
       </div>
       <div style="margin-top:32px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r-lg);padding:28px;">
@@ -424,11 +426,57 @@
         <div class="order-dash">-</div>
         <div class="order-seg"><div class="order-seg-code">电流</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑦</div></div>
       </div>
-      <div class="order-steps">
-        <div class="order-step"><div class="order-step-num">SMC — 控制单元</div><div class="order-step-title">控制方式</div><div class="order-step-opts">PA — 相位角控制 (P.A-N)<br>PI — 电流反馈 (P.A-I)<br>PV — 电压反馈 (P.A-V)<br>PW — 功率反馈 (P.A-W)<br>ZC — 过零控制 (ZCS)<br>PZ — 复合控制 (PZM)<br>※ 默认: PA（相位角控制）</div></div>
-        <div class="order-step"><div class="order-step-num">接线方式</div><div class="order-step-title">电气接线配置</div><div class="order-step-opts">1P1L / 1P2L / 1P3L<br>2P2L / 3P2L<br>3P3L / 3P4L / 3P6L</div></div>
-        <div class="order-step"><div class="order-step-num">选项</div><div class="order-step-title">附加功能选择</div><div class="order-step-opts">C — 通信功能<br>S — PSD远程型（D-SUB线缆5M）<br>MPD — 最大功率分配功能<br>PSD2 — PSD-2000<br>1R — 传输输出1通道<br>3R — 传输输出3通道</div></div>
-        <div class="order-step"><div class="order-step-num">PM — 功率模块</div><div class="order-step-title">额定电压·电流</div><div class="order-step-opts">电压: 1(110V) / 2(220V) / 3(380V) / 4(440V) / 6(660V)<br>电流: 从10A ~ 2500A中选择</div></div>
+      <!-- SMC 섹션 -->
+      <div style="margin-top:32px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;color:var(--primary-on-dark);margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:20px;height:2px;background:var(--primary-on-dark);"></span>SMC — 控制单元</div>
+        <div style="background:rgba(41,151,255,0.08);border:1px solid rgba(41,151,255,0.3);border-radius:var(--r-md);padding:18px 24px;margin-bottom:12px;display:flex;align-items:center;gap:20px;">
+          <span style="font-size:26px;font-weight:800;color:rgba(41,151,255,0.35);line-height:1;flex-shrink:0;">①</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--primary-on-dark);letter-spacing:0.06em;margin-bottom:3px;">SMC</div>
+            <div style="font-size:17px;font-weight:700;color:var(--on-dark);">SMART MAIN CONTROLLER</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+          <div class="order-step">
+            <div class="order-step-num">② 控制方式</div>
+            <div class="order-step-title">输出控制方式</div>
+            <div class="order-step-opts">PA — 相位角控制 (P.A-N)<br>PI — 电流反馈 (P.A-I)<br>PV — 电压反馈 (P.A-V)<br>PW — 功率反馈 (P.A-W)<br>ZC — 过零控制 (ZCS)<br>PZ — 复合控制 (PZM)<br>※ 默认: PA（相位角控制）</div>
+          </div>
+          <div class="order-step">
+            <div class="order-step-num">③ 接线方式</div>
+            <div class="order-step-title">电气接线配置</div>
+            <div class="order-step-opts">1P1L / 1P2L / 1P3L<br>2P2L / 3P2L<br>3P3L / 3P4L / 3P6L</div>
+          </div>
+          <div class="order-step">
+            <div class="order-step-num">④ 选项</div>
+            <div class="order-step-title">附加功能选择</div>
+            <div class="order-step-opts">C — 通信功能<br>S — PSD远程型（D-SUB线缆5M）<br>MPD — 最大功率分配功能<br>PSD2 — PSD-2000<br>1R — 传输输出1通道<br>3R — 传输输出3通道</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PM 섹션 -->
+      <div style="margin-top:20px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;color:var(--primary-on-dark);margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:20px;height:2px;background:var(--primary-on-dark);"></span>PM — 功率模块</div>
+        <div style="background:rgba(41,151,255,0.08);border:1px solid rgba(41,151,255,0.3);border-radius:var(--r-md);padding:18px 24px;margin-bottom:12px;display:flex;align-items:center;gap:20px;">
+          <span style="font-size:26px;font-weight:800;color:rgba(41,151,255,0.35);line-height:1;flex-shrink:0;">⑤</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--primary-on-dark);letter-spacing:0.06em;margin-bottom:3px;">PM</div>
+            <div style="font-size:17px;font-weight:700;color:var(--on-dark);">POWER MODULE</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+          <div class="order-step">
+            <div class="order-step-num">⑥ 额定电压</div>
+            <div class="order-step-title">电压选择</div>
+            <div class="order-step-opts">1 : 110V<br>2 : 220V<br>3 : 380V<br>4 : 440V</div>
+          </div>
+          <div class="order-step">
+            <div class="order-step-num">⑦ 额定电流</div>
+            <div class="order-step-title">电流容量</div>
+            <div class="order-step-opts">从10A ~ 2500A中选择</div>
+          </div>
+        </div>
       </div>
 
       <div style="margin-top:48px;">
@@ -635,12 +683,12 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-grid">
-      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../../assets/images/logo.png" alt="Paraent"></a><p>Paraent Co., Ltd.<br>韩国京畿道华城市东滩起兴路64-14<br>TEL: +82-31-357-0680<br>E-mail: paraent@paraent.com</p></div>
+      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../../assets/images/logo.png" alt="Paraent"></a><p>PARA-ENT Co., Ltd.<br>韩国京畿道华城市东滩起兴路64-14<br>TEL: 031-831-8310 · FAX: 031-831-8314<br>E-mail: paraent@paraent.com</p></div>
       <div class="footer-col"><h5>关于我们</h5><ul><li><a href="./company-overview.html">公司概要</a></li><li><a href="./history.html">公司历史</a></li><li><a href="./certifications.html">认证情况</a></li><li><a href="./location.html">交通指南</a></li><li><a href="./quality.html">品质革新</a></li></ul></div>
       <div class="footer-col"><h5>产品</h5><ul><li><a href="./product-pll.html">Pll</a></li><li><a href="./product-smart.html">SMART</a></li><li><a href="./product-flex.html">FLEX</a></li><li><a href="./product-mini.html">MINI</a></li><li><a href="./product-etype.html">E-TYPE</a></li><li><a href="./product-ptype.html">P-TYPE</a></li></ul></div>
       <div class="footer-col"><h5>客户支持</h5><ul><li><a href="./resources.html">资料室</a></li><li><a href="./inquiry.html">在线咨询</a></li><li><a href="./notice.html">公告通知</a></li></ul></div>
     </div>
-    <div class="footer-bottom">© 2025 Paraent Co., Ltd. All rights reserved.</div>
+    <div class="footer-bottom">© 2025 PARA-ENT Co., Ltd. All rights reserved.</div>
   </div>
 </footer>
 
@@ -691,3 +739,7 @@
 <script src="../../assets/js/mobile-nav.js"></script>
 </body>
 </html>
+
+
+
+
