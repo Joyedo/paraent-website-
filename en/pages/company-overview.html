@@ -308,12 +308,14 @@
       font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 10px;
       transition: color 0.3s ease;
     }
-    .tech-card:hover h4 { color: var(--primary); }
+    .tech-card:hover h4 { color: #fff; }
     .tech-card p { font-size: 14px; color: var(--ink-muted-48); line-height: 1.7; }
     .tech-card-bg { position:absolute; inset:0; opacity:0; transition:opacity 0.5s ease; overflow:hidden; }
     .tech-card-bg img { width:100%; height:100%; object-fit:cover; transform:scale(1.05); transition:transform 0.5s cubic-bezier(0.22,1,0.36,1); }
     .tech-card:hover .tech-card-bg { opacity:1; }
     .tech-card:hover .tech-card-bg img { transform:scale(1); }
+    .tech-card-bg::after { content:''; position:absolute; inset:0; background:rgba(8,16,40,0.58); }
+    .tech-card:hover p { color:rgba(255,255,255,0.82); }
     .tech-num, .tech-card h4, .tech-card p { position:relative; }
 
     /* PRODUCTS SECTION */
@@ -714,6 +716,7 @@
 </script>
   <script src="../../assets/js/mobile-nav.js"></script></body>
 </html>
+
 
 
 
