@@ -267,7 +267,7 @@
     .lightbox-img {
       max-width: min(90vw, 700px); max-height: 90vh;
       border-radius: 12px; box-shadow: 0 24px 64px rgba(0,0,0,0.6);
-      object-fit: contain;
+      object-fit: contain; background: #fff;
     }
     .lightbox-close {
       position: fixed; top: 20px; right: 24px;
@@ -550,47 +550,41 @@
     <h2 class="section-title">특허 및 상표등록증</h2>
     <div class="cert-patent-grid">
 
-      <!-- 디자인등록증 (PDF 인라인) -->
-      <a href="../assets/certifications/patents/patent-design.pdf" target="_blank" rel="noopener" style="text-decoration:none; display:block;">
-        <div class="cert-img-card">
-          <div class="cert-doc-preview">
-            <embed src="../assets/certifications/patents/patent-design.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf">
-          </div>
-          <div class="cert-img-info">
-            <h4>디자인등록증</h4>
-            <p>전력조정기 외관 디자인 등록증</p>
-            <span class="cert-img-badge">Design · PDF</span>
-          </div>
+      <!-- 디자인등록증 (이미지 + 라이트박스) -->
+      <div class="cert-img-card" onclick="openLightbox('patents', 4)" style="cursor:pointer;">
+        <div class="cert-img-preview">
+          <img src="../assets/certifications/patents/patent-design.jpg" alt="전력조정기 외관 디자인 등록증">
         </div>
-      </a>
+        <div class="cert-img-info">
+          <h4>디자인등록증</h4>
+          <p>전력조정기 외관 디자인 등록증</p>
+          <span class="cert-img-badge">Design</span>
+        </div>
+      </div>
 
-      <!-- 상표등록증 영문 (PDF 인라인) -->
-      <a href="../assets/certifications/patents/trademark-en.pdf" target="_blank" rel="noopener" style="text-decoration:none; display:block;">
-        <div class="cert-img-card">
-          <div class="cert-doc-preview">
-            <embed src="../assets/certifications/patents/trademark-en.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf">
-          </div>
-          <div class="cert-img-info">
-            <h4>상표등록증</h4>
-            <p>PARAENT 영문 브랜드 로고 상표 등록증</p>
-            <span class="cert-img-badge">Trademark (EN) · PDF</span>
-          </div>
+      <!-- 상표등록증 영문 (이미지 + 라이트박스) -->
+      <div class="cert-img-card" onclick="openLightbox('patents', 5)" style="cursor:pointer;">
+        <div class="cert-img-preview">
+          <img src="../assets/certifications/patents/trademark-en.jpg" alt="PARAENT 영문 브랜드 로고 상표 등록증">
         </div>
-      </a>
+        <div class="cert-img-info">
+          <h4>상표등록증</h4>
+          <p>PARAENT 영문 브랜드 로고 상표 등록증</p>
+          <span class="cert-img-badge">Trademark (EN)</span>
+        </div>
+      </div>
 
-      <!-- 상표등록증 한글 (PDF 인라인) -->
-      <a href="../assets/certifications/patents/trademark-ko.pdf" target="_blank" rel="noopener" style="text-decoration:none; display:block;">
-        <div class="cert-img-card">
-          <div class="cert-doc-preview">
-            <embed src="../assets/certifications/patents/trademark-ko.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf">
-          </div>
-          <div class="cert-img-info">
-            <h4>상표등록증</h4>
-            <p>파라이엔티 한글 브랜드 로고 상표 등록증</p>
-            <span class="cert-img-badge">Trademark (KO) · PDF</span>
-          </div>
+      <!-- 상표등록증 한글 (이미지 + 라이트박스) -->
+      <div class="cert-img-card" onclick="openLightbox('patents', 6)" style="cursor:pointer;">
+        <div class="cert-img-preview">
+          <img src="../assets/certifications/patents/trademark-ko.jpg" alt="파라이엔티 한글 브랜드 로고 상표 등록증">
         </div>
-      </a>
+        <div class="cert-img-info">
+          <h4>상표등록증</h4>
+          <p>파라이엔티 한글 브랜드 로고 상표 등록증</p>
+          <span class="cert-img-badge">Trademark (KO)</span>
+        </div>
+      </div>
 
       <!-- 특허증 멀티채널 (이미지 + 라이트박스) -->
       <div class="cert-img-card" onclick="openLightbox('patents', 0)" style="cursor:pointer;">
@@ -799,20 +793,20 @@
         </div>
         <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
           <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 0)">
-            <div class="cert-img-preview-dark"><img src="../assets/images/certifications/ul/pii-ul-1.png" alt="PII UL 인증서 1"></div>
-            <div class="cert-img-info-dark"><h4>UL CoC p.1</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+            <div class="cert-img-preview-dark"><img src="../assets/images/certifications/ul/pii-ul-3.png" alt="PII UL 인증서 3"></div>
+            <div class="cert-img-info-dark"><h4>ULCA 1</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
           </div>
           <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 1)">
-            <div class="cert-img-preview-dark"><img src="../assets/images/certifications/ul/pii-ul-2.png" alt="PII UL 인증서 2"></div>
-            <div class="cert-img-info-dark"><h4>UL CoC p.2</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+            <div class="cert-img-preview-dark"><img src="../assets/images/certifications/ul/pii-ul-4.png" alt="PII UL 인증서 4"></div>
+            <div class="cert-img-info-dark"><h4>ULCA 2</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
           </div>
           <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 2)">
-            <div class="cert-img-preview-dark"><img src="../assets/images/certifications/ul/pii-ul-3.png" alt="PII UL 인증서 3"></div>
-            <div class="cert-img-info-dark"><h4>UL CoC p.3</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+            <div class="cert-img-preview-dark"><img src="../assets/images/certifications/ul/pii-ul-1.png" alt="PII UL 인증서 1"></div>
+            <div class="cert-img-info-dark"><h4>ULUS 1</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
           </div>
           <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 3)">
-            <div class="cert-img-preview-dark"><img src="../assets/images/certifications/ul/pii-ul-4.png" alt="PII UL 인증서 4"></div>
-            <div class="cert-img-info-dark"><h4>UL CoC p.4</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
+            <div class="cert-img-preview-dark"><img src="../assets/images/certifications/ul/pii-ul-2.png" alt="PII UL 인증서 2"></div>
+            <div class="cert-img-info-dark"><h4>ULUS 2</h4><p>PII 전력조정기</p><span class="cert-img-badge-dark">UL</span></div>
           </div>
         </div>
       </div>
@@ -884,12 +878,15 @@ const galleries = {
     '../assets/certifications/patents/patent-plf.jpg',
     '../assets/certifications/patents/patent-waveform.jpg',
     '../assets/certifications/patents/patent-mpd.jpg',
+    '../assets/certifications/patents/patent-design.jpg',
+    '../assets/certifications/patents/trademark-en.jpg',
+    '../assets/certifications/patents/trademark-ko.jpg',
   ],
   'ul-all': [
-    '../assets/images/certifications/ul/pii-ul-1.png',
-    '../assets/images/certifications/ul/pii-ul-2.png',
     '../assets/images/certifications/ul/pii-ul-3.png',
     '../assets/images/certifications/ul/pii-ul-4.png',
+    '../assets/images/certifications/ul/pii-ul-1.png',
+    '../assets/images/certifications/ul/pii-ul-2.png',
     '../assets/images/certifications/ul/flex-ul-1.jpg',
     '../assets/images/certifications/ul/flex-ul-2.jpg',
     '../assets/images/certifications/ul/flex-ul-3.jpg',
@@ -1079,7 +1076,7 @@ document.addEventListener('keydown', e => {
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="../index.html" class="footer-logo"><img src="../assets/images/logo.png" alt="Paraent"></a>
-        <p>(주)파라이엔티<br>경기도 화성시 동탄기흥로 64-14<br>TEL 031-831-8310 | FAX 031-831-8314</p>
+        <p>(주)파라이엔티<br>경기도 화성시 동탄기흥로 64-14<br>TEL 031-831-8310 | FAX 031-831-8314<br>E-mail: cpmaui@paratec.co.kr</p>
       </div>
       <div class="footer-col">
         <h5>회사소개</h5>

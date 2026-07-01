@@ -126,7 +126,7 @@
     /* LIGHTBOX */
     .lightbox-overlay { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.92); backdrop-filter: blur(12px); align-items: center; justify-content: center; }
     .lightbox-overlay.open { display: flex; }
-    .lightbox-img { max-width: min(90vw, 700px); max-height: 90vh; border-radius: 12px; box-shadow: 0 24px 64px rgba(0,0,0,0.6); object-fit: contain; }
+    .lightbox-img { max-width: min(90vw, 700px); max-height: 90vh; border-radius: 12px; box-shadow: 0 24px 64px rgba(0,0,0,0.6); object-fit: contain; background: #fff; }
     .lightbox-close { position: fixed; top: 20px; right: 24px; background: rgba(255,255,255,0.12); border: none; color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .lightbox-close:hover { background: rgba(255,255,255,0.22); }
     .lightbox-nav { position: fixed; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.12); border: none; color: #fff; width: 44px; height: 44px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
@@ -235,42 +235,36 @@
     <div class="section-label">Patents &amp; Trademarks</div>
     <h2 class="section-title">Patents &amp; Trademark Certificates</h2>
     <div class="cert-patent-grid">
-      <a href="../../assets/certifications/patents/patent-design.pdf" target="_blank" rel="noopener" style="text-decoration:none; display:block;">
-        <div class="cert-img-card">
-          <div class="cert-doc-preview">
-            <embed src="../../assets/certifications/patents/patent-design.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf">
-          </div>
-          <div class="cert-img-info">
-            <h4>Design Registration</h4>
-            <p>Power regulator exterior design registration</p>
-            <span class="cert-img-badge">Design · PDF</span>
-          </div>
+      <div class="cert-img-card" onclick="openLightbox('patents', 4)" style="cursor:pointer;">
+        <div class="cert-img-preview">
+          <img src="../../assets/certifications/patents/patent-design.jpg" alt="Power regulator exterior design registration">
         </div>
-      </a>
-      <a href="../../assets/certifications/patents/trademark-en.pdf" target="_blank" rel="noopener" style="text-decoration:none; display:block;">
-        <div class="cert-img-card">
-          <div class="cert-doc-preview">
-            <embed src="../../assets/certifications/patents/trademark-en.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf">
-          </div>
-          <div class="cert-img-info">
-            <h4>Trademark Registration</h4>
-            <p>PARAENT English brand logo trademark registration</p>
-            <span class="cert-img-badge">Trademark (EN) · PDF</span>
-          </div>
+        <div class="cert-img-info">
+          <h4>Design Registration</h4>
+          <p>Power regulator exterior design registration</p>
+          <span class="cert-img-badge">Design</span>
         </div>
-      </a>
-      <a href="../../assets/certifications/patents/trademark-ko.pdf" target="_blank" rel="noopener" style="text-decoration:none; display:block;">
-        <div class="cert-img-card">
-          <div class="cert-doc-preview">
-            <embed src="../../assets/certifications/patents/trademark-ko.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf">
-          </div>
-          <div class="cert-img-info">
-            <h4>Trademark Registration</h4>
-            <p>Paraent Korean brand logo trademark registration</p>
-            <span class="cert-img-badge">Trademark (KO) · PDF</span>
-          </div>
+      </div>
+      <div class="cert-img-card" onclick="openLightbox('patents', 5)" style="cursor:pointer;">
+        <div class="cert-img-preview">
+          <img src="../../assets/certifications/patents/trademark-en.jpg" alt="PARAENT English brand logo trademark registration">
         </div>
-      </a>
+        <div class="cert-img-info">
+          <h4>Trademark Registration</h4>
+          <p>PARAENT English brand logo trademark registration</p>
+          <span class="cert-img-badge">Trademark (EN)</span>
+        </div>
+      </div>
+      <div class="cert-img-card" onclick="openLightbox('patents', 6)" style="cursor:pointer;">
+        <div class="cert-img-preview">
+          <img src="../../assets/certifications/patents/trademark-ko.jpg" alt="Paraent Korean brand logo trademark registration">
+        </div>
+        <div class="cert-img-info">
+          <h4>Trademark Registration</h4>
+          <p>Paraent Korean brand logo trademark registration</p>
+          <span class="cert-img-badge">Trademark (KO)</span>
+        </div>
+      </div>
       <div class="cert-img-card" onclick="openLightbox('patents', 0)" style="cursor:pointer;">
         <div class="cert-img-preview">
           <img src="../../assets/certifications/patents/patent-multichannel.jpg" alt="Multi-channel Power Regulator Patent">
@@ -409,10 +403,10 @@
       <div class="ul-product-block">
         <div class="ul-product-label"><span class="ul-product-label-badge">PII</span><span class="ul-product-label-sub">UL Certification of Compliance</span></div>
         <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
-          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 0)"><div class="cert-img-preview-dark"><img src="../../assets/images/certifications/ul/pii-ul-1.png" alt="PII UL Certificate 1"></div><div class="cert-img-info-dark"><h4>UL CoC p.1</h4><p>PII Power Regulator</p><span class="cert-img-badge-dark">UL</span></div></div>
-          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 1)"><div class="cert-img-preview-dark"><img src="../../assets/images/certifications/ul/pii-ul-2.png" alt="PII UL Certificate 2"></div><div class="cert-img-info-dark"><h4>UL CoC p.2</h4><p>PII Power Regulator</p><span class="cert-img-badge-dark">UL</span></div></div>
-          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 2)"><div class="cert-img-preview-dark"><img src="../../assets/images/certifications/ul/pii-ul-3.png" alt="PII UL Certificate 3"></div><div class="cert-img-info-dark"><h4>UL CoC p.3</h4><p>PII Power Regulator</p><span class="cert-img-badge-dark">UL</span></div></div>
-          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 3)"><div class="cert-img-preview-dark"><img src="../../assets/images/certifications/ul/pii-ul-4.png" alt="PII UL Certificate 4"></div><div class="cert-img-info-dark"><h4>UL CoC p.4</h4><p>PII Power Regulator</p><span class="cert-img-badge-dark">UL</span></div></div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 0)"><div class="cert-img-preview-dark"><img src="../../assets/images/certifications/ul/pii-ul-3.png" alt="PII UL Certificate 3"></div><div class="cert-img-info-dark"><h4>ULCA 1</h4><p>PII Power Regulator</p><span class="cert-img-badge-dark">UL</span></div></div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 1)"><div class="cert-img-preview-dark"><img src="../../assets/images/certifications/ul/pii-ul-4.png" alt="PII UL Certificate 4"></div><div class="cert-img-info-dark"><h4>ULCA 2</h4><p>PII Power Regulator</p><span class="cert-img-badge-dark">UL</span></div></div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 2)"><div class="cert-img-preview-dark"><img src="../../assets/images/certifications/ul/pii-ul-1.png" alt="PII UL Certificate 1"></div><div class="cert-img-info-dark"><h4>ULUS 1</h4><p>PII Power Regulator</p><span class="cert-img-badge-dark">UL</span></div></div>
+          <div class="cert-img-card-dark" onclick="openLightbox('ul-all', 3)"><div class="cert-img-preview-dark"><img src="../../assets/images/certifications/ul/pii-ul-2.png" alt="PII UL Certificate 2"></div><div class="cert-img-info-dark"><h4>ULUS 2</h4><p>PII Power Regulator</p><span class="cert-img-badge-dark">UL</span></div></div>
         </div>
       </div>
       <div class="ul-product-block">
@@ -448,8 +442,8 @@
 
 <script>
 const galleries = {
-  'patents': ['../../assets/certifications/patents/patent-multichannel.jpg','../../assets/certifications/patents/patent-plf.jpg','../../assets/certifications/patents/patent-waveform.jpg','../../assets/certifications/patents/patent-mpd.jpg'],
-  'ul-all': ['../../assets/images/certifications/ul/pii-ul-1.png','../../assets/images/certifications/ul/pii-ul-2.png','../../assets/images/certifications/ul/pii-ul-3.png','../../assets/images/certifications/ul/pii-ul-4.png','../../assets/images/certifications/ul/flex-ul-1.jpg','../../assets/images/certifications/ul/flex-ul-2.jpg','../../assets/images/certifications/ul/flex-ul-3.jpg','../../assets/images/certifications/ul/flex-ul-4.jpg','../../assets/images/certifications/ul/smart-ul-1.jpg','../../assets/images/certifications/ul/smart-ul-2.jpg','../../assets/images/certifications/ul/smart-ul-3.jpg','../../assets/images/certifications/ul/smart-ul-4.jpg'],
+  'patents': ['../../assets/certifications/patents/patent-multichannel.jpg','../../assets/certifications/patents/patent-plf.jpg','../../assets/certifications/patents/patent-waveform.jpg','../../assets/certifications/patents/patent-mpd.jpg','../../assets/certifications/patents/patent-design.jpg','../../assets/certifications/patents/trademark-en.jpg','../../assets/certifications/patents/trademark-ko.jpg'],
+  'ul-all': ['../../assets/images/certifications/ul/pii-ul-3.png','../../assets/images/certifications/ul/pii-ul-4.png','../../assets/images/certifications/ul/pii-ul-1.png','../../assets/images/certifications/ul/pii-ul-2.png','../../assets/images/certifications/ul/flex-ul-1.jpg','../../assets/images/certifications/ul/flex-ul-2.jpg','../../assets/images/certifications/ul/flex-ul-3.jpg','../../assets/images/certifications/ul/flex-ul-4.jpg','../../assets/images/certifications/ul/smart-ul-1.jpg','../../assets/images/certifications/ul/smart-ul-2.jpg','../../assets/images/certifications/ul/smart-ul-3.jpg','../../assets/images/certifications/ul/smart-ul-4.jpg'],
   'ce-pii': ['../../assets/images/certifications/ce/ce-pii-1.jpg','../../assets/images/certifications/ce/ce-pii-2.jpg','../../assets/images/certifications/ce/ce-pii-3.jpg','../../assets/images/certifications/ce/ce-pii-4.jpg'],
   'ce-smart': ['../../assets/images/certifications/ce/ce-smart-1.jpg'],
   'ce-flex': ['../../assets/images/certifications/ce/ce-flex-1.jpg','../../assets/images/certifications/ce/ce-flex-2.jpg'],
@@ -537,7 +531,7 @@ document.addEventListener('keydown', e => {
 <footer>
   <div class="footer-inner">
     <div class="footer-grid">
-      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../../assets/images/logo.png" alt="Paraent"></a><p>PARA-ENT Co., Ltd.<br>64-14 Dongtan-gihung-ro, Hwaseong-si, Gyeonggi-do<br>TEL 031-831-8310 | FAX 031-831-8314</p></div>
+      <div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../../assets/images/logo.png" alt="Paraent"></a><p>PARA-ENT Co., Ltd.<br>64-14 Dongtan-gihung-ro, Hwaseong-si, Gyeonggi-do<br>TEL 031-831-8310 | FAX 031-831-8314<br>E-mail: cpmaui@paratec.co.kr</p></div>
       <div class="footer-col"><h5>About Us</h5><ul><li><a href="./company-overview.html">Company Overview</a></li><li><a href="./history.html">Company History</a></li><li><a href="./certifications.html">Certifications</a></li><li><a href="./location.html">Location</a></li><li><a href="./quality.html">Quality Innovation</a></li></ul></div>
       <div class="footer-col"><h5>Products</h5><ul><li><a href="./product-pll.html">PII</a></li><li><a href="./product-smart.html">SMART</a></li><li><a href="./product-flex.html">FLEX</a></li><li><a href="./product-mini.html">MINI</a></li><li><a href="./product-etype.html">E-TYPE</a></li><li><a href="./product-ptype.html">P-TYPE</a></li></ul></div>
       <div class="footer-col"><h5>Support</h5><ul><li><a href="./resources.html">Resources</a></li><li><a href="./inquiry.html">Online Inquiry</a></li><li><a href="./notice.html">Notice</a></li></ul></div>
