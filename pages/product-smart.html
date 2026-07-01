@@ -149,7 +149,7 @@
     .section-body-light { color: rgba(255,255,255,0.6); }
 
     .pillar-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 40px; }
-    .pillar-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 36px 28px; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), border-color 0.38s, box-shadow 0.38s, background 0.38s; cursor: default; }
+    .pillar-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 36px 28px; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), border-color 0.38s, box-shadow 0.38s, background 0.38s; cursor: pointer; display: block; text-decoration: none; color: inherit; }
     .pillar-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--primary-on-dark), transparent); }
     .pillar-num { font-family: var(--font-display); font-size: 48px; font-weight: 800; color: rgba(41,151,255,0.12); position: absolute; top: 16px; right: 20px; line-height: 1; }
     .pillar-tag { display: inline-block; background: rgba(41,151,255,0.15); border: 1px solid rgba(41,151,255,0.25); border-radius: var(--r-sm); padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--primary-on-dark); margin-bottom: 14px; }
@@ -157,6 +157,12 @@
     .pillar-card p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; max-height: 0; overflow: hidden; opacity: 0; padding-top: 0; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease, padding-top 0.38s ease; }
     .pillar-card:hover { transform: translateY(-4px); border-color: rgba(41,151,255,0.5); box-shadow: 0 16px 48px rgba(0,102,204,0.25), inset 0 0 0 1px rgba(41,151,255,0.18); background: rgba(41,151,255,0.06); }
     .pillar-card:hover p { max-height: 300px; opacity: 1; padding-top: 12px; }
+    .pillar-card-bg { position:absolute; inset:0; opacity:0; transition:opacity 0.5s ease; overflow:hidden; }
+    .pillar-card-bg img { width:100%; height:100%; object-fit:cover; transform:scale(1.05); transition:transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+    .pillar-card:hover .pillar-card-bg { opacity:1; }
+    .pillar-card:hover .pillar-card-bg img { transform:scale(1); }
+    .pillar-card-bg::after { content:''; position:absolute; inset:0; background:rgba(8,16,40,0.58); }
+    .pillar-tag, .pillar-card h3, .pillar-card p { position:relative; }
 
     .order-diagram { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding: 40px 0 16px; }
     .order-seg { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
@@ -275,6 +281,7 @@
       <span class="hero-badge">PLF 특허 : 제10-1405244호</span>
       <span class="hero-badge">컬러 LCD 디스플레이</span>
       <span class="hero-badge">RS-485 · Modbus-RTU</span>
+      <span class="hero-badge">CE · UL 인증</span>
     </div>
     </div>
     <div class="product-hero-visual"></div>
@@ -297,30 +304,34 @@
       <h2 class="section-title section-title-light">4가지 SMART 핵심 기술</h2>
       <p class="section-body section-body-light">파라이엔티의 모든 전력조정기 기술이 집약된 차세대 플래그십 전력조정기</p>
       <div class="pillar-grid">
-        <div class="pillar-card">
+        <a href="#smart-mpd" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../images/smart-hover-mpd.png" alt="" loading="lazy"></div>
           <span class="pillar-num">01</span>
           <span class="pillar-tag">MPD 특허 : 제10-1405243호</span>
           <h3>SMART MPD</h3>
           <p>최대전력분산제어 기능으로 다수의 전력조정기를 제로크로싱으로 제어 시 각 전력조정기 간의 전력분배로 메인 수전의 전력을 평활합니다. 역률 개선 및 피크 전력을 감소시킵니다.</p>
-        </div>
-        <div class="pillar-card">
+        </a>
+        <a href="#smart-plf" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../images/smart-hover-plf.png" alt="" loading="lazy"></div>
           <span class="pillar-num">02</span>
           <span class="pillar-tag">PLF 특허 : 제10-1405244호</span>
           <h3>SMART PLF</h3>
           <p>한 대의 전력조정기에 여러 개의 병렬 부하 연결 시, 부분적인 부하의 단선을 검출해 내는 기능입니다. 오토튜닝을 통해 부하 특성을 파악하여 정확한 감지를 실현합니다.</p>
-        </div>
-        <div class="pillar-card">
+        </a>
+        <a href="#smart-display" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../images/smart-hover-display.png" alt="" loading="lazy"></div>
           <span class="pillar-num">03</span>
           <span class="pillar-tag">컬러 LCD · 18키 패드</span>
           <h3>SMART DISPLAY (PSD)</h3>
           <p>컬러 LCD와 18KEYPAD 적용으로 사용자 인터페이스를 개선했습니다. 자가진단, 테스트 모드, 용이한 파라미터 설정이 가능하며, 본체 부착 및 분리 장착이 모두 가능합니다.</p>
-        </div>
-        <div class="pillar-card">
+        </a>
+        <a href="#smart-combination" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../images/smart-hover-combination.png" alt="" loading="lazy"></div>
           <span class="pillar-num">04</span>
           <span class="pillar-tag">복합 제어</span>
           <h3>SMART COMBINATION</h3>
           <p>하나의 몸체에 최대 단상 3대의 전력조정기를 탑재하여 비용과 공간을 절약합니다. 단상, 삼상 등 다양한 결선 방식에 대응하며 1P1P, 1P2L, 1P3L, 2P2L, 3P2L, 3P3L, 3P4L, 3P6L 등을 지원합니다.</p>
-        </div>
+        </a>
       </div>
     </div>
   </section>
@@ -328,7 +339,7 @@
   <section class="section" style="background:#ffffff;border-top:1px solid var(--hairline);padding-top:48px;padding-bottom:48px;">
     <div class="container">
       <!-- SMART MPD -->
-      <div>
+      <div id="smart-mpd" style="scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART MPD <span style="font-size:13px;font-weight:400;color:#555;">(Max Power Distribution, 최대전력분산제어) 기능</span></h3>
         <p style="font-size:13px;font-weight:600;color:#1a3f8f;margin:10px 0 4px;">1) 역률개선 효과</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 최대전력 분산제어는 다수의 전력조정기를 제로크로싱으로 제어 시 각 전력조정기 간의 전력분배로 메인 수전의 전력을 평활하는 기능입니다.</p>
@@ -348,7 +359,7 @@
         </div>
       </div>
       <!-- SMART PLF -->
-      <div style="margin-top:48px;">
+      <div id="smart-plf" style="margin-top:48px;scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART PLF <span style="font-size:13px;font-weight:400;color:#555;">(Partial Load Failure, 부분부하단선 감지) 기능</span></h3>
         <p style="font-size:13px;color:var(--ink-muted-48);margin-bottom:8px;">(특허 제10-1405243호 부분부하단선 검출기를 구비한 전력조정기 및 이의 부분부하단선 검출 방법)</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 한 대의 전력조정기에 여러 개의 병렬 부하 연결 시, 부분적인 부하의 단선을 검출해 내는 기능</p>
@@ -366,7 +377,7 @@
         </div>
       </div>
       <!-- SMART DISPLAY (PSD) -->
-      <div style="margin-top:28px;">
+      <div id="smart-display" style="margin-top:28px;scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART DISPLAY <span style="font-size:13px;font-weight:400;color:#555;">(PSD, PARA SMART DISPLAY) 기능</span></h3>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 컬러 LCD와 18KEYPAD 적용으로 사용자 인터페이스 개선</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 전력조정기의 자가진단 기능탑재, 테스트 모드실행 및 쉬운 파라미터 설정을 통해 고객의 편의성 제고</p>
@@ -396,7 +407,7 @@
         <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 설정 유니트의 탈.부착이 가능하며, 유니트를 탈착하여 패널의 전면부에 설치 시, 전류계 및 전압계를 별도로 부착하지 않아도 되는 장점이 있음.</p>
       </div>
       <!-- SMART COMBINATION — 결선 구성표 -->
-      <div style="margin-top:28px;">
+      <div id="smart-combination" style="margin-top:28px;scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:8px;">SMART COMBINATION</h3>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:20px;">- 비용 및 공간 절약을 위해 하나의 몸체에 최대 단상 3대의 전력조정기를 탑재하여 각각의 입력신호에 따라 제어가 되며 모든 히터결선에 사용 할 수 있도록 설계.</p>
         <div style="border:1.5px solid #c8d4ea;border-radius:8px;overflow:hidden;">
@@ -406,7 +417,10 @@
               <img src="../images/smart-combo-1.jpg" alt="단상 1대" style="width:100%;height:100%;object-fit:contain;display:block;">
             </div>
             <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
-              <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 단상 1대 사용 시</p>
+              <div>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:4px;">▶ 1P1L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 단상 1대 사용 시</p>
+              </div>
             </div>
             <div style="padding:16px 20px;display:flex;align-items:center;">
             </div>
@@ -418,8 +432,11 @@
             </div>
             <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
               <div>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 단상 2대 사용 시</p>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 두상을 제어하여 단상 히터1개 사용 시</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 1P2L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- 단상 2대 사용 시</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 2P2L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- 2상을 제어하여 단상 히터 1개 사용 시</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P2L</p>
                 <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 삼상 2LEG 사용 시(제로크로싱만 사용가능)</p>
               </div>
             </div>
@@ -437,9 +454,13 @@
             </div>
             <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
               <div>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 단상 3대 사용 시</p>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 삼상 4선식 사용 시</p>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 삼상 3LEG 사용 시(스타 및 델타 결선)</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 1P3L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- 단상 3대 사용 시</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P4L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- 삼상 4선식 사용 시</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P3L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- 삼상 3LEG 사용 시(스타 및 델타 결선)</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P6L</p>
                 <p style="font-size:14px;color:var(--ink);line-height:1.7;">- OPEN DELTA 결선 시</p>
               </div>
             </div>
@@ -449,9 +470,9 @@
           </div>
         </div>
       </div>
-      <!-- SMART COMBINATION — 알람 기능 -->
+      <!-- SMART ALARM — 알람 기능 -->
       <div style="margin-top:28px;">
-        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:12px;">SMART COMBINATION</h3>
+        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:12px;">SMART ALARM</h3>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 각각의 알람을 사용자의 선택에 따라 3개의 릴레이 중 택일하여 신호 발생</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 알람 발생 시, 출력을 차단여부 고객이 선택</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 펜의 수명연장을 위해 고객이 지정하는 방열판의 온도에 따라 펜 구동</p>
@@ -528,12 +549,13 @@
         <div class="order-seg"><div class="order-seg-code">결선방식</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
         <div class="order-dash">-</div>
         <div class="order-seg"><div class="order-seg-code">옵션</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">④</div></div>
+      </div>
+      <div class="order-diagram" style="padding-top:16px;">
+        <div class="order-seg"><div class="order-seg-code">PM</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">①</div></div>
         <div class="order-dash">-</div>
-        <div class="order-seg"><div class="order-seg-code">PM</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑤</div></div>
+        <div class="order-seg"><div class="order-seg-code">전압</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">②</div></div>
         <div class="order-dash">-</div>
-        <div class="order-seg"><div class="order-seg-code">전압</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑥</div></div>
-        <div class="order-dash">-</div>
-        <div class="order-seg"><div class="order-seg-code">전류</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑦</div></div>
+        <div class="order-seg"><div class="order-seg-code">전류</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
       </div>
       <!-- SMC 섹션 -->
       <div style="margin-top:32px;">
@@ -568,7 +590,7 @@
       <div style="margin-top:20px;">
         <div style="font-size:11px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;color:var(--primary-on-dark);margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:20px;height:2px;background:var(--primary-on-dark);"></span>PM — 파워 모듈</div>
         <div style="background:rgba(41,151,255,0.08);border:1px solid rgba(41,151,255,0.3);border-radius:var(--r-md);padding:18px 24px;margin-bottom:12px;display:flex;align-items:center;gap:20px;">
-          <span style="font-size:26px;font-weight:800;color:rgba(41,151,255,0.35);line-height:1;flex-shrink:0;">⑤</span>
+          <span style="font-size:26px;font-weight:800;color:rgba(41,151,255,0.35);line-height:1;flex-shrink:0;">①</span>
           <div>
             <div style="font-size:12px;font-weight:700;color:var(--primary-on-dark);letter-spacing:0.06em;margin-bottom:3px;">PM</div>
             <div style="font-size:17px;font-weight:700;color:var(--on-dark);">POWER MODULE</div>
@@ -576,14 +598,14 @@
         </div>
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
           <div class="order-step">
-            <div class="order-step-num">⑥ 정격전압</div>
+            <div class="order-step-num">② 정격전압</div>
             <div class="order-step-title">전압 선택</div>
             <div class="order-step-opts">1 : 110V<br>2 : 220V<br>3 : 380V<br>4 : 440V</div>
           </div>
           <div class="order-step">
-            <div class="order-step-num">⑦ 정격전류</div>
+            <div class="order-step-num">③ 정격전류</div>
             <div class="order-step-title">전류 용량</div>
-            <div class="order-step-opts">10A ~ 2500A 중 선택</div>
+            <div class="order-step-opts">10A ~ 2500A 중 선택 (사양참고)</div>
           </div>
         </div>
       </div>
@@ -831,7 +853,9 @@
           <tbody>
             <tr><td>사용전압</td><td>110V / 220V / 380V / 440V (최소 50V, 최대 500V)</td></tr>
             <tr><td>허용전압 변동범위</td><td>정격전압의 ±10%</td></tr>
-            <tr><td>정격전류</td><td>10A ~ 2500A</td></tr>
+            <tr><td>정격전류</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A, 700A, 1000A, 1400A, 2000A, 2500A</td></tr>
+            <tr><td>정격전류 (CE인증)</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
+            <tr><td>정격전류 (UL인증)</td><td>25A, 40A, 55A, 70A, 100A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
             <tr><td>정격 주파수</td><td>50/60Hz (자동선택)</td></tr>
             <tr><td>최소부하전류</td><td>1A</td></tr>
             <tr><td>출력범위</td><td>위상각 제어 / 제로크로싱 제어: 0 ~ 99.8%</td></tr>
@@ -849,7 +873,7 @@
             <tr><td>사용습도 범위</td><td>30% ~ 90% RH (결로가 없을 것)</td></tr>
             <tr><td>SMC (제어부)</td><td>32Bit CPU 적용 (12Bit ADC)</td></tr>
             <tr><td>PM (파워 모듈)</td><td>출력전압 / 전류 RMS 측정</td></tr>
-            <tr><td>PSD (디스플레이)</td><td>컬러 LCD 및 18Key Pad</td></tr>
+            <tr><td>PSD<br>(디스플레이)</td><td>컬러 LCD 및 18Key Pad</td></tr>
             <tr><td>통신</td><td>RS-485 3Wire, 최대 115,200bps, Modbus-RTU, 최대 32대 접속</td></tr>
           </tbody>
         </table>

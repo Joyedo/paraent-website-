@@ -77,7 +77,7 @@
     .section-body { font-size: 17px; color: var(--ink-muted-48); line-height: 1.7; max-width: 720px; }
     .section-body-light { color: rgba(255,255,255,0.6); }
     .pillar-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 40px; }
-    .pillar-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 36px 28px; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), border-color 0.38s, box-shadow 0.38s, background 0.38s; cursor: default; }
+    .pillar-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 36px 28px; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), border-color 0.38s, box-shadow 0.38s, background 0.38s; cursor: pointer; display: block; text-decoration: none; color: inherit; }
     .pillar-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--primary-on-dark), transparent); }
     .pillar-num { font-family: var(--font-display); font-size: 48px; font-weight: 800; color: rgba(41,151,255,0.12); position: absolute; top: 16px; right: 20px; line-height: 1; }
     .pillar-tag { display: inline-block; background: rgba(41,151,255,0.15); border: 1px solid rgba(41,151,255,0.25); border-radius: var(--r-sm); padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--primary-on-dark); margin-bottom: 14px; }
@@ -85,6 +85,12 @@
     .pillar-card p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; max-height: 0; overflow: hidden; opacity: 0; padding-top: 0; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease, padding-top 0.38s ease; }
     .pillar-card:hover { transform: translateY(-4px); border-color: rgba(41,151,255,0.5); box-shadow: 0 16px 48px rgba(0,102,204,0.25), inset 0 0 0 1px rgba(41,151,255,0.18); background: rgba(41,151,255,0.06); }
     .pillar-card:hover p { max-height: 300px; opacity: 1; padding-top: 12px; }
+    .pillar-card-bg { position:absolute; inset:0; opacity:0; transition:opacity 0.5s ease; overflow:hidden; }
+    .pillar-card-bg img { width:100%; height:100%; object-fit:cover; transform:scale(1.05); transition:transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+    .pillar-card:hover .pillar-card-bg { opacity:1; }
+    .pillar-card:hover .pillar-card-bg img { transform:scale(1); }
+    .pillar-card-bg::after { content:''; position:absolute; inset:0; background:rgba(8,16,40,0.58); }
+    .pillar-tag, .pillar-card h3, .pillar-card p { position:relative; }
     .order-diagram { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding: 40px 0 16px; }
     .order-seg { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
     .order-seg-code { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--on-dark); white-space: nowrap; padding: 0 14px 10px; border-bottom: 2.5px solid var(--primary-on-dark); text-align: center; }
@@ -164,6 +170,7 @@
       <span class="hero-badge">PLF Patent: No. 10-1405244</span>
       <span class="hero-badge">Color LCD Display</span>
       <span class="hero-badge">RS-485 · Modbus-RTU</span>
+      <span class="hero-badge">CE · UL Certified</span>
     </div>
     </div>
     <div class="product-hero-visual"></div>
@@ -186,30 +193,34 @@
       <h2 class="section-title section-title-light">4 SMART Core Technologies</h2>
       <p class="section-body section-body-light">The next-generation flagship power regulator integrating all of Paraent's power regulator technologies</p>
       <div class="pillar-grid">
-        <div class="pillar-card">
+        <a href="#smart-mpd" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../../images/smart-hover-mpd.png" alt="" loading="lazy"></div>
           <span class="pillar-num">01</span>
           <span class="pillar-tag">MPD Patent: No. 10-1405243</span>
           <h3>SMART MPD</h3>
           <p>The Max Power Distribution Control function smooths main power by distributing power among multiple power regulators when controlled with zero-crossing. Improves power factor and reduces peak power.</p>
-        </div>
-        <div class="pillar-card">
+        </a>
+        <a href="#smart-plf" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../../images/smart-hover-plf.png" alt="" loading="lazy"></div>
           <span class="pillar-num">02</span>
           <span class="pillar-tag">PLF Patent: No. 10-1405244</span>
           <h3>SMART PLF</h3>
           <p>When multiple parallel loads are connected to a single power regulator, this function detects partial load open circuits. Auto-tuning acquires load characteristic patterns for accurate detection.</p>
-        </div>
-        <div class="pillar-card">
+        </a>
+        <a href="#smart-display" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../../images/smart-hover-display.png" alt="" loading="lazy"></div>
           <span class="pillar-num">03</span>
           <span class="pillar-tag">Color LCD · 18-Key Pad</span>
           <h3>SMART DISPLAY (PSD)</h3>
           <p>Improved user interface with color LCD and 18-key pad. Enables self-diagnostics, test mode, easy parameter settings. Can be attached to the unit or mounted separately on a panel.</p>
-        </div>
-        <div class="pillar-card">
+        </a>
+        <a href="#smart-combination" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../../images/smart-hover-combination.png" alt="" loading="lazy"></div>
           <span class="pillar-num">04</span>
           <span class="pillar-tag">Combined Control</span>
           <h3>SMART COMBINATION</h3>
           <p>Saves cost and space by mounting up to 3 single-phase power regulators in one body. Supports various wiring methods: 1P1P, 1P2L, 1P3L, 2P2L, 3P2L, 3P3L, 3P4L, 3P6L.</p>
-        </div>
+        </a>
       </div>
     </div>
   </section>
@@ -218,7 +229,7 @@
   <section class="section" style="background:#ffffff;border-top:1px solid var(--hairline);padding-top:48px;padding-bottom:48px;">
     <div class="container">
       <!-- SMART MPD -->
-      <div>
+      <div id="smart-mpd" style="scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART MPD <span style="font-size:13px;font-weight:400;color:#555;">(Max Power Distribution Control)</span></h3>
         <p style="font-size:13px;font-weight:600;color:#1a3f8f;margin:10px 0 4px;">1) Power Factor Improvement</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- Max Power Distribution Control smooths main power by distributing power among multiple power regulators when controlled via zero-crossing.</p>
@@ -239,7 +250,7 @@
       </div>
 
       <!-- SMART PLF -->
-      <div style="margin-top:48px;">
+      <div id="smart-plf" style="margin-top:48px;scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART PLF <span style="font-size:13px;font-weight:400;color:#555;">(Partial Load Failure Detection)</span></h3>
         <p style="font-size:13px;color:var(--ink-muted-48);margin-bottom:8px;">(Patent No. 10-1405243: Power regulator with partial load failure detector and detection method)</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- Detects partial load open-circuits when multiple parallel loads are connected to a single power regulator.</p>
@@ -258,7 +269,7 @@
       </div>
 
       <!-- SMART DISPLAY (PSD) -->
-      <div style="margin-top:48px;">
+      <div id="smart-display" style="margin-top:48px;scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART DISPLAY <span style="font-size:13px;font-weight:400;color:#555;">(PSD — PARA SMART DISPLAY)</span></h3>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- Improved user interface with color LCD and 18-key pad.</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- Self-diagnostics, test mode, and easy parameter settings for improved user convenience.</p>
@@ -289,7 +300,7 @@
       </div>
 
       <!-- SMART COMBINATION — Wiring configuration -->
-      <div style="margin-top:48px;">
+      <div id="smart-combination" style="margin-top:48px;scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:8px;">SMART COMBINATION</h3>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:20px;">- Up to 3 single-phase power regulators in one body, each controlled by its own input signal. Compatible with all heater wiring configurations.</p>
         <div style="border:1.5px solid #c8d4ea;border-radius:8px;overflow:hidden;">
@@ -298,7 +309,10 @@
               <img src="../../images/smart-combo-1.jpg" alt="Single-phase ×1" style="width:100%;height:100%;object-fit:contain;display:block;">
             </div>
             <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
-              <p style="font-size:14px;color:var(--ink);line-height:1.7;">- When using 1 single-phase unit</p>
+              <div>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:4px;">▶ 1P1L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- When using 1 single-phase unit</p>
+              </div>
             </div>
             <div style="padding:16px 20px;display:flex;align-items:center;"></div>
           </div>
@@ -308,8 +322,11 @@
             </div>
             <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
               <div>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- When using 2 single-phase units</p>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- Controlling 2 phases for a single-phase heater</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 1P2L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- When using 2 single-phase units</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 2P2L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- Controlling 2 phases for a single-phase heater</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P2L</p>
                 <p style="font-size:14px;color:var(--ink);line-height:1.7;">- Three-phase 2-LEG (zero-crossing only)</p>
               </div>
             </div>
@@ -326,9 +343,13 @@
             </div>
             <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
               <div>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- When using 3 single-phase units</p>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- Three-phase 4-wire system</p>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- Three-phase 3-LEG (Star and Delta wiring)</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 1P3L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- When using 3 single-phase units</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P4L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- Three-phase 4-wire system</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P3L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- Three-phase 3-LEG (Star and Delta wiring)</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P6L</p>
                 <p style="font-size:14px;color:var(--ink);line-height:1.7;">- Open Delta wiring</p>
               </div>
             </div>
@@ -339,9 +360,9 @@
         </div>
       </div>
 
-      <!-- SMART COMBINATION — Alarm functions -->
+      <!-- SMART ALARM — Alarm functions -->
       <div style="margin-top:28px;">
-        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:12px;">SMART COMBINATION — Alarm Functions</h3>
+        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:12px;">SMART ALARM</h3>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- Each alarm can be routed to one of 3 relays per user selection.</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- User selects whether output is cut off when an alarm triggers.</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- Fan speed driven by heatsink temperature as specified by user to extend fan life.</p>
@@ -419,12 +440,13 @@
         <div class="order-seg"><div class="order-seg-code">Wiring</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
         <div class="order-dash">-</div>
         <div class="order-seg"><div class="order-seg-code">Options</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">④</div></div>
+      </div>
+      <div class="order-diagram" style="padding-top:16px;">
+        <div class="order-seg"><div class="order-seg-code">PM</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">①</div></div>
         <div class="order-dash">-</div>
-        <div class="order-seg"><div class="order-seg-code">PM</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑤</div></div>
+        <div class="order-seg"><div class="order-seg-code">Voltage</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">②</div></div>
         <div class="order-dash">-</div>
-        <div class="order-seg"><div class="order-seg-code">Voltage</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑥</div></div>
-        <div class="order-dash">-</div>
-        <div class="order-seg"><div class="order-seg-code">Current</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑦</div></div>
+        <div class="order-seg"><div class="order-seg-code">Current</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
       </div>
       <!-- SMC Section -->
       <div style="margin-top:32px;">
@@ -459,7 +481,7 @@
       <div style="margin-top:20px;">
         <div style="font-size:11px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;color:var(--primary-on-dark);margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:20px;height:2px;background:var(--primary-on-dark);"></span>PM — Power Module</div>
         <div style="background:rgba(41,151,255,0.08);border:1px solid rgba(41,151,255,0.3);border-radius:var(--r-md);padding:18px 24px;margin-bottom:12px;display:flex;align-items:center;gap:20px;">
-          <span style="font-size:26px;font-weight:800;color:rgba(41,151,255,0.35);line-height:1;flex-shrink:0;">⑤</span>
+          <span style="font-size:26px;font-weight:800;color:rgba(41,151,255,0.35);line-height:1;flex-shrink:0;">①</span>
           <div>
             <div style="font-size:12px;font-weight:700;color:var(--primary-on-dark);letter-spacing:0.06em;margin-bottom:3px;">PM</div>
             <div style="font-size:17px;font-weight:700;color:var(--on-dark);">POWER MODULE</div>
@@ -467,14 +489,14 @@
         </div>
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
           <div class="order-step">
-            <div class="order-step-num">⑥ Rated Voltage</div>
+            <div class="order-step-num">② Rated Voltage</div>
             <div class="order-step-title">Voltage Selection</div>
             <div class="order-step-opts">1 : 110V<br>2 : 220V<br>3 : 380V<br>4 : 440V</div>
           </div>
           <div class="order-step">
-            <div class="order-step-num">⑦ Rated Current</div>
+            <div class="order-step-num">③ Rated Current</div>
             <div class="order-step-title">Current Capacity</div>
-            <div class="order-step-opts">Select from 10A ~ 2500A</div>
+            <div class="order-step-opts">Select from 10A ~ 2500A (see specifications)</div>
           </div>
         </div>
       </div>
@@ -654,7 +676,9 @@
           <tbody>
             <tr><td>Operating Voltage</td><td>110V / 220V / 380V / 440V (Min. 50V, Max. 500V)</td></tr>
             <tr><td>Allowable Voltage Variation</td><td>±10% of rated voltage</td></tr>
-            <tr><td>Rated Current</td><td>10A ~ 2500A</td></tr>
+            <tr><td>Rated Current</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A, 700A, 1000A, 1400A, 2000A, 2500A</td></tr>
+            <tr><td>Rated Current (CE Certified)</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
+            <tr><td>Rated Current (UL Certified)</td><td>25A, 40A, 55A, 70A, 100A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
             <tr><td>Rated Frequency</td><td>50/60Hz (auto-select)</td></tr>
             <tr><td>Minimum Load Current</td><td>1A</td></tr>
             <tr><td>Output Range</td><td>Phase-angle / Zero-crossing: 0 ~ 99.8%</td></tr>
@@ -672,7 +696,7 @@
             <tr><td>Humidity Range</td><td>30% ~ 90% RH (no condensation)</td></tr>
             <tr><td>SMC (Control Unit)</td><td>32-bit CPU (12-bit ADC)</td></tr>
             <tr><td>PM (Power Module)</td><td>Output voltage / current RMS measurement</td></tr>
-            <tr><td>PSD (Display)</td><td>Color LCD and 18-key pad</td></tr>
+            <tr><td>PSD<br>(Display)</td><td>Color LCD and 18-key pad</td></tr>
             <tr><td>Communication</td><td>RS-485 3-wire, max 115,200bps, Modbus-RTU, max 32 units</td></tr>
           </tbody>
         </table>

@@ -77,7 +77,7 @@
     .section-body { font-size: 17px; color: var(--ink-muted-48); line-height: 1.7; max-width: 720px; }
     .section-body-light { color: rgba(255,255,255,0.6); }
     .pillar-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 40px; }
-    .pillar-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 36px 28px; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), border-color 0.38s, box-shadow 0.38s, background 0.38s; cursor: default; }
+    .pillar-card { background: rgba(255,255,255,0.05); border-radius: var(--r-lg); padding: 36px 28px; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), border-color 0.38s, box-shadow 0.38s, background 0.38s; cursor: pointer; display: block; text-decoration: none; color: inherit; }
     .pillar-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--primary-on-dark), transparent); }
     .pillar-num { font-family: var(--font-display); font-size: 48px; font-weight: 800; color: rgba(41,151,255,0.12); position: absolute; top: 16px; right: 20px; line-height: 1; }
     .pillar-tag { display: inline-block; background: rgba(41,151,255,0.15); border: 1px solid rgba(41,151,255,0.25); border-radius: var(--r-sm); padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--primary-on-dark); margin-bottom: 14px; }
@@ -85,6 +85,12 @@
     .pillar-card p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; max-height: 0; overflow: hidden; opacity: 0; padding-top: 0; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease, padding-top 0.38s ease; }
     .pillar-card:hover { transform: translateY(-4px); border-color: rgba(41,151,255,0.5); box-shadow: 0 16px 48px rgba(0,102,204,0.25), inset 0 0 0 1px rgba(41,151,255,0.18); background: rgba(41,151,255,0.06); }
     .pillar-card:hover p { max-height: 300px; opacity: 1; padding-top: 12px; }
+    .pillar-card-bg { position:absolute; inset:0; opacity:0; transition:opacity 0.5s ease; overflow:hidden; }
+    .pillar-card-bg img { width:100%; height:100%; object-fit:cover; transform:scale(1.05); transition:transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+    .pillar-card:hover .pillar-card-bg { opacity:1; }
+    .pillar-card:hover .pillar-card-bg img { transform:scale(1); }
+    .pillar-card-bg::after { content:''; position:absolute; inset:0; background:rgba(8,16,40,0.58); }
+    .pillar-tag, .pillar-card h3, .pillar-card p { position:relative; }
     .order-diagram { display: flex; align-items: flex-start; gap: 0; overflow-x: auto; padding: 40px 0 16px; }
     .order-seg { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
     .order-seg-code { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--on-dark); white-space: nowrap; padding: 0 14px 10px; border-bottom: 2.5px solid var(--primary-on-dark); text-align: center; }
@@ -162,6 +168,7 @@
       <span class="hero-badge">PLF专利：第10-1405244号</span>
       <span class="hero-badge">彩色LCD显示屏</span>
       <span class="hero-badge">RS-485 · Modbus-RTU</span>
+      <span class="hero-badge">CE · UL认证</span>
     </div>
     </div>
     <div class="product-hero-visual"></div>
@@ -183,30 +190,34 @@
       <h2 class="section-title section-title-light">4大 SMART 核心技术</h2>
       <p class="section-body section-body-light">集成Paraent全部功率调节器技术的新一代旗舰产品</p>
       <div class="pillar-grid">
-        <div class="pillar-card">
+        <a href="#smart-mpd" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../../images/smart-hover-mpd.png" alt="" loading="lazy"></div>
           <span class="pillar-num">01</span>
           <span class="pillar-tag">MPD专利：第10-1405243号</span>
           <h3>SMART MPD</h3>
           <p>最大功率分配控制功能通过在多台功率调节器间分配功率（过零控制时），平滑主电源负荷，改善功率因数并降低峰值功率。</p>
-        </div>
-        <div class="pillar-card">
+        </a>
+        <a href="#smart-plf" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../../images/smart-hover-plf.png" alt="" loading="lazy"></div>
           <span class="pillar-num">02</span>
           <span class="pillar-tag">PLF专利：第10-1405244号</span>
           <h3>SMART PLF</h3>
           <p>当多个并联负载连接到单台功率调节器时，检测局部负载断路的功能。自动调谐获取负载特性模式，实现精确检测。</p>
-        </div>
-        <div class="pillar-card">
+        </a>
+        <a href="#smart-display" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../../images/smart-hover-display.png" alt="" loading="lazy"></div>
           <span class="pillar-num">03</span>
           <span class="pillar-tag">彩色LCD · 18键盘</span>
           <h3>SMART DISPLAY (PSD)</h3>
           <p>搭载彩色LCD和18键盘的改进用户界面。支持自诊断、测试模式、便捷参数设置。可安装在主机上或独立安装在面板上。</p>
-        </div>
-        <div class="pillar-card">
+        </a>
+        <a href="#smart-combination" class="pillar-card">
+          <div class="pillar-card-bg"><img src="../../images/smart-hover-combination.png" alt="" loading="lazy"></div>
           <span class="pillar-num">04</span>
           <span class="pillar-tag">复合控制</span>
           <h3>SMART COMBINATION</h3>
           <p>在一个机体内安装最多3台单相功率调节器，节省成本和空间。支持多种接线方式：1P1P、1P2L、1P3L、2P2L、3P2L、3P3L、3P4L、3P6L。</p>
-        </div>
+        </a>
       </div>
     </div>
   </section>
@@ -215,7 +226,7 @@
   <section class="section" style="background:#ffffff;border-top:1px solid var(--hairline);padding-top:48px;padding-bottom:48px;">
     <div class="container">
       <!-- SMART MPD -->
-      <div>
+      <div id="smart-mpd" style="scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART MPD <span style="font-size:13px;font-weight:400;color:#555;">(最大功率分配控制)</span></h3>
         <p style="font-size:13px;font-weight:600;color:#1a3f8f;margin:10px 0 4px;">1) 功率因数改善效果</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 最大功率分配控制通过在多台功率调节器间分配功率（过零控制时），平滑主电源负荷。</p>
@@ -236,7 +247,7 @@
       </div>
 
       <!-- SMART PLF -->
-      <div style="margin-top:48px;">
+      <div id="smart-plf" style="margin-top:48px;scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART PLF <span style="font-size:13px;font-weight:400;color:#555;">(局部负载断路检测)</span></h3>
         <p style="font-size:13px;color:var(--ink-muted-48);margin-bottom:8px;">（专利第10-1405243号：具有局部负载断路检测器的功率调节器及其检测方法）</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 检测一台功率调节器连接多个并联负载时发生的局部负载断路。</p>
@@ -255,7 +266,7 @@
       </div>
 
       <!-- SMART DISPLAY (PSD) -->
-      <div style="margin-top:48px;">
+      <div id="smart-display" style="margin-top:48px;scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:4px;">SMART DISPLAY <span style="font-size:13px;font-weight:400;color:#555;">(PSD — PARA SMART DISPLAY)</span></h3>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 搭载彩色LCD和18键盘，改善用户界面。</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 具备自诊断功能、测试模式执行及便捷参数设置，提升用户便利性。</p>
@@ -286,7 +297,7 @@
       </div>
 
       <!-- SMART COMBINATION — 结线配置表 -->
-      <div style="margin-top:48px;">
+      <div id="smart-combination" style="margin-top:48px;scroll-margin-top:150px;">
         <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:8px;">SMART COMBINATION</h3>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:20px;">- 为节省成本和空间，在一个机体内最多可安装3台单相功率调节器，根据各自的输入信号进行控制，适用于所有加热器接线方式。</p>
         <div style="border:1.5px solid #c8d4ea;border-radius:8px;overflow:hidden;">
@@ -295,7 +306,10 @@
               <img src="../../images/smart-combo-1.jpg" alt="单相×1" style="width:100%;height:100%;object-fit:contain;display:block;">
             </div>
             <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
-              <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 使用1台单相时</p>
+              <div>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:4px;">▶ 1P1L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 使用1台单相时</p>
+              </div>
             </div>
             <div style="padding:16px 20px;display:flex;align-items:center;"></div>
           </div>
@@ -305,8 +319,11 @@
             </div>
             <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
               <div>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 使用2台单相时</p>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 控制两相用于单相加热器时</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 1P2L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- 使用2台单相时</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 2P2L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- 控制两相用于单相加热器时</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P2L</p>
                 <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 三相2LEG时（仅限过零控制）</p>
               </div>
             </div>
@@ -323,9 +340,13 @@
             </div>
             <div style="padding:16px 20px;border-right:1px solid #c8d4ea;display:flex;align-items:center;">
               <div>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 使用3台单相时</p>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 三相4线制时</p>
-                <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 三相3LEG时（星形及三角形接线）</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 1P3L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- 使用3台单相时</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P4L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- 三相4线制时</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P3L</p>
+                <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:10px;">- 三相3LEG时（星形及三角形接线）</p>
+                <p style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:2px;">▶ 3P6L</p>
                 <p style="font-size:14px;color:var(--ink);line-height:1.7;">- 开口三角形接线时</p>
               </div>
             </div>
@@ -336,9 +357,9 @@
         </div>
       </div>
 
-      <!-- SMART COMBINATION — 报警功能 -->
+      <!-- SMART ALARM — 报警功能 -->
       <div style="margin-top:28px;">
-        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:12px;">SMART COMBINATION — 报警功能</h3>
+        <h3 style="font-size:18px;font-weight:700;color:#1a3f8f;margin-bottom:12px;">SMART ALARM</h3>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 各报警可根据用户选择路由到3个继电器之一。</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 报警触发时是否切断输出由用户选择。</p>
         <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:4px;">- 风扇根据用户设定的散热器温度驱动，延长风扇寿命。</p>
@@ -415,12 +436,13 @@
         <div class="order-seg"><div class="order-seg-code">接线</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
         <div class="order-dash">-</div>
         <div class="order-seg"><div class="order-seg-code">选项</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">④</div></div>
+      </div>
+      <div class="order-diagram" style="padding-top:16px;">
+        <div class="order-seg"><div class="order-seg-code">PM</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">①</div></div>
         <div class="order-dash">-</div>
-        <div class="order-seg"><div class="order-seg-code">PM</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑤</div></div>
+        <div class="order-seg"><div class="order-seg-code">电压</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">②</div></div>
         <div class="order-dash">-</div>
-        <div class="order-seg"><div class="order-seg-code">电压</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑥</div></div>
-        <div class="order-dash">-</div>
-        <div class="order-seg"><div class="order-seg-code">电流</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">⑦</div></div>
+        <div class="order-seg"><div class="order-seg-code">电流</div><div class="order-seg-arrow">↓</div><div class="order-seg-num">③</div></div>
       </div>
       <!-- SMC 섹션 -->
       <div style="margin-top:32px;">
@@ -455,7 +477,7 @@
       <div style="margin-top:20px;">
         <div style="font-size:11px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;color:var(--primary-on-dark);margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:20px;height:2px;background:var(--primary-on-dark);"></span>PM — 功率模块</div>
         <div style="background:rgba(41,151,255,0.08);border:1px solid rgba(41,151,255,0.3);border-radius:var(--r-md);padding:18px 24px;margin-bottom:12px;display:flex;align-items:center;gap:20px;">
-          <span style="font-size:26px;font-weight:800;color:rgba(41,151,255,0.35);line-height:1;flex-shrink:0;">⑤</span>
+          <span style="font-size:26px;font-weight:800;color:rgba(41,151,255,0.35);line-height:1;flex-shrink:0;">①</span>
           <div>
             <div style="font-size:12px;font-weight:700;color:var(--primary-on-dark);letter-spacing:0.06em;margin-bottom:3px;">PM</div>
             <div style="font-size:17px;font-weight:700;color:var(--on-dark);">POWER MODULE</div>
@@ -463,14 +485,14 @@
         </div>
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
           <div class="order-step">
-            <div class="order-step-num">⑥ 额定电压</div>
+            <div class="order-step-num">② 额定电压</div>
             <div class="order-step-title">电压选择</div>
             <div class="order-step-opts">1 : 110V<br>2 : 220V<br>3 : 380V<br>4 : 440V</div>
           </div>
           <div class="order-step">
-            <div class="order-step-num">⑦ 额定电流</div>
+            <div class="order-step-num">③ 额定电流</div>
             <div class="order-step-title">电流容量</div>
-            <div class="order-step-opts">从10A ~ 2500A中选择</div>
+            <div class="order-step-opts">从10A ~ 2500A中选择（请参考规格）</div>
           </div>
         </div>
       </div>
@@ -649,7 +671,9 @@
           <tbody>
             <tr><td>工作电压</td><td>110V / 220V / 380V / 440V（最低50V，最高500V）</td></tr>
             <tr><td>允许电压变动范围</td><td>额定电压 ±10%</td></tr>
-            <tr><td>额定电流</td><td>10A ~ 2500A</td></tr>
+            <tr><td>额定电流</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A, 700A, 1000A, 1400A, 2000A, 2500A</td></tr>
+            <tr><td>额定电流（CE认证）</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
+            <tr><td>额定电流（UL认证）</td><td>25A, 40A, 55A, 70A, 100A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
             <tr><td>额定频率</td><td>50/60Hz（自动选择）</td></tr>
             <tr><td>最小负载电流</td><td>1A</td></tr>
             <tr><td>输出范围</td><td>相位角控制 / 过零控制：0 ~ 99.8%</td></tr>
@@ -667,7 +691,7 @@
             <tr><td>湿度范围</td><td>30% ~ 90% RH（无结露）</td></tr>
             <tr><td>SMC（控制单元）</td><td>32位CPU（12位ADC）</td></tr>
             <tr><td>PM（功率模块）</td><td>输出电压/电流RMS测量</td></tr>
-            <tr><td>PSD（显示屏）</td><td>彩色LCD及18键盘</td></tr>
+            <tr><td>PSD<br>（显示屏）</td><td>彩色LCD及18键盘</td></tr>
             <tr><td>通信</td><td>RS-485 3线，最高115,200bps，Modbus-RTU，最多32台连接</td></tr>
           </tbody>
         </table>
