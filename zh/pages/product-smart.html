@@ -180,6 +180,7 @@
     <button class="tab-btn active" data-tab="tab-features">产品特点</button>
     <button class="tab-btn" data-tab="tab-order">订购代码</button>
     <button class="tab-btn" data-tab="tab-spec">技术规格</button>
+    <button class="tab-btn" data-tab="tab-psd2000">PSD-2000</button>
   </div>
 </div>
 
@@ -216,7 +217,7 @@
           <span class="pillar-num">04</span>
           <span class="pillar-tag">复合控制</span>
           <h3>SMART COMBINATION</h3>
-          <p>在一个机体内安装最多3台单相功率调节器，节省成本和空间。支持多种接线方式：1P1P、1P2L、1P3L、2P2L、3P2L、3P3L、3P4L、3P6L。</p>
+          <p>在一个机体内安装最多3台单相功率调节器，节省成本和空间。支持多种接线方式：1P1L、1P2L、1P3L、2P2L、3P2L、3P3L、3P4L、3P6L。</p>
         </a>
       </div>
     </div>
@@ -518,6 +519,55 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="tab-spec" class="tab-panel">
+  <section class="section section-dark-2">
+    <div class="container">
+      <div class="section-label section-label-light">技术规格</div>
+      <h2 class="section-title section-title-light">SMART 产品规格</h2>
+      <div class="spec-table-wrap">
+        <table class="spec-table">
+          <thead><tr><th>项目</th><th>规格</th></tr></thead>
+          <tbody>
+            <tr><td>工作电压</td><td>110V / 220V / 380V / 440V（最低50V，最高500V）</td></tr>
+            <tr><td>允许电压变动范围</td><td>额定电压 ±10%</td></tr>
+            <tr><td>额定电流</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A, 700A, 1000A, 1400A, 2000A, 2500A</td></tr>
+            <tr><td>额定电流（CE认证）</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
+            <tr><td>额定电流（UL认证）</td><td>25A, 40A, 55A, 70A, 100A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
+            <tr><td>额定频率</td><td>50/60Hz（自动选择）</td></tr>
+            <tr><td>最小负载电流</td><td>1A</td></tr>
+            <tr><td>输出范围</td><td>相位角控制 / 过零控制：0 ~ 99.8%</td></tr>
+            <tr><td>控制电源</td><td>DC 24V</td></tr>
+            <tr><td>功耗</td><td>Max. 15W（风扇电源另计）</td></tr>
+            <tr><td>控制输入信号</td><td>4~20mA（阻抗 150Ω）3CH / 0~5V, 1~5V, 0~10V, 10K VOL（可选）1CH</td></tr>
+            <tr><td>输入接点</td><td>Switch Input 3CH</td></tr>
+            <tr><td>输出接点</td><td>Relay Out 6CH（Alarm 3CH, Fan Control 3CH）</td></tr>
+            <tr><td>控制方式</td><td>相位角 / 过零（MPD选项）/ PZ复合模式</td></tr>
+            <tr><td>绝缘强度</td><td>AC 3KV（Step 1Min.）</td></tr>
+            <tr><td>绝缘电阻</td><td>10MΩ以上</td></tr>
+            <tr><td>冷却方式</td><td>55A及以下自然冷却 / 70A及以上强制冷却</td></tr>
+            <tr><td>报警功能</td><td>过流(OC)、过流预警(OCW)、散热器过热(OTW/OT)、保险丝断开(FUSE)、负载断路(LINE)、SCR故障(SCR)、局部负载失效(PLF)、主电源断开(MPF)、FAN故障(FAN)、负载不平衡(UL) — 共10种</td></tr>
+            <tr><td>工作温度</td><td>0 ~ 40℃</td></tr>
+            <tr><td>湿度范围</td><td>30% ~ 90% RH（无结露）</td></tr>
+            <tr><td>SMC（控制单元）</td><td>32位CPU（12位ADC）</td></tr>
+            <tr><td>PM（功率模块）</td><td>输出电压/电流RMS测量</td></tr>
+            <tr><td>PSD<br>（显示屏）</td><td>彩色LCD及18键盘</td></tr>
+            <tr><td>通信</td><td>RS-485 2线，最高115,200bps，Modbus-RTU，最多32台连接</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TAB: PSD-2000 -->
+<div id="tab-psd2000" class="tab-panel">
+  <section class="section section-dark-2">
+    <div class="container">
         <div class="section-label section-label-light">PSD-2000 规格</div>
         <h3 style="font-size:20px;font-weight:700;color:var(--on-dark);margin-bottom:20px;">PSD-2000 显示屏规格</h3>
         <div style="overflow-x:auto;border-radius:var(--r-lg);border:1px solid rgba(255,255,255,0.08);margin-bottom:16px;">
@@ -655,47 +705,6 @@
           </table>
         </div>
         <p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:12px;">* SMC·PM外形尺寸因电流容量而异，详细尺寸请参阅目录。</p>
-      </div>
-    </div>
-  </section>
-</div>
-
-<div id="tab-spec" class="tab-panel">
-  <section class="section section-dark-2">
-    <div class="container">
-      <div class="section-label section-label-light">技术规格</div>
-      <h2 class="section-title section-title-light">SMART 产品规格</h2>
-      <div class="spec-table-wrap">
-        <table class="spec-table">
-          <thead><tr><th>项目</th><th>规格</th></tr></thead>
-          <tbody>
-            <tr><td>工作电压</td><td>110V / 220V / 380V / 440V（最低50V，最高500V）</td></tr>
-            <tr><td>允许电压变动范围</td><td>额定电压 ±10%</td></tr>
-            <tr><td>额定电流</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A, 700A, 1000A, 1400A, 2000A, 2500A</td></tr>
-            <tr><td>额定电流（CE认证）</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
-            <tr><td>额定电流（UL认证）</td><td>25A, 40A, 55A, 70A, 100A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
-            <tr><td>额定频率</td><td>50/60Hz（自动选择）</td></tr>
-            <tr><td>最小负载电流</td><td>1A</td></tr>
-            <tr><td>输出范围</td><td>相位角控制 / 过零控制：0 ~ 99.8%</td></tr>
-            <tr><td>控制电源</td><td>DC 24V</td></tr>
-            <tr><td>功耗</td><td>Max. 15W（风扇电源另计）</td></tr>
-            <tr><td>控制输入信号</td><td>4~20mA（阻抗 150Ω）3CH / 0~5V, 1~5V, 0~10V, 10K VOL（可选）1CH</td></tr>
-            <tr><td>输入接点</td><td>Switch Input 3CH</td></tr>
-            <tr><td>输出接点</td><td>Relay Out 6CH（Alarm 3CH, Fan Control 3CH）</td></tr>
-            <tr><td>控制方式</td><td>相位角 / 过零（MPD选项）/ PZ复合模式</td></tr>
-            <tr><td>绝缘强度</td><td>AC 3KV（Step 1Min.）</td></tr>
-            <tr><td>绝缘电阻</td><td>10MΩ以上</td></tr>
-            <tr><td>冷却方式</td><td>55A及以下自然冷却 / 70A及以上强制冷却</td></tr>
-            <tr><td>报警功能</td><td>过流(OC)、过流预警(OCW)、散热器过热(OTW/OT)、保险丝断开(FUSE)、负载断路(LINE)、SCR故障(SCR)、局部负载失效(PLF)、主电源断开(MPF)、FAN故障(FAN)、负载不平衡(UL) — 共10种</td></tr>
-            <tr><td>工作温度</td><td>0 ~ 40℃</td></tr>
-            <tr><td>湿度范围</td><td>30% ~ 90% RH（无结露）</td></tr>
-            <tr><td>SMC（控制单元）</td><td>32位CPU（12位ADC）</td></tr>
-            <tr><td>PM（功率模块）</td><td>输出电压/电流RMS测量</td></tr>
-            <tr><td>PSD<br>（显示屏）</td><td>彩色LCD及18键盘</td></tr>
-            <tr><td>通信</td><td>RS-485 3线，最高115,200bps，Modbus-RTU，最多32台连接</td></tr>
-          </tbody>
-        </table>
-      </div>
     </div>
   </section>
 </div>

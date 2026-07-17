@@ -293,6 +293,7 @@
     <button class="tab-btn active" data-tab="tab-features">특장점</button>
     <button class="tab-btn" data-tab="tab-order">주문형식</button>
     <button class="tab-btn" data-tab="tab-spec">사양</button>
+    <button class="tab-btn" data-tab="tab-psd2000">PSD-2000</button>
   </div>
 </div>
 
@@ -330,7 +331,7 @@
           <span class="pillar-num">04</span>
           <span class="pillar-tag">복합 제어</span>
           <h3>SMART COMBINATION</h3>
-          <p>하나의 몸체에 최대 단상 3대의 전력조정기를 탑재하여 비용과 공간을 절약합니다. 단상, 삼상 등 다양한 결선 방식에 대응하며 1P1P, 1P2L, 1P3L, 2P2L, 3P2L, 3P3L, 3P4L, 3P6L 등을 지원합니다.</p>
+          <p>하나의 몸체에 최대 단상 3대의 전력조정기를 탑재하여 비용과 공간을 절약합니다. 단상, 삼상 등 다양한 결선 방식에 대응하며 1P1L, 1P2L, 1P3L, 2P2L, 3P2L, 3P3L, 3P4L, 3P6L 등을 지원합니다.</p>
         </a>
       </div>
     </div>
@@ -629,6 +630,56 @@
             <div style="font-size:12px;color:rgba(255,255,255,0.5);">컬러 LCD 디스플레이<br>18키 패드</div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TAB: 사양 -->
+<div id="tab-spec" class="tab-panel">
+  <section class="section section-dark-2">
+    <div class="container">
+      <div class="section-label section-label-light">사양</div>
+      <h2 class="section-title section-title-light">SMART 제품 사양</h2>
+      <div class="spec-table-wrap">
+        <table class="spec-table">
+          <thead><tr><th>항목</th><th>사양</th></tr></thead>
+          <tbody>
+            <tr><td>사용전압</td><td>110V / 220V / 380V / 440V (최소 50V, 최대 500V)</td></tr>
+            <tr><td>허용전압 변동범위</td><td>정격전압의 ±10%</td></tr>
+            <tr><td>정격전류</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A, 700A, 1000A, 1400A, 2000A, 2500A</td></tr>
+            <tr><td>정격전류 (CE인증)</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
+            <tr><td>정격전류 (UL인증)</td><td>25A, 40A, 55A, 70A, 100A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
+            <tr><td>정격 주파수</td><td>50/60Hz (자동선택)</td></tr>
+            <tr><td>최소부하전류</td><td>1A</td></tr>
+            <tr><td>출력범위</td><td>위상각 제어 / 제로크로싱 제어: 0 ~ 99.8%</td></tr>
+            <tr><td>제어전원</td><td>DC 24V</td></tr>
+            <tr><td>소비전력</td><td>Max. 15W (FAN 전원 별도)</td></tr>
+            <tr><td>제어입력 신호</td><td>4~20mA (임피던스 150Ω) 3CH / 0~5V, 1~5V, 0~10V, 10K VOL(선택) 1CH</td></tr>
+            <tr><td>입력 접점</td><td>Switch Input 3CH</td></tr>
+            <tr><td>출력 접점</td><td>Relay Out 6CH (Alarm 3CH, Fan Control 3CH)</td></tr>
+            <tr><td>제어방법</td><td>위상각 / 제로크로싱(MPD 옵션) / PZ 혼합모드</td></tr>
+            <tr><td>내전압</td><td>AC 3KV (Step 1Min.)</td></tr>
+            <tr><td>절연저항</td><td>10MΩ 이상</td></tr>
+            <tr><td>냉각방식</td><td>55A 이하 자연공냉 / 70A 이상 강제공냉</td></tr>
+            <tr><td>알람기능</td><td>과전류(OC), 과전류 경고(OCW), 방열판 과열(OTW/OT), 휴즈단선(FUSE), 부하단선(LINE), SCR 소자 이상(SCR), 부분부하단선(PLF), 주전원 차단(MPF), FAN 고장(FAN), 부하불평형(UL) — 총 10종</td></tr>
+            <tr><td>동작 보증 온도</td><td>0 ~ 40℃</td></tr>
+            <tr><td>사용습도 범위</td><td>30% ~ 90% RH (결로가 없을 것)</td></tr>
+            <tr><td>SMC (제어부)</td><td>32Bit CPU 적용 (12Bit ADC)</td></tr>
+            <tr><td>PM (파워 모듈)</td><td>출력전압 / 전류 RMS 측정</td></tr>
+            <tr><td>PSD<br>(디스플레이)</td><td>컬러 LCD 및 18Key Pad</td></tr>
+            <tr><td>통신</td><td>RS-485 2Wire, 최대 115,200bps, Modbus-RTU, 최대 32대 접속</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TAB: PSD-2000 -->
+<div id="tab-psd2000" class="tab-panel">
+  <section class="section section-dark-2">
+    <div class="container">
         <div class="section-label section-label-light">PSD-2000 사양</div>
         <h3 style="font-size:20px;font-weight:700;color:var(--on-dark);margin-bottom:20px;">PSD-2000 디스플레이 외형 및 사양</h3>
         <div style="overflow-x:auto;border-radius:var(--r-lg);border:1px solid rgba(255,255,255,0.08);margin-bottom:16px;">
@@ -836,52 +887,11 @@
             </tbody>
           </table>
         </div>
-      </div>
     </div>
   </section>
 </div>
 
-<!-- TAB: 사양 -->
-<div id="tab-spec" class="tab-panel">
-  <section class="section section-dark-2">
-    <div class="container">
-      <div class="section-label section-label-light">사양</div>
-      <h2 class="section-title section-title-light">SMART 제품 사양</h2>
-      <div class="spec-table-wrap">
-        <table class="spec-table">
-          <thead><tr><th>항목</th><th>사양</th></tr></thead>
-          <tbody>
-            <tr><td>사용전압</td><td>110V / 220V / 380V / 440V (최소 50V, 최대 500V)</td></tr>
-            <tr><td>허용전압 변동범위</td><td>정격전압의 ±10%</td></tr>
-            <tr><td>정격전류</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A, 700A, 1000A, 1400A, 2000A, 2500A</td></tr>
-            <tr><td>정격전류 (CE인증)</td><td>25A, 40A, 55A, 70A, 90A, 110A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
-            <tr><td>정격전류 (UL인증)</td><td>25A, 40A, 55A, 70A, 100A, 130A, 160A, 200A, 250A, 320A, 400A, 500A</td></tr>
-            <tr><td>정격 주파수</td><td>50/60Hz (자동선택)</td></tr>
-            <tr><td>최소부하전류</td><td>1A</td></tr>
-            <tr><td>출력범위</td><td>위상각 제어 / 제로크로싱 제어: 0 ~ 99.8%</td></tr>
-            <tr><td>제어전원</td><td>DC 24V</td></tr>
-            <tr><td>소비전력</td><td>Max. 15W (FAN 전원 별도)</td></tr>
-            <tr><td>제어입력 신호</td><td>4~20mA (임피던스 150Ω) 3CH / 0~5V, 1~5V, 0~10V, 10K VOL(선택) 1CH</td></tr>
-            <tr><td>입력 접점</td><td>Switch Input 3CH</td></tr>
-            <tr><td>출력 접점</td><td>Relay Out 6CH (Alarm 3CH, Fan Control 3CH)</td></tr>
-            <tr><td>제어방법</td><td>위상각 / 제로크로싱(MPD 옵션) / PZ 혼합모드</td></tr>
-            <tr><td>내전압</td><td>AC 3KV (Step 1Min.)</td></tr>
-            <tr><td>절연저항</td><td>10MΩ 이상</td></tr>
-            <tr><td>냉각방식</td><td>55A 이하 자연공냉 / 70A 이상 강제공냉</td></tr>
-            <tr><td>알람기능</td><td>과전류(OC), 과전류 경고(OCW), 방열판 과열(OTW/OT), 휴즈단선(FUSE), 부하단선(LINE), SCR 소자 이상(SCR), 부분부하단선(PLF), 주전원 차단(MPF), FAN 고장(FAN), 부하불평형(UL) — 총 10종</td></tr>
-            <tr><td>동작 보증 온도</td><td>0 ~ 40℃</td></tr>
-            <tr><td>사용습도 범위</td><td>30% ~ 90% RH (결로가 없을 것)</td></tr>
-            <tr><td>SMC (제어부)</td><td>32Bit CPU 적용 (12Bit ADC)</td></tr>
-            <tr><td>PM (파워 모듈)</td><td>출력전압 / 전류 RMS 측정</td></tr>
-            <tr><td>PSD<br>(디스플레이)</td><td>컬러 LCD 및 18Key Pad</td></tr>
-            <tr><td>통신</td><td>RS-485 3Wire, 최대 115,200bps, Modbus-RTU, 최대 32대 접속</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-</div>
-
+<!-- TAB END: PSD-2000 -->
 <footer>
   <div class="footer-inner">
     <div class="footer-grid">
