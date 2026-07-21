@@ -1,18 +1,18 @@
 name: Keep Supabase Alive
 
-  on:
-    schedule:
-      # 매주 월, 목 09:00 UTC(한국시간 18:00) 실행 — 7일 무활동 자동 일시정지 방지
-      - cron: '0 9 * * 1,4'
-    workflow_dispatch:
+on:
+  schedule:
+    # 매주 월, 목 09:00 UTC(한국시간 18:00) 실행 — 7일 무활동 자동 일시정지 방지
+    - cron: '0 9 * * 1,4'
+  workflow_dispatch:
 
-  jobs:
-    ping-supabase:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Ping Supabase REST API
-          run: |
-            curl -s -o /dev/null -w "%{http_code}" \
-              "https://ttrxqfrzzwyrpgiyjwix.supabase.co/rest/v1/inquiries?select=id&limit=1" \
-              -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-              -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" \
+            "https://ttrxqfrzzwyrpgiyjwix.supabase.co/rest/v1/inquiries?select=id&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
