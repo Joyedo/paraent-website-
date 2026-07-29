@@ -32,6 +32,11 @@
     .tab-btn:hover { color: #111; }
     .tab-btn.active { background: #0066cc; color: #fff; border-color: #0066cc; }
 
+    .lang-bar { display: flex; gap: 6px; margin-bottom: 16px; }
+    .lang-btn { background: #fff; border: 1px solid #e5e7eb; cursor: pointer; padding: 6px 16px; font-size: 12px; font-weight: 600; color: #6b7280; border-radius: 20px; font-family: inherit; transition: all 0.15s; }
+    .lang-btn:hover { color: #111; }
+    .lang-btn.active { background: #111827; color: #fff; border-color: #111827; }
+
     .card { background: #fff; border-radius: 14px; border: 1px solid #e5e7eb; padding: 22px 24px; margin-bottom: 20px; }
     .card h2 { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 16px; }
 
@@ -94,6 +99,12 @@
 </div>
 
 <div class="main">
+  <div class="lang-bar">
+    <button class="lang-btn active" data-lang="ko" onclick="switchLanguage('ko')">🇰🇷 한국어</button>
+    <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">🇺🇸 English</button>
+    <button class="lang-btn" data-lang="zh" onclick="switchLanguage('zh')">🇨🇳 中文</button>
+  </div>
+
   <div class="tab-bar">
     <button class="tab-btn active" data-cat="tech" onclick="switchCategory('tech')">기술자료</button>
     <button class="tab-btn" data-cat="manual" onclick="switchCategory('manual')">메뉴얼</button>
@@ -151,12 +162,20 @@
   const CAD_GROUP_LABEL = { pll: 'Pll 전력조정기', smart: 'SMART 전력조정기', flex: 'FLEX 전력조정기', mini: 'MINI 전력조정기', etype: 'E-TYPE 전력조정기', ptype: 'P-TYPE 전력조정기' };
 
   let currentCategory = 'tech';
+  let currentLanguage = 'ko';
   let editingId = null;
 
   async function checkAuth() {
     const { data: { session } } = await _supabase.auth.getSession();
     if (!session) { window.location.href = './index.html'; return; }
     document.getElementById('adminEmail').textContent = session.user.email;
+    loadList();
+  }
+
+  function switchLanguage(lang) {
+    currentLanguage = lang;
+    cancelEdit();
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
     loadList();
   }
 
@@ -179,6 +198,7 @@
       .from('resources')
       .select('*')
       .eq('category', currentCategory)
+      .eq('language', currentLanguage)
       .order('id', { ascending: true });
 
     if (error) {
@@ -289,6 +309,7 @@
         if (error) throw error;
       } else {
         payload.category = currentCategory;
+        payload.language = currentLanguage;
         const { error } = await _supabase.from('resources').insert(payload);
         if (error) throw error;
       }

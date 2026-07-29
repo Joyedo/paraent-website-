@@ -118,129 +118,14 @@
 <section class="section">
   <div class="container">
     <div class="board-header">
-      <div class="board-count">共 <strong>12</strong> 条公告</div>
+      <div class="board-count">共 <strong id="noticeCount">—</strong> 条公告</div>
     </div>
 
-    <div class="notice-list">
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num" style="color:var(--primary);">📌</div>
-          <div><span class="notice-badge">公告</span><span class="notice-title-text">2025年夏季休假通知（8月12日 – 8月16日）</span></div>
-          <div class="notice-author">管理员</div>
-          <div class="notice-date">2025-07-28</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>尊敬的客户，您好。</p>
-            <p>现将2025年夏季休假安排通知如下。</p>
-            <p><strong>休假时间：2025年8月12日（周二）— 8月16日（周六）</strong></p>
-            <p>休假期间收到的咨询将从8月18日（周一）起依次回复。如有紧急事项，请发送邮件至 paraent@paraent.com。</p>
-            <p>感谢您的理解与支持。</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num" style="color:var(--primary);">📌</div>
-          <div><span class="notice-badge">公告</span><span class="notice-title-text">FLEX功率调节器EtherCAT驱动程序更新（v2.3.1）</span></div>
-          <div class="notice-author">技术团队</div>
-          <div class="notice-date">2025-06-10</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>FLEX功率调节器EtherCAT驱动程序2.3.1版本已发布。</p>
-            <p><strong>主要更新内容：</strong></p>
-            <p>- 修复与部分主PLC发生初始化错误的问题<br>- 通信响应速度提升15%<br>- 增强报警历史存储稳定性</p>
-            <p>驱动程序可在资料室 &gt; 技术文件中下载。更新方法请参阅FLEX手册第5章。</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num">12</div>
-          <div><span class="notice-title-text">SMART MPD技术研讨会公告</span></div>
-          <div class="notice-author">管理员</div>
-          <div class="notice-date">2025-05-15</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>我们将举办一场在线技术研讨会，介绍SMART功率调节器核心技术MPD（最大功率分配）功能的应用方法。</p>
-            <p>时间：2025年6月5日（周四）下午2:00 / 形式：在线视频研讨会（Zoom）</p>
-            <p>请通过在线咨询板报名参加。</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num">11</div>
-          <div><span class="notice-title-text">参展SIMTOS 2025智能制造展览会</span></div>
-          <div class="notice-author">管理员</div>
-          <div class="notice-date">2025-03-20</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>Paraent将参加SIMTOS 2025（首尔国际制造技术展）。</p>
-            <p>时间：2025年4月7日（周一）—11日（周五）/ 地点：KINTEX第2展览馆</p>
-            <p>欢迎莅临我们的展台体验FLEX和SMART等最新产品。预约参观请通过在线咨询联系我们。</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num">10</div>
-          <div><span class="notice-title-text">UL认证续签完成（P-TYPE、Pll、SMART）</span></div>
-          <div class="notice-author">品质团队</div>
-          <div class="notice-date">2025-02-14</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>P-TYPE、Pll及SMART功率调节器的UL认证已于2025年2月完成续签。</p>
-            <p>认证有效期至2028年2月，相关证书可在资料室查阅。</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num">9</div>
-          <div><span class="notice-title-text">官网改版上线通知</span></div>
-          <div class="notice-author">管理员</div>
-          <div class="notice-date">2025-01-06</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>Paraent官网已全新改版上线。</p>
-            <p>我们对网站进行了优化，提升了资料查找和产品信息浏览的便捷性。如有任何不便，请通过在线咨询与我们联系。</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num">8</div>
-          <div><span class="notice-title-text">MINI三相功率调节器新品发布</span></div>
-          <div class="notice-author">管理员</div>
-          <div class="notice-date">2024-11-25</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>继单相26mm系列之后，三相115mm MINI功率调节器正式发布。</p>
-            <p>该三相产品搭载SCR方式、内置CT及波形缺损补偿功能，即使在狭小的面板空间内也能实现3相系统控制。</p>
-          </div>
-        </div>
-      </div>
+    <div class="notice-list" id="noticeList">
+      <div style="text-align:center;color:var(--ink-muted-48);padding:48px 0;">加载中...</div>
     </div>
 
-    <div class="pagination">
-      <a href="#" class="page-btn">‹</a>
-      <a href="#" class="page-btn active">1</a>
-      <a href="#" class="page-btn">2</a>
-      <a href="#" class="page-btn">›</a>
-    </div>
+    <div class="pagination" id="noticePagination"></div>
   </div>
 </section>
 
@@ -256,11 +141,106 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 function toggleNotice(header) {
   const body = header.nextElementSibling;
   body.classList.toggle('open');
 }
+
+const SUPABASE_URL = 'https://ttrxqfrzzwyrpgiyjwix.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0cnhxZnJ6end5cnBnaXlqd2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3OTM2MjcsImV4cCI6MjA5NTM2OTYyN30.xUJwYc7e4hir3zNEWT1JvEnWHLkxVlDB3P56XHUJ1eg';
+const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const NOTICE_PAGE_SIZE = 10;
+let noticePage = 1;
+let noticeTotal = 0;
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatDate(iso) {
+  const d = new Date(iso);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function noticeBodyHtml(content) {
+  return escHtml(content).split(/\n\s*\n/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+}
+
+async function loadNotices(page = 1) {
+  noticePage = page;
+  const listEl = document.getElementById('noticeList');
+  listEl.innerHTML = '<div style="text-align:center;color:var(--ink-muted-48);padding:48px 0;">加载中...</div>';
+
+  const { data, count, error } = await _supabase
+    .from('notices')
+    .select('*', { count: 'exact' })
+    .eq('language', 'zh')
+    .order('pinned', { ascending: false })
+    .order('created_at', { ascending: false })
+    .range((page - 1) * NOTICE_PAGE_SIZE, page * NOTICE_PAGE_SIZE - 1);
+
+  if (error) {
+    listEl.innerHTML = `<div style="text-align:center;color:#dc2626;padding:48px 0;">公告加载失败。</div>`;
+    return;
+  }
+
+  noticeTotal = count ?? 0;
+  document.getElementById('noticeCount').textContent = noticeTotal;
+
+  const rows = data || [];
+  if (rows.length === 0) {
+    listEl.innerHTML = '<div style="text-align:center;color:var(--ink-muted-48);padding:48px 0;">暂无公告。</div>';
+    renderPagination();
+    return;
+  }
+
+  const offset = (page - 1) * NOTICE_PAGE_SIZE;
+  listEl.innerHTML = rows.map((n, i) => {
+    const num = noticeTotal - offset - i;
+    return `<div class="notice-item">
+      <div class="notice-item-header" onclick="toggleNotice(this)">
+        <div class="notice-num" style="${n.pinned ? 'color:var(--primary);' : ''}">${n.pinned ? '📌' : num}</div>
+        <div>${n.pinned ? '<span class="notice-badge">公告</span>' : ''}<span class="notice-title-text">${escHtml(n.title)}</span></div>
+        <div class="notice-author">${escHtml(n.author)}</div>
+        <div class="notice-date">${formatDate(n.created_at)}</div>
+      </div>
+      <div class="notice-body">
+        <div class="notice-body-text">${noticeBodyHtml(n.content)}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  renderPagination();
+}
+
+function renderPagination() {
+  const totalPages = Math.max(1, Math.ceil(noticeTotal / NOTICE_PAGE_SIZE));
+  const el = document.getElementById('noticePagination');
+  el.innerHTML = '';
+
+  const prev = document.createElement('a');
+  prev.href = '#'; prev.className = 'page-btn'; prev.textContent = '‹';
+  prev.onclick = (e) => { e.preventDefault(); if (noticePage > 1) loadNotices(noticePage - 1); };
+  el.appendChild(prev);
+
+  for (let p = 1; p <= totalPages; p++) {
+    const btn = document.createElement('a');
+    btn.href = '#';
+    btn.className = 'page-btn' + (p === noticePage ? ' active' : '');
+    btn.textContent = p;
+    btn.onclick = (e) => { e.preventDefault(); loadNotices(p); };
+    el.appendChild(btn);
+  }
+
+  const next = document.createElement('a');
+  next.href = '#'; next.className = 'page-btn'; next.textContent = '›';
+  next.onclick = (e) => { e.preventDefault(); if (noticePage < totalPages) loadNotices(noticePage + 1); };
+  el.appendChild(next);
+}
+
+loadNotices();
 </script>
 
 <div class="float-btns">

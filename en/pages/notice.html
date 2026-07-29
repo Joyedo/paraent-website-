@@ -118,129 +118,14 @@
 <section class="section">
   <div class="container">
     <div class="board-header">
-      <div class="board-count">Total <strong>12</strong> posts</div>
+      <div class="board-count">Total <strong id="noticeCount">—</strong> posts</div>
     </div>
 
-    <div class="notice-list">
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num" style="color:var(--primary);">📌</div>
-          <div><span class="notice-badge">Notice</span><span class="notice-title-text">2025 Summer Holiday Notice (Aug 12 – Aug 16)</span></div>
-          <div class="notice-author">Admin</div>
-          <div class="notice-date">2025-07-28</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>Dear customers, this is PARA-ENT Co., Ltd.</p>
-            <p>Please be advised of our 2025 summer holiday schedule as follows.</p>
-            <p><strong>Holiday period: August 12 (Tue) – August 16 (Sat), 2025</strong></p>
-            <p>Inquiries received during the holiday period will be answered sequentially from August 18 (Mon). For urgent matters, please contact us by email (paraent@paraent.com).</p>
-            <p>We appreciate your understanding.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num" style="color:var(--primary);">📌</div>
-          <div><span class="notice-badge">Notice</span><span class="notice-title-text">FLEX Power Regulator EtherCAT Driver Update (v2.3.1)</span></div>
-          <div class="notice-author">Tech Team</div>
-          <div class="notice-date">2025-06-10</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>FLEX Power Regulator EtherCAT Driver version 2.3.1 has been released.</p>
-            <p><strong>Key updates:</strong></p>
-            <p>- Fixed initialization errors that occurred with some master PLCs<br>- 15% improvement in communication response speed<br>- Enhanced alarm history storage stability</p>
-            <p>The driver can be downloaded from Resources &gt; Tech Docs. For update instructions, please refer to Chapter 5 of the FLEX manual.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num">12</div>
-          <div><span class="notice-title-text">SMART MPD Technology Seminar Announcement</span></div>
-          <div class="notice-author">Admin</div>
-          <div class="notice-date">2025-05-15</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>We are hosting an online technical seminar on how to utilize the MPD (Multi-Point Detection) function, the core technology of SMART power regulators.</p>
-            <p>Date: June 5, 2025 (Thu) 2:00 PM / Format: Online video seminar (Zoom)</p>
-            <p>Please register through the online inquiry board.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num">11</div>
-          <div><span class="notice-title-text">Participation in SIMTOS 2025 Smart Manufacturing Exhibition</span></div>
-          <div class="notice-author">Admin</div>
-          <div class="notice-date">2025-03-20</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>Paraent will participate in SIMTOS 2025 (Seoul International Manufacturing Technology Show).</p>
-            <p>Date: April 7 (Mon) – 11 (Fri), 2025 / Venue: KINTEX Exhibition Hall 2</p>
-            <p>You can experience our latest products including FLEX and SMART at our booth. For advance visit reservations, please contact us via online inquiry.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num">10</div>
-          <div><span class="notice-title-text">UL Certification Renewal Completed (P-TYPE, Pll, SMART)</span></div>
-          <div class="notice-author">Quality Team</div>
-          <div class="notice-date">2025-02-14</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>UL certification for P-TYPE, Pll, and SMART power regulators has been renewed in February 2025.</p>
-            <p>The certification is valid until February 2028, and related certificates can be viewed in the Resources section.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num">9</div>
-          <div><span class="notice-title-text">Website Renewal Notice</span></div>
-          <div class="notice-author">Admin</div>
-          <div class="notice-date">2025-01-06</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>The Paraent website has been newly renewed.</p>
-            <p>We have improved the site for more convenient document search and product information. If you experience any inconvenience, please contact us via online inquiry.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notice-item">
-        <div class="notice-item-header" onclick="toggleNotice(this)">
-          <div class="notice-num">8</div>
-          <div><span class="notice-title-text">New MINI Three-phase Power Regulator Launch</span></div>
-          <div class="notice-author">Admin</div>
-          <div class="notice-date">2024-11-25</div>
-        </div>
-        <div class="notice-body">
-          <div class="notice-body-text">
-            <p>Following the single-phase 26mm lineup, the three-phase 115mm MINI power regulator has been newly launched.</p>
-            <p>A three-phase model equipped with SCR method, built-in CT, and waveform loss compensation function, enabling 3-phase system control even in narrow panel spaces.</p>
-          </div>
-        </div>
-      </div>
+    <div class="notice-list" id="noticeList">
+      <div style="text-align:center;color:var(--ink-muted-48);padding:48px 0;">Loading...</div>
     </div>
 
-    <div class="pagination">
-      <a href="#" class="page-btn">‹</a>
-      <a href="#" class="page-btn active">1</a>
-      <a href="#" class="page-btn">2</a>
-      <a href="#" class="page-btn">›</a>
-    </div>
+    <div class="pagination" id="noticePagination"></div>
   </div>
 </section>
 
@@ -256,11 +141,106 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 function toggleNotice(header) {
   const body = header.nextElementSibling;
   body.classList.toggle('open');
 }
+
+const SUPABASE_URL = 'https://ttrxqfrzzwyrpgiyjwix.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0cnhxZnJ6end5cnBnaXlqd2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3OTM2MjcsImV4cCI6MjA5NTM2OTYyN30.xUJwYc7e4hir3zNEWT1JvEnWHLkxVlDB3P56XHUJ1eg';
+const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const NOTICE_PAGE_SIZE = 10;
+let noticePage = 1;
+let noticeTotal = 0;
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatDate(iso) {
+  const d = new Date(iso);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function noticeBodyHtml(content) {
+  return escHtml(content).split(/\n\s*\n/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+}
+
+async function loadNotices(page = 1) {
+  noticePage = page;
+  const listEl = document.getElementById('noticeList');
+  listEl.innerHTML = '<div style="text-align:center;color:var(--ink-muted-48);padding:48px 0;">Loading...</div>';
+
+  const { data, count, error } = await _supabase
+    .from('notices')
+    .select('*', { count: 'exact' })
+    .eq('language', 'en')
+    .order('pinned', { ascending: false })
+    .order('created_at', { ascending: false })
+    .range((page - 1) * NOTICE_PAGE_SIZE, page * NOTICE_PAGE_SIZE - 1);
+
+  if (error) {
+    listEl.innerHTML = `<div style="text-align:center;color:#dc2626;padding:48px 0;">Failed to load notices.</div>`;
+    return;
+  }
+
+  noticeTotal = count ?? 0;
+  document.getElementById('noticeCount').textContent = noticeTotal;
+
+  const rows = data || [];
+  if (rows.length === 0) {
+    listEl.innerHTML = '<div style="text-align:center;color:var(--ink-muted-48);padding:48px 0;">No notices yet.</div>';
+    renderPagination();
+    return;
+  }
+
+  const offset = (page - 1) * NOTICE_PAGE_SIZE;
+  listEl.innerHTML = rows.map((n, i) => {
+    const num = noticeTotal - offset - i;
+    return `<div class="notice-item">
+      <div class="notice-item-header" onclick="toggleNotice(this)">
+        <div class="notice-num" style="${n.pinned ? 'color:var(--primary);' : ''}">${n.pinned ? '📌' : num}</div>
+        <div>${n.pinned ? '<span class="notice-badge">Notice</span>' : ''}<span class="notice-title-text">${escHtml(n.title)}</span></div>
+        <div class="notice-author">${escHtml(n.author)}</div>
+        <div class="notice-date">${formatDate(n.created_at)}</div>
+      </div>
+      <div class="notice-body">
+        <div class="notice-body-text">${noticeBodyHtml(n.content)}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  renderPagination();
+}
+
+function renderPagination() {
+  const totalPages = Math.max(1, Math.ceil(noticeTotal / NOTICE_PAGE_SIZE));
+  const el = document.getElementById('noticePagination');
+  el.innerHTML = '';
+
+  const prev = document.createElement('a');
+  prev.href = '#'; prev.className = 'page-btn'; prev.textContent = '‹';
+  prev.onclick = (e) => { e.preventDefault(); if (noticePage > 1) loadNotices(noticePage - 1); };
+  el.appendChild(prev);
+
+  for (let p = 1; p <= totalPages; p++) {
+    const btn = document.createElement('a');
+    btn.href = '#';
+    btn.className = 'page-btn' + (p === noticePage ? ' active' : '');
+    btn.textContent = p;
+    btn.onclick = (e) => { e.preventDefault(); loadNotices(p); };
+    el.appendChild(btn);
+  }
+
+  const next = document.createElement('a');
+  next.href = '#'; next.className = 'page-btn'; next.textContent = '›';
+  next.onclick = (e) => { e.preventDefault(); if (noticePage < totalPages) loadNotices(noticePage + 1); };
+  el.appendChild(next);
+}
+
+loadNotices();
 </script>
 
 <!-- FLOATING BUTTONS -->

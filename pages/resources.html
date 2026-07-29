@@ -343,7 +343,7 @@ function renderCad(rows) {
 }
 
 async function loadAllResources() {
-  const { data, error } = await _supabase.from('resources').select('*').order('id', { ascending: true });
+  const { data, error } = await _supabase.from('resources').select('*').eq('language', 'ko').order('id', { ascending: true });
   if (error) { console.error(error); return; }
   const rows = data || [];
   renderFlatTable('techBody', rows.filter(r => r.category === 'tech'), '📄');

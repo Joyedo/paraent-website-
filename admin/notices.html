@@ -58,6 +58,11 @@
     .btn-delete { background: #fef2f2; color: #dc2626; }
     .btn-delete:hover { background: #fee2e2; }
     .empty-msg { text-align: center; padding: 32px; color: #9ca3af; font-size: 13px; }
+
+    .lang-bar { display: flex; gap: 6px; margin-bottom: 16px; }
+    .lang-btn-pill { background: #fff; border: 1px solid #e5e7eb; cursor: pointer; padding: 6px 16px; font-size: 12px; font-weight: 600; color: #6b7280; border-radius: 20px; font-family: inherit; transition: all 0.15s; }
+    .lang-btn-pill:hover { color: #111; }
+    .lang-btn-pill.active { background: #111827; color: #fff; border-color: #111827; }
   </style>
 </head>
 <body>
@@ -81,6 +86,12 @@
 </div>
 
 <div class="main">
+  <div class="lang-bar">
+    <button class="lang-btn-pill active" data-lang="ko" onclick="switchLanguage('ko')">🇰🇷 한국어</button>
+    <button class="lang-btn-pill" data-lang="en" onclick="switchLanguage('en')">🇺🇸 English</button>
+    <button class="lang-btn-pill" data-lang="zh" onclick="switchLanguage('zh')">🇨🇳 中文</button>
+  </div>
+
   <div class="card">
     <h2 id="formTitle">새 공지 등록</h2>
     <form id="noticeForm" onsubmit="handleSave(event)">
@@ -123,11 +134,19 @@
   const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let editingId = null;
+  let currentLanguage = 'ko';
 
   async function checkAuth() {
     const { data: { session } } = await _supabase.auth.getSession();
     if (!session) { window.location.href = './index.html'; return; }
     document.getElementById('adminEmail').textContent = session.user.email;
+    loadList();
+  }
+
+  function switchLanguage(lang) {
+    currentLanguage = lang;
+    cancelEdit();
+    document.querySelectorAll('.lang-btn-pill').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
     loadList();
   }
 
@@ -138,6 +157,7 @@
     const { data, error } = await _supabase
       .from('notices')
       .select('*')
+      .eq('language', currentLanguage)
       .order('pinned', { ascending: false })
       .order('created_at', { ascending: false });
 
@@ -192,6 +212,7 @@
         const { error } = await _supabase.from('notices').update(payload).eq('id', editingId);
         if (error) throw error;
       } else {
+        payload.language = currentLanguage;
         const { error } = await _supabase.from('notices').insert(payload);
         if (error) throw error;
       }
