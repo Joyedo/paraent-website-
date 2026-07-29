@@ -203,10 +203,7 @@
       <div class="file-table-wrap">
         <table class="file-table">
           <thead><tr><th>파일명</th><th>용량</th><th>등록일</th><th>다운로드</th></tr></thead>
-          <tbody>
-            <tr><td><div class="file-name"><div class="file-icon">📄</div>SMART 전력조정기의 MPD 기능</div></td><td><span class="file-size">3.0 MB</span></td><td><span class="file-date">2026-05-22</span></td><td><a href="../files/tech/tech-mpd.pdf" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>
-            <tr><td><div class="file-name"><div class="file-icon">📄</div>위상각제어방식 &amp; 제로크로싱제어방식 비교</div></td><td><span class="file-size">3.1 MB</span></td><td><span class="file-date">2026-05-22</span></td><td><a href="../files/tech/tech-phase-zerocross.pdf" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>
-          </tbody>
+          <tbody id="techBody"><tr><td colspan="4" style="text-align:center;color:var(--ink-muted-48);padding:32px;">불러오는 중...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -216,218 +213,16 @@
       <div class="file-table-wrap">
         <table class="file-table">
           <thead><tr><th>파일명</th><th>용량</th><th>등록일</th><th>다운로드</th></tr></thead>
-          <tbody>
-            <tr><td><div class="file-name"><div class="file-icon">📘</div>Pll 전력조정기 사용자 매뉴얼</div></td><td><span class="file-size">9.9 MB</span></td><td><span class="file-date">2026-01-27</span></td><td><a href="../files/manual/manual-pll.pdf" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>
-            <tr><td><div class="file-name"><div class="file-icon">📘</div>SMART 전력조정기 사용자 매뉴얼</div></td><td><span class="file-size">9.7 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../files/manual/manual-smart.pdf" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>
-            <tr><td><div class="file-name"><div class="file-icon">📘</div>FLEX 전력조정기 사용자 매뉴얼</div></td><td><span class="file-size">2.9 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../files/manual/manual-flex.pdf" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>
-            <tr><td><div class="file-name"><div class="file-icon">📘</div>MINI 단상 전력조정기 사용자 매뉴얼</div></td><td><span class="file-size">1.1 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../files/manual/manual-mini-1p.pdf" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>
-            <tr><td><div class="file-name"><div class="file-icon">📘</div>MINI 삼상 전력조정기 사용자 매뉴얼</div></td><td><span class="file-size">1.3 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../files/manual/manual-mini-3p.pdf" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>
-            <tr><td><div class="file-name"><div class="file-icon">📘</div>SE-TYPE 전력조정기 사용자 매뉴얼</div></td><td><span class="file-size">0.6 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../files/manual/manual-se.pdf" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>
-            <tr><td><div class="file-name"><div class="file-icon">📘</div>TE-TYPE 전력조정기 사용자 매뉴얼</div></td><td><span class="file-size">0.7 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../files/manual/manual-te.pdf" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>
-            <tr><td><div class="file-name"><div class="file-icon">📘</div>P-TYPE 전력조정기 사용자 매뉴얼</div></td><td><span class="file-size">2.6 MB</span></td><td><span class="file-date">2026-01-05</span></td><td><a href="../files/manual/manual-ptype.pdf" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>
-          </tbody>
+          <tbody id="manualBody"><tr><td colspan="4" style="text-align:center;color:var(--ink-muted-48);padding:32px;">불러오는 중...</td></tr></tbody>
         </table>
       </div>
     </div>
 
     <!-- 캐드도면 -->
     <div class="tab-panel" id="tab-cad">
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px;">
-        <a href="#cad-pll" class="cad-jump-btn">Pll</a>
-        <a href="#cad-smart" class="cad-jump-btn">SMART</a>
-        <a href="#cad-flex" class="cad-jump-btn">FLEX</a>
-        <a href="#cad-mini" class="cad-jump-btn">MINI</a>
-        <a href="#cad-etype" class="cad-jump-btn">E-TYPE</a>
-        <a href="#cad-ptype" class="cad-jump-btn">P-TYPE</a>
-      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px;" id="cadJumpBar"></div>
 
-      <!-- Pll 전력조정기 -->
-      <div id="cad-pll" style="margin-bottom:48px;">
-        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">Pll 전력조정기</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SPII 단상 A 25A~70A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #단상 #step</div><a href="../files/cad/SPII-A-025_070_외형도.step" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SPII 단상 A 90A~110A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #단상 #step</div><a href="../files/cad/SPII-A-090_110_외형도.step" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SPII 단상 A 130A~200A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #단상 #step</div><a href="../files/cad/SPII-A-130_200_외형도.step" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SPII 단상 A 250A~320A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #단상 #step</div><a href="../files/cad/SPII-A-250_320_외형도.step" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SPII 단상 A 400A~500A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #단상 #step</div><a href="../files/cad/SPII-A-400_500_외형도.stp" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SPII 단상 C 010A~040A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #단상 #step</div><a href="../files/cad/SPII-C-010_040_외형도.stp" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">TPII 삼상 A 25A~70A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #삼상 #step</div><a href="../files/cad/TPII-025_070_외형도.step" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">TPII 삼상 A 90A~200A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #삼상 #step</div><a href="../files/cad/TPII-090_200_외형도.stp" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">TPII 삼상 A 250A~320A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #삼상 #step</div><a href="../files/cad/TPII-250_320_외형도.stp" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">TPII 삼상 A 400A~500A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #삼상 #step</div><a href="../files/cad/TPII-400_500_외형도.stp" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">TPII 삼상 C 010A~040A</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #삼상 #step</div><a href="../files/cad/TPII-C-010_040_외형도.step" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">TPII 삼상 C 010A~040A (FN)</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #Pll전력조정기 #삼상 #step</div><a href="../files/cad/TPII-C-010_040_FN_외형도.step" class="dl-btn" download>↓ 다운로드</a></div></div>
-        </div>
-      </div>
-
-      <!-- SMART 전력조정기 -->
-      <div id="cad-smart" style="margin-bottom:48px;">
-        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">SMART 전력조정기</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SMART 10A~55A 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #SMART전력조정기 #dwg</div><a href="../files/cad/SMART-10A-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SMART 70A~200A 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #SMART전력조정기 #dwg</div><a href="../files/cad/SMART-70A-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SMART 250A~320A 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #SMART전력조정기 #dwg</div><a href="../files/cad/SMART-250A-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SMART 400A~500A 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #SMART전력조정기 #dwg</div><a href="../files/cad/SMART-400A-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a></div></div>
-        </div>
-      </div>
-
-      <!-- FLEX 전력조정기 -->
-      <div id="cad-flex" style="margin-bottom:48px;">
-        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">FLEX 전력조정기</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">FLEX 전력조정기 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #FLEX전력조정기 #dwg</div><a href="../files/cad/FLEX-TYPE 치수도면.dwg" class="dl-btn" download>↓ 다운로드</a></div></div>
-        </div>
-      </div>
-
-      <!-- MINI 전력조정기 -->
-      <div id="cad-mini" style="margin-bottom:48px;">
-        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">MINI 전력조정기</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">MINI 단상(1φ) 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #MINI전력조정기 #단상 #dwg</div><a href="../files/cad/Mini 단상-Type-20250124.dwg" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">MINI 삼상(3φ) 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #MINI전력조정기 #삼상 #dwg</div><a href="../files/cad/Mini 3상-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">MINI 단상 15A~25A 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #MINI전력조정기 #단상 #step</div><a href="../files/cad/MINI-단상-15A_25A_외형도_3D.step" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">MINI 단상 40A 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #MINI전력조정기 #단상 #step</div><a href="../files/cad/MINI-단상-40A_외형도_3D.step" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">MINI 삼상 25A 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #MINI전력조정기 #삼상 #step</div><a href="../files/cad/MINI-삼상-25A_외형도_3D.step" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:#5856d6;text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">STEP</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">MINI 삼상 40A~70A 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #MINI전력조정기 #삼상 #step</div><a href="../files/cad/MINI-삼상-40A_70A_외형도_3D.step" class="dl-btn" download>↓ 다운로드</a></div></div>
-        </div>
-      </div>
-
-      <!-- E-TYPE 전력조정기 -->
-      <div id="cad-etype" style="margin-bottom:48px;">
-        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">E-TYPE 전력조정기</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">SE-TYPE 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #E-TYPE전력조정기 #dwg</div><a href="../files/cad/SE-Type-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a></div></div>
-          <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;"><div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div></div></div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">TE-TYPE 외형 도면</div><div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #E-TYPE전력조정기 #dwg</div><a href="../files/cad/TE-Type-치수도면-.dwg" class="dl-btn" download>↓ 다운로드</a></div></div>
-        </div>
-      </div>
-
-      <!-- P-TYPE 전력조정기 -->
-      <div id="cad-ptype" style="margin-bottom:48px;">
-        <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">P-TYPE 전력조정기</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-
-                <!-- 단상 25A~70A -->
-                <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;">
-                  <div style="width:46px;height:56px;flex-shrink:0;position:relative;">
-                    <div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;">
-                      <div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div>
-                      <div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div>
-                    </div>
-                  </div>
-                  <div style="flex:1;min-width:0;">
-                    <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">P-TYPE 단상 25A~70A</div>
-                    <div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #P-TYPE전력조정기 #단상 #dwg</div>
-                    <a href="../files/cad/SP-025-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a>
-                  </div>
-                </div>
-
-                <!-- 단상 90A~200A -->
-                <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;">
-                  <div style="width:46px;height:56px;flex-shrink:0;position:relative;">
-                    <div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;">
-                      <div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div>
-                      <div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div>
-                    </div>
-                  </div>
-                  <div style="flex:1;min-width:0;">
-                    <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">P-TYPE 단상 90A~200A</div>
-                    <div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #P-TYPE전력조정기 #단상 #dwg</div>
-                    <a href="../files/cad/SP-90A-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a>
-                  </div>
-                </div>
-
-                <!-- 단상 250A~320A -->
-                <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;">
-                  <div style="width:46px;height:56px;flex-shrink:0;position:relative;">
-                    <div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;">
-                      <div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div>
-                      <div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div>
-                    </div>
-                  </div>
-                  <div style="flex:1;min-width:0;">
-                    <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">P-TYPE 단상 250A~320A</div>
-                    <div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #P-TYPE전력조정기 #단상 #dwg</div>
-                    <a href="../files/cad/SP-250A-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a>
-                  </div>
-                </div>
-
-                <!-- 단상 400A~500A -->
-                <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;">
-                  <div style="width:46px;height:56px;flex-shrink:0;position:relative;">
-                    <div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;">
-                      <div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div>
-                      <div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div>
-                    </div>
-                  </div>
-                  <div style="flex:1;min-width:0;">
-                    <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">P-TYPE 단상 400A~500A</div>
-                    <div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #P-TYPE전력조정기 #단상 #dwg</div>
-                    <a href="../files/cad/SP-400A-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a>
-                  </div>
-                </div>
-
-                <!-- 삼상 25A~70A -->
-                <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;">
-                  <div style="width:46px;height:56px;flex-shrink:0;position:relative;">
-                    <div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;">
-                      <div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div>
-                      <div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div>
-                    </div>
-                  </div>
-                  <div style="flex:1;min-width:0;">
-                    <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">P-TYPE 삼상 25A~70A</div>
-                    <div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #P-TYPE전력조정기 #삼상 #dwg</div>
-                    <a href="../files/cad/TP-025-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a>
-                  </div>
-                </div>
-
-                <!-- 삼상 90A~200A -->
-                <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;">
-                  <div style="width:46px;height:56px;flex-shrink:0;position:relative;">
-                    <div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;">
-                      <div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div>
-                      <div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div>
-                    </div>
-                  </div>
-                  <div style="flex:1;min-width:0;">
-                    <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">P-TYPE 삼상 90A~200A</div>
-                    <div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #P-TYPE전력조정기 #삼상 #dwg</div>
-                    <a href="../files/cad/TP-90A-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a>
-                  </div>
-                </div>
-
-                <!-- 삼상 250A~320A -->
-                <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;">
-                  <div style="width:46px;height:56px;flex-shrink:0;position:relative;">
-                    <div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;">
-                      <div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div>
-                      <div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div>
-                    </div>
-                  </div>
-                  <div style="flex:1;min-width:0;">
-                    <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">P-TYPE 삼상 250A~320A</div>
-                    <div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #P-TYPE전력조정기 #삼상 #dwg</div>
-                    <a href="../files/cad/TP-250A-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a>
-                  </div>
-                </div>
-
-                <!-- 삼상 400A~500A -->
-                <div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;">
-                  <div style="width:46px;height:56px;flex-shrink:0;position:relative;">
-                    <div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;">
-                      <div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div>
-                      <div style="position:absolute;bottom:0;left:0;right:0;background:var(--primary);text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">DWG</div>
-                    </div>
-                  </div>
-                  <div style="flex:1;min-width:0;">
-                    <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">P-TYPE 삼상 400A~500A</div>
-                    <div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">#CAD도면 #P-TYPE전력조정기 #삼상 #dwg</div>
-                    <a href="../files/cad/TP-400A-치수도면.dwg" class="dl-btn" download>↓ 다운로드</a>
-                  </div>
-                </div>
-
-        </div>
-      </div>
+      <div id="cadGroups"></div>
     </div>
 
     <!-- 카다로그 -->
@@ -435,9 +230,7 @@
       <div class="file-table-wrap">
         <table class="file-table">
           <thead><tr><th>파일명</th><th>용량</th><th>등록일</th><th>다운로드</th></tr></thead>
-          <tbody>
-            <tr><td><div class="file-name"><div class="file-icon">🗂️</div>제품종합카다로그</div></td><td><span class="file-size">—</span></td><td><span class="file-date">2024-07-02</span></td><td><a href="../files/catalog/catalog-general.pdf" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>
-          </tbody>
+          <tbody id="catalogBody"><tr><td colspan="4" style="text-align:center;color:var(--ink-muted-48);padding:32px;">불러오는 중...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -456,6 +249,7 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 function switchTab(id, btn) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -480,9 +274,88 @@ function activateFromHash() {
     }, 50);
   }
 }
-window.addEventListener('DOMContentLoaded', activateFromHash);
 window.addEventListener('hashchange', activateFromHash);
 
+// ── 자료실 데이터 (Supabase) ──
+const SUPABASE_URL = 'https://ttrxqfrzzwyrpgiyjwix.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0cnhxZnJ6end5cnBnaXlqd2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3OTM2MjcsImV4cCI6MjA5NTM2OTYyN30.xUJwYc7e4hir3zNEWT1JvEnWHLkxVlDB3P56XHUJ1eg';
+const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const CAD_GROUP_LABEL = { pll: 'Pll 전력조정기', smart: 'SMART 전력조정기', flex: 'FLEX 전력조정기', mini: 'MINI 전력조정기', etype: 'E-TYPE 전력조정기', ptype: 'P-TYPE 전력조정기' };
+const CAD_GROUP_SHORT = { pll: 'Pll', smart: 'SMART', flex: 'FLEX', mini: 'MINI', etype: 'E-TYPE', ptype: 'P-TYPE' };
+const CAD_GROUP_ORDER = ['pll', 'smart', 'flex', 'mini', 'etype', 'ptype'];
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatDate(iso) {
+  const d = new Date(iso);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function renderFlatTable(tbodyId, rows, icon) {
+  const tbody = document.getElementById(tbodyId);
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--ink-muted-48);padding:32px;">등록된 자료가 없습니다.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(r => `<tr><td><div class="file-name"><div class="file-icon">${icon}</div>${escHtml(r.title)}</div></td><td><span class="file-size">${escHtml(r.file_size || '—')}</span></td><td><span class="file-date">${formatDate(r.created_at)}</span></td><td><a href="${escHtml(r.file_path)}" class="dl-btn" target="_blank">↓ 다운로드</a></td></tr>`).join('');
+}
+
+function cadItemHtml(r) {
+  const ext = (r.file_path.split('.').pop() || '').toLowerCase();
+  const isStep = ext === 'step' || ext === 'stp';
+  const badgeColor = isStep ? '#5856d6' : 'var(--primary)';
+  const badgeLabel = isStep ? 'STEP' : 'DWG';
+  return `<div style="display:flex;align-items:center;gap:16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:18px;">
+    <div style="width:46px;height:56px;flex-shrink:0;"><div style="width:46px;height:56px;background:#fff;border:1.5px solid #d0d0d0;border-radius:4px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(135deg,#c8c8c8 50%,#fff 50%);"></div><div style="position:absolute;bottom:0;left:0;right:0;background:${badgeColor};text-align:center;font-size:9px;font-weight:700;color:#fff;padding:3px 0;letter-spacing:0.06em;">${badgeLabel}</div></div></div>
+    <div style="flex:1;min-width:0;">
+      <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;">${escHtml(r.title)}</div>
+      <div style="font-size:12px;color:var(--ink-muted-48);margin-bottom:10px;">${escHtml(r.tags || '')}</div>
+      <a href="${escHtml(r.file_path)}" class="dl-btn" download>↓ 다운로드</a>
+    </div>
+  </div>`;
+}
+
+function renderCad(rows) {
+  const jumpBar = document.getElementById('cadJumpBar');
+  const groupsEl = document.getElementById('cadGroups');
+  if (!rows.length) {
+    jumpBar.innerHTML = '';
+    groupsEl.innerHTML = '<div style="text-align:center;color:var(--ink-muted-48);padding:32px;">등록된 캐드도면이 없습니다.</div>';
+    return;
+  }
+  const groups = {};
+  rows.forEach(r => { const g = r.product_group || 'etc'; (groups[g] = groups[g] || []).push(r); });
+  const order = [...CAD_GROUP_ORDER, ...Object.keys(groups).filter(g => !CAD_GROUP_ORDER.includes(g))].filter(g => groups[g]);
+
+  jumpBar.innerHTML = order.map(g => `<a href="#cad-${g}" class="cad-jump-btn">${CAD_GROUP_SHORT[g] || g}</a>`).join('');
+
+  groupsEl.innerHTML = order.map(g => `
+    <div id="cad-${g}" style="margin-bottom:48px;">
+      <div style="font-size:12px;font-weight:700;color:var(--ink-muted-80);letter-spacing:0.06em;text-transform:uppercase;background:var(--canvas-parchment);border:1px solid var(--hairline);padding:10px 16px;border-radius:var(--r-sm);margin-bottom:16px;">${CAD_GROUP_LABEL[g] || g}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        ${groups[g].map(cadItemHtml).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+async function loadAllResources() {
+  const { data, error } = await _supabase.from('resources').select('*').order('id', { ascending: true });
+  if (error) { console.error(error); return; }
+  const rows = data || [];
+  renderFlatTable('techBody', rows.filter(r => r.category === 'tech'), '📄');
+  renderFlatTable('manualBody', rows.filter(r => r.category === 'manual'), '📘');
+  renderFlatTable('catalogBody', rows.filter(r => r.category === 'catalog'), '🗂️');
+  renderCad(rows.filter(r => r.category === 'cad'));
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  await loadAllResources();
+  activateFromHash();
+});
 </script>
 
 <!-- FLOATING BUTTONS -->

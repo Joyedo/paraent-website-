@@ -25,6 +25,10 @@
     .topbar-left img { height: 28px; }
     .topbar-title { color: #fff; font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
     .topbar-badge { background: #0066cc; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.05em; }
+    .topbar-nav { display: flex; align-items: center; gap: 4px; margin-left: 12px; }
+    .topbar-nav a { font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
+    .topbar-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .topbar-nav a.active { color: #fff; background: rgba(0,102,204,0.35); font-weight: 600; }
     .topbar-right { display: flex; align-items: center; gap: 12px; }
     .admin-name { font-size: 13px; color: rgba(255,255,255,0.6); }
     .btn-logout {
@@ -401,6 +405,11 @@
     <img src="../assets/images/logo-white.png" alt="Paraent" />
     <span class="topbar-title">관리자 페이지</span>
     <span class="topbar-badge">ADMIN</span>
+    <div class="topbar-nav">
+      <a href="./dashboard.html" class="active">문의 관리</a>
+      <a href="./resources.html">자료실 관리</a>
+      <a href="./notices.html">공지사항 관리</a>
+    </div>
   </div>
   <div class="topbar-right">
     <span class="admin-name" id="adminEmail"></span>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>자료실 관리 — Paraent Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #f0f2f5; color: #1d1d1f; min-height: 100vh; }
+
+    .topbar { background: #1a1a2e; height: 56px; display: flex; align-items: center; padding: 0 24px; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .topbar-left img { height: 28px; }
+    .topbar-title { color: #fff; font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+    .topbar-badge { background: #0066cc; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.05em; }
+    .topbar-nav { display: flex; align-items: center; gap: 4px; margin-left: 12px; }
+    .topbar-nav a { font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
+    .topbar-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .topbar-nav a.active { color: #fff; background: rgba(0,102,204,0.35); font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .admin-name { font-size: 13px; color: rgba(255,255,255,0.6); }
+    .btn-logout { padding: 6px 14px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; font-size: 12px; font-family: inherit; cursor: pointer; transition: all 0.15s; }
+    .btn-logout:hover { background: rgba(255,255,255,0.18); color: #fff; }
+    .btn-home { padding: 6px 14px; background: transparent; color: rgba(255,255,255,0.6); border: none; font-size: 12px; font-family: inherit; cursor: pointer; text-decoration: none; transition: color 0.15s; }
+    .btn-home:hover { color: #fff; }
+
+    .main { max-width: 1300px; margin: 0 auto; padding: 28px 24px; }
+
+    .tab-bar { display: flex; gap: 6px; margin-bottom: 20px; }
+    .tab-btn { background: #fff; border: 1px solid #e5e7eb; cursor: pointer; padding: 10px 20px; font-size: 13px; font-weight: 600; color: #6b7280; border-radius: 9px; font-family: inherit; transition: all 0.15s; }
+    .tab-btn:hover { color: #111; }
+    .tab-btn.active { background: #0066cc; color: #fff; border-color: #0066cc; }
+
+    .card { background: #fff; border-radius: 14px; border: 1px solid #e5e7eb; padding: 22px 24px; margin-bottom: 20px; }
+    .card h2 { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 16px; }
+
+    .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; align-items: end; }
+    .form-grid.cad { grid-template-columns: repeat(5, 1fr); }
+    .field label { display: block; font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .field input[type=text], .field select { width: 100%; padding: 9px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; }
+    .field input[type=text]:focus, .field select:focus { border-color: #0066cc; }
+    .field input[type=file] { width: 100%; font-size: 12px; }
+    .form-actions { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; margin-top: 6px; }
+    .btn-save { padding: 10px 22px; background: #0066cc; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; transition: background 0.15s; }
+    .btn-save:hover { background: #0052a3; }
+    .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-cancel-edit { padding: 10px 16px; background: #f3f4f6; color: #374151; border: none; border-radius: 8px; font-size: 13px; font-family: inherit; cursor: pointer; }
+    .save-hint { font-size: 12px; color: #9ca3af; }
+    .edit-banner { grid-column: 1/-1; background: #fffbeb; border: 1px solid #fde68a; color: #92400e; font-size: 12px; padding: 8px 12px; border-radius: 8px; margin-bottom: 4px; }
+
+    .group-header { font-size: 12px; font-weight: 700; color: #374151; letter-spacing: 0.04em; text-transform: uppercase; background: #f9fafb; border: 1px solid #e5e7eb; padding: 10px 16px; border-radius: 8px; margin: 20px 0 10px; }
+    .group-header:first-child { margin-top: 0; }
+
+    .table-wrap { overflow-x: auto; border: 1px solid #e5e7eb; border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: #f9fafb; }
+    th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: #6b7280; letter-spacing: 0.04em; text-transform: uppercase; border-bottom: 1px solid #f3f4f6; white-space: nowrap; }
+    td { padding: 12px 14px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; color: #374151; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+    .td-title { font-weight: 500; color: #111; }
+    .td-tags { color: #9ca3af; font-size: 12px; }
+    .td-date { color: #6b7280; font-size: 12px; white-space: nowrap; }
+    .dl-link { color: #0066cc; text-decoration: none; font-size: 12px; }
+    .dl-link:hover { text-decoration: underline; }
+    .action-btns { display: flex; gap: 6px; }
+    .btn-edit, .btn-delete { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; border: none; transition: all 0.15s; white-space: nowrap; }
+    .btn-edit { background: #eff6ff; color: #2563eb; }
+    .btn-edit:hover { background: #dbeafe; }
+    .btn-delete { background: #fef2f2; color: #dc2626; }
+    .btn-delete:hover { background: #fee2e2; }
+    .empty-row td { text-align: center; padding: 32px; color: #9ca3af; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <img src="../assets/images/logo-white.png" alt="Paraent" />
+    <span class="topbar-title">관리자 페이지</span>
+    <span class="topbar-badge">ADMIN</span>
+    <div class="topbar-nav">
+      <a href="./dashboard.html">문의 관리</a>
+      <a href="./resources.html" class="active">자료실 관리</a>
+      <a href="./notices.html">공지사항 관리</a>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="admin-name" id="adminEmail"></span>
+    <a href="../index.html" class="btn-home">홈페이지</a>
+    <button class="btn-logout" onclick="handleLogout()">로그아웃</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="tab-bar">
+    <button class="tab-btn active" data-cat="tech" onclick="switchCategory('tech')">기술자료</button>
+    <button class="tab-btn" data-cat="manual" onclick="switchCategory('manual')">메뉴얼</button>
+    <button class="tab-btn" data-cat="cad" onclick="switchCategory('cad')">캐드도면</button>
+    <button class="tab-btn" data-cat="catalog" onclick="switchCategory('catalog')">카다로그</button>
+  </div>
+
+  <div class="card">
+    <h2 id="formTitle">새 자료 등록</h2>
+    <form id="resourceForm" onsubmit="handleSave(event)">
+      <div class="form-grid" id="formGrid">
+        <div class="field" id="groupField" style="display:none;">
+          <label>제품군</label>
+          <select id="fProductGroup">
+            <option value="pll">Pll 전력조정기</option>
+            <option value="smart">SMART 전력조정기</option>
+            <option value="flex">FLEX 전력조정기</option>
+            <option value="mini">MINI 전력조정기</option>
+            <option value="etype">E-TYPE 전력조정기</option>
+            <option value="ptype">P-TYPE 전력조정기</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>제목</label>
+          <input type="text" id="fTitle" placeholder="자료 제목" required />
+        </div>
+        <div class="field">
+          <label>태그 (선택)</label>
+          <input type="text" id="fTags" placeholder="#CAD도면 #단상 #dwg" />
+        </div>
+        <div class="field">
+          <label id="fileLabel">파일 업로드</label>
+          <input type="file" id="fFile" />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-save" id="saveBtn">등록</button>
+          <button type="button" class="btn-cancel-edit" id="cancelEditBtn" style="display:none;" onclick="cancelEdit()">취소</button>
+          <span class="save-hint" id="saveHint"></span>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div id="listArea"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  const SUPABASE_URL = 'https://ttrxqfrzzwyrpgiyjwix.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0cnhxZnJ6end5cnBnaXlqd2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3OTM2MjcsImV4cCI6MjA5NTM2OTYyN30.xUJwYc7e4hir3zNEWT1JvEnWHLkxVlDB3P56XHUJ1eg';
+  const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const CATEGORY_LABEL = { tech: '기술자료', manual: '메뉴얼', cad: '캐드도면', catalog: '카다로그' };
+  const CAD_GROUP_ORDER = ['pll', 'smart', 'flex', 'mini', 'etype', 'ptype'];
+  const CAD_GROUP_LABEL = { pll: 'Pll 전력조정기', smart: 'SMART 전력조정기', flex: 'FLEX 전력조정기', mini: 'MINI 전력조정기', etype: 'E-TYPE 전력조정기', ptype: 'P-TYPE 전력조정기' };
+
+  let currentCategory = 'tech';
+  let editingId = null;
+
+  async function checkAuth() {
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (!session) { window.location.href = './index.html'; return; }
+    document.getElementById('adminEmail').textContent = session.user.email;
+    loadList();
+  }
+
+  function switchCategory(cat) {
+    currentCategory = cat;
+    cancelEdit();
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+    document.getElementById('groupField').style.display = cat === 'cad' ? 'block' : 'none';
+    document.getElementById('formGrid').classList.toggle('cad', cat === 'cad');
+    document.getElementById('formTitle').textContent = `새 ${CATEGORY_LABEL[cat]} 등록`;
+    document.getElementById('fileLabel').textContent = '파일 업로드';
+    loadList();
+  }
+
+  async function loadList() {
+    const listArea = document.getElementById('listArea');
+    listArea.innerHTML = '<div class="table-wrap"><table><tbody><tr class="empty-row"><td>불러오는 중...</td></tr></tbody></table></div>';
+
+    const { data, error } = await _supabase
+      .from('resources')
+      .select('*')
+      .eq('category', currentCategory)
+      .order('id', { ascending: true });
+
+    if (error) {
+      listArea.innerHTML = `<div class="card" style="color:#dc2626;">목록을 불러오지 못했습니다: ${escHtml(error.message)}</div>`;
+      return;
+    }
+
+    if (currentCategory === 'cad') {
+      renderCadList(data ?? []);
+    } else {
+      renderFlatList(data ?? []);
+    }
+  }
+
+  function renderFlatList(rows) {
+    const listArea = document.getElementById('listArea');
+    if (rows.length === 0) {
+      listArea.innerHTML = '<div class="table-wrap"><table><tbody><tr class="empty-row"><td>등록된 자료가 없습니다.</td></tr></tbody></table></div>';
+      return;
+    }
+    listArea.innerHTML = `<div class="table-wrap">${buildTable(rows)}</div>`;
+  }
+
+  function renderCadList(rows) {
+    const listArea = document.getElementById('listArea');
+    if (rows.length === 0) {
+      listArea.innerHTML = '<div class="table-wrap"><table><tbody><tr class="empty-row"><td>등록된 자료가 없습니다.</td></tr></tbody></table></div>';
+      return;
+    }
+    const groups = {};
+    rows.forEach(r => {
+      const g = r.product_group || 'etc';
+      (groups[g] = groups[g] || []).push(r);
+    });
+    const order = [...CAD_GROUP_ORDER, ...Object.keys(groups).filter(g => !CAD_GROUP_ORDER.includes(g))];
+    let html = '';
+    order.forEach(g => {
+      if (!groups[g]) return;
+      html += `<div class="group-header">${CAD_GROUP_LABEL[g] || g}</div><div class="table-wrap">${buildTable(groups[g])}</div>`;
+    });
+    listArea.innerHTML = html;
+  }
+
+  function buildTable(rows) {
+    return `<table>
+      <thead><tr><th>제목</th><th>태그</th><th>등록일</th><th>파일</th><th>관리</th></tr></thead>
+      <tbody>
+        ${rows.map(r => `<tr>
+          <td class="td-title">${escHtml(r.title)}</td>
+          <td class="td-tags">${escHtml(r.tags || '—')}</td>
+          <td class="td-date">${formatDate(r.created_at)}</td>
+          <td><a href="${escAttr(r.file_path)}" class="dl-link" target="_blank">파일 열기</a></td>
+          <td>
+            <div class="action-btns">
+              <button class="btn-edit" onclick="startEdit(${r.id})">수정</button>
+              <button class="btn-delete" onclick="deleteResource(${r.id}, '${escAttr(r.file_path)}')">삭제</button>
+            </div>
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+  }
+
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function formatFileSize(bytes) {
+    if (!bytes) return '—';
+    const mb = bytes / (1024 * 1024);
+    if (mb < 0.1) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+    return `${mb.toFixed(1)} MB`;
+  }
+
+  function sanitizeFileName(name) {
+    return name.replace(/\s+/g, '_');
+  }
+
+  async function handleSave(e) {
+    e.preventDefault();
+    const title = document.getElementById('fTitle').value.trim();
+    const tags = document.getElementById('fTags').value.trim();
+    const productGroup = currentCategory === 'cad' ? document.getElementById('fProductGroup').value : null;
+    const file = document.getElementById('fFile').files[0];
+
+    if (!title) { alert('제목을 입력해 주세요.'); return; }
+    if (!editingId && !file) { alert('파일을 선택해 주세요.'); return; }
+
+    const saveBtn = document.getElementById('saveBtn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = '저장 중...';
+
+    try {
+      let payload = { title, tags: tags || null, product_group: productGroup };
+
+      if (file) {
+        const path = `${currentCategory}/${Date.now()}-${sanitizeFileName(file.name)}`;
+        const { error: uploadError } = await _supabase.storage.from('resources').upload(path, file);
+        if (uploadError) throw uploadError;
+        const { data: pub } = _supabase.storage.from('resources').getPublicUrl(path);
+        payload.file_path = pub.publicUrl;
+        payload.file_size = formatFileSize(file.size);
+      }
+
+      if (editingId) {
+        const { error } = await _supabase.from('resources').update(payload).eq('id', editingId);
+        if (error) throw error;
+      } else {
+        payload.category = currentCategory;
+        const { error } = await _supabase.from('resources').insert(payload);
+        if (error) throw error;
+      }
+
+      cancelEdit();
+      loadList();
+    } catch (err) {
+      alert('저장에 실패했습니다: ' + err.message);
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = editingId ? '수정 저장' : '등록';
+    }
+  }
+
+  async function startEdit(id) {
+    const { data, error } = await _supabase.from('resources').select('*').eq('id', id).single();
+    if (error || !data) return;
+
+    editingId = id;
+    document.getElementById('fTitle').value = data.title;
+    document.getElementById('fTags').value = data.tags || '';
+    if (currentCategory === 'cad') document.getElementById('fProductGroup').value = data.product_group || 'pll';
+    document.getElementById('fFile').value = '';
+    document.getElementById('fileLabel').textContent = '파일 교체 (선택, 비워두면 기존 파일 유지)';
+    document.getElementById('formTitle').textContent = `${CATEGORY_LABEL[currentCategory]} 수정`;
+    document.getElementById('saveBtn').textContent = '수정 저장';
+    document.getElementById('cancelEditBtn').style.display = 'inline-block';
+    document.getElementById('saveHint').textContent = `#${id} 수정 중`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function cancelEdit() {
+    editingId = null;
+    document.getElementById('resourceForm').reset();
+    document.getElementById('fileLabel').textContent = '파일 업로드';
+    document.getElementById('formTitle').textContent = `새 ${CATEGORY_LABEL[currentCategory]} 등록`;
+    document.getElementById('saveBtn').textContent = '등록';
+    document.getElementById('cancelEditBtn').style.display = 'none';
+    document.getElementById('saveHint').textContent = '';
+  }
+
+  async function deleteResource(id, filePath) {
+    if (!confirm('이 자료를 삭제하시겠습니까?')) return;
+    const { error } = await _supabase.from('resources').delete().eq('id', id);
+    if (error) { alert('삭제에 실패했습니다: ' + error.message); return; }
+
+    if (filePath && filePath.includes('/storage/v1/object/public/resources/')) {
+      const storagePath = filePath.split('/storage/v1/object/public/resources/')[1];
+      if (storagePath) await _supabase.storage.from('resources').remove([decodeURIComponent(storagePath)]);
+    }
+    loadList();
+  }
+
+  async function handleLogout() {
+    await _supabase.auth.signOut();
+    window.location.href = './index.html';
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function escAttr(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  checkAuth();
+</script>
+</body>
+</html>
