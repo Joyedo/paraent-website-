@@ -76,6 +76,7 @@
       padding: 10px 14px;
       border-radius: var(--r-sm);
       transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+      text-decoration: none;
     }
     .nav-dropdown a + a { border-top: 1px solid rgba(255,255,255,0.07); }
     .nav-dropdown a:hover {
@@ -180,7 +181,7 @@
       <div class="nav-item"><a href="#" class="nav-link">자료실<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./resources.html#tech">기술자료</a><a href="./resources.html#manual">메뉴얼</a><a href="./resources.html#cad">캐드도면</a><a href="./resources.html#catalog">카다로그</a></div></div>
       <div class="nav-item"><a href="#" class="nav-link">고객센터<svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-dropdown"><a href="./inquiry.html">온라인상담</a><a href="./notice.html">공지사항</a></div></div>
     </div>
-    <div class="nav-right"><a href="./resources.html" class="lang-btn active">KO</a><a href="../en/pages/resources.html" class="lang-btn">EN</a><a href="../zh/pages/resources.html" class="lang-btn">中</a><a href="./inquiry.html" class="btn-primary">온라인 문의</a></div>
+    <div class="nav-right"><a href="./resources.html" class="lang-btn active">KO</a><a href="../en/pages/resources.html" class="lang-btn">EN</a><a href="../zh/pages/resources.html" class="lang-btn">CN</a><a href="./inquiry.html" class="btn-primary">온라인 문의</a></div>
   </div>
 </nav>
 
@@ -268,10 +269,15 @@ function activateFromHash() {
   } else if (CAD_PRODUCTS.some(p => hash === 'cad-' + p)) {
     const cadBtn = document.querySelector(`.tab-btn[onclick*="'cad'"]`);
     if (cadBtn) switchTab('cad', cadBtn);
-    setTimeout(() => {
-      const el = document.getElementById(hash);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 50);
+    const prevScrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const el = document.getElementById(hash);
+        if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' });
+        document.documentElement.style.scrollBehavior = prevScrollBehavior;
+      });
+    });
   }
 }
 window.addEventListener('hashchange', activateFromHash);

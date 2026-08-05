@@ -99,7 +99,7 @@
     <div class="nav-right">
       <a href="../../pages/resources.html" class="lang-btn">KO</a>
       <a href="./resources.html" class="lang-btn active">EN</a>
-      <a href="../../zh/pages/resources.html" class="lang-btn">中</a>
+      <a href="../../zh/pages/resources.html" class="lang-btn">CN</a>
       <a href="./inquiry.html" class="btn-primary">Contact Us</a>
     </div>
   </div>
@@ -189,10 +189,15 @@ function activateFromHash() {
   } else if (CAD_PRODUCTS.some(p => hash === 'cad-' + p)) {
     const cadBtn = document.querySelector(`.tab-btn[onclick*="'cad'"]`);
     if (cadBtn) switchTab('cad', cadBtn);
-    setTimeout(() => {
-      const el = document.getElementById(hash);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 50);
+    const prevScrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const el = document.getElementById(hash);
+        if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' });
+        document.documentElement.style.scrollBehavior = prevScrollBehavior;
+      });
+    });
   }
 }
 window.addEventListener('hashchange', activateFromHash);
