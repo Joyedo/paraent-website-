@@ -275,7 +275,16 @@
   }
 
   function sanitizeFileName(name) {
-    return name.replace(/\s+/g, '_');
+    const lastDot = name.lastIndexOf('.');
+    const base = lastDot > -1 ? name.slice(0, lastDot) : name;
+    const ext = lastDot > -1 ? name.slice(lastDot + 1) : '';
+    const cleanBase = base
+      .replace(/\s+/g, '_')
+      .replace(/[^a-zA-Z0-9_-]/g, '_')
+      .replace(/_+/g, '_')
+      .replace(/^_+|_+$/g, '') || 'file';
+    const cleanExt = ext.replace(/[^a-zA-Z0-9]/g, '');
+    return cleanExt ? `${cleanBase}.${cleanExt}` : cleanBase;
   }
 
   async function handleSave(e) {
