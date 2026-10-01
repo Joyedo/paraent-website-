@@ -607,13 +607,16 @@ body.menu-open { overflow: hidden; }
   .slide-hero::before { display: none !important; }
   .slide-text { max-width: 100% !important; }
 
-  /* 타이틀 바로 아래, 설명 바로 위에 제품 사진 삽입 */
+  /* 타이틀 바로 아래, 설명 바로 위에 제품 사진 삽입
+     — 원본 사진에 어두운 스튜디오 배경이 박혀있어서 생기는 사각 테두리를
+     mix-blend-mode:multiply로 지워서 어두운 페이지 배경과 자연스럽게 섞이게 함 */
   .hero-mobile-img {
     display: block;
     width: 52%;
-    max-width: 220px;
+    max-width: 200px;
     height: auto;
-    margin: 14px auto 18px;
-    filter: drop-shadow(0 10px 28px rgba(0,0,0,0.5));
+    margin: 10px auto 14px;
+    mix-blend-mode: multiply;
+    filter: drop-shadow(0 6px 20px rgba(0,0,0,0.4));
   }
 }
