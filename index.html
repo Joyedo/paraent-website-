@@ -104,10 +104,12 @@
     .nav-menu > li > a {
       display: flex;
       align-items: center;
-      gap: 3px;
-      font-size: 13px;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
       color: rgba(255,255,255,0.75);
-      letter-spacing: -0.12px;
+      letter-spacing: 0.09em;
       padding: 0 15px;
       height: 64px;
       transition: color 0.15s;
@@ -602,76 +604,77 @@
 
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: var(--sp-lg);
     }
-    .product-card {
-      background: var(--canvas);
-      border: 1px solid var(--hairline);
-      border-radius: var(--r-lg);
-      padding: var(--sp-lg);
-      display: flex;
-      flex-direction: column;
-      transition: box-shadow 0.2s, transform 0.2s;
-      cursor: pointer;
-    }
-    .product-card:hover {
-      box-shadow: 0 6px 28px rgba(0,0,0,0.09);
-      transform: translateY(-3px);
-    }
+    .product-card { border-radius: var(--r-lg); overflow: hidden; }
     .card-img-link {
+      position: relative;
       display: block;
-      text-decoration: none;
-    }
-    .card-img {
+      aspect-ratio: 3 / 4;
       width: 100%;
-      background: var(--canvas-parchment);
-      border-radius: var(--r-sm);
-      margin-bottom: var(--sp-md);
       overflow: hidden;
+      text-decoration: none;
+      background: #0a0a0c;
+      border-radius: var(--r-lg);
     }
-    .card-img img {
+    .card-photo {
+      position: absolute;
+      inset: 0;
       width: 100%;
-      height: auto;
-      display: block;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    .card-img-link:hover .card-photo { transform: scale(1.06); }
+    .card-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.05) 68%, transparent 100%);
+      transition: background 0.3s;
+    }
+    .card-overlay {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 22px 20px;
     }
     .card-label {
       font-family: var(--font-text);
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.8px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--primary);
-      margin-bottom: 5px;
+      color: var(--primary-on-dark);
+      margin-bottom: 8px;
     }
     .card-title {
       font-family: var(--font-display);
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 19px;
+      font-weight: 700;
       line-height: 1.25;
       letter-spacing: -0.374px;
-      color: var(--ink);
+      color: #fff;
       margin-bottom: 6px;
     }
     .card-tagline {
       font-family: var(--font-text);
       font-size: 13px;
-      color: var(--ink-muted-48);
+      color: rgba(255,255,255,0.6);
       line-height: 1.4;
-      flex: 1;
-      margin-bottom: var(--sp-md);
+      margin-bottom: 14px;
     }
     .card-link {
       font-family: var(--font-text);
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--primary);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.85);
       display: inline-flex;
       align-items: center;
       gap: 3px;
-      transition: gap 0.15s;
+      transition: gap 0.15s, color 0.15s;
     }
-    .card-link:hover { gap: 7px; }
+    .card-img-link:hover .card-link { gap: 7px; color: var(--primary-on-dark); }
 
     /* ═══════════════════════════════════════════
        CTA SECTION
@@ -1044,46 +1047,76 @@
       </div>
       <div class="product-grid">
         <div class="product-card">
-          <a href="pages/product-pll.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/pll.png" alt="Pll 디지털 전력조정기"></div></a>
-          <p class="card-label" style="text-transform: none;">Pll</p>
-          <h3 class="card-title">Pll 디지털 전력조정기</h3>
-          <p class="card-tagline">P-TYPE의 명성과 기술을 담은 차세대 전력조정기</p>
-          <a href="pages/product-pll.html" class="card-link">자세히 보기 →</a>
+          <a href="pages/product-pll.html" class="card-img-link">
+            <img class="card-photo" src="assets/images/products/pll.png" alt="Pll 디지털 전력조정기">
+            <div class="card-scrim"></div>
+            <div class="card-overlay">
+              <p class="card-label" style="text-transform: none;">Pll</p>
+              <h3 class="card-title">Pll 디지털 전력조정기</h3>
+              <p class="card-tagline">P-TYPE의 명성과 기술을 담은 차세대 전력조정기</p>
+              <span class="card-link">자세히 보기 →</span>
+            </div>
+          </a>
         </div>
         <div class="product-card">
-          <a href="pages/product-smart.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/smart.png" alt="SMART 디지털 전력조정기"></div></a>
-          <p class="card-label">SMART</p>
-          <h3 class="card-title">SMART 디지털 전력조정기</h3>
-          <p class="card-tagline">Nothing is smarter than SMART</p>
-          <a href="pages/product-smart.html" class="card-link">자세히 보기 →</a>
+          <a href="pages/product-smart.html" class="card-img-link">
+            <img class="card-photo" src="assets/images/products/smart.png" alt="SMART 디지털 전력조정기">
+            <div class="card-scrim"></div>
+            <div class="card-overlay">
+              <p class="card-label">SMART</p>
+              <h3 class="card-title">SMART 디지털 전력조정기</h3>
+              <p class="card-tagline">Nothing is smarter than SMART</p>
+              <span class="card-link">자세히 보기 →</span>
+            </div>
+          </a>
         </div>
         <div class="product-card">
-          <a href="pages/product-flex.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/flex.png" alt="FLEX 디지털 전력조정기"></div></a>
-          <p class="card-label">FLEX</p>
-          <h3 class="card-title">FLEX 디지털 전력조정기</h3>
-          <p class="card-tagline">EtherCAT Communication</p>
-          <a href="pages/product-flex.html" class="card-link">자세히 보기 →</a>
+          <a href="pages/product-flex.html" class="card-img-link">
+            <img class="card-photo" src="assets/images/products/flex.png" alt="FLEX 디지털 전력조정기">
+            <div class="card-scrim"></div>
+            <div class="card-overlay">
+              <p class="card-label">FLEX</p>
+              <h3 class="card-title">FLEX 디지털 전력조정기</h3>
+              <p class="card-tagline">EtherCAT Communication</p>
+              <span class="card-link">자세히 보기 →</span>
+            </div>
+          </a>
         </div>
         <div class="product-card">
-          <a href="pages/product-mini.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/mini.png" alt="MINI 디지털 전력조정기"></div></a>
-          <p class="card-label">MINI</p>
-          <h3 class="card-title">MINI 디지털 전력조정기</h3>
-          <p class="card-tagline">국내 최소형 / SSR 대체형</p>
-          <a href="pages/product-mini.html" class="card-link">자세히 보기 →</a>
+          <a href="pages/product-mini.html" class="card-img-link">
+            <img class="card-photo" src="assets/images/products/mini.png" alt="MINI 디지털 전력조정기">
+            <div class="card-scrim"></div>
+            <div class="card-overlay">
+              <p class="card-label">MINI</p>
+              <h3 class="card-title">MINI 디지털 전력조정기</h3>
+              <p class="card-tagline">국내 최소형 / SSR 대체형</p>
+              <span class="card-link">자세히 보기 →</span>
+            </div>
+          </a>
         </div>
         <div class="product-card">
-          <a href="pages/product-etype.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/etype.png" alt="E-TYPE 디지털 전력조정기"></div></a>
-          <p class="card-label">E-TYPE</p>
-          <h3 class="card-title">E-TYPE 디지털 전력조정기</h3>
-          <p class="card-tagline">Economic Power Control</p>
-          <a href="pages/product-etype.html" class="card-link">자세히 보기 →</a>
+          <a href="pages/product-etype.html" class="card-img-link">
+            <img class="card-photo" src="assets/images/products/etype.png" alt="E-TYPE 디지털 전력조정기">
+            <div class="card-scrim"></div>
+            <div class="card-overlay">
+              <p class="card-label">E-TYPE</p>
+              <h3 class="card-title">E-TYPE 디지털 전력조정기</h3>
+              <p class="card-tagline">Economic Power Control</p>
+              <span class="card-link">자세히 보기 →</span>
+            </div>
+          </a>
         </div>
         <div class="product-card">
-          <a href="pages/product-ptype.html" class="card-img-link"><div class="card-img"><img src="assets/images/products/ptype.png" alt="P-TYPE 디지털 전력조정기"></div></a>
-          <p class="card-label">P-TYPE</p>
-          <h3 class="card-title">P-TYPE 디지털 전력조정기</h3>
-          <p class="card-tagline">Steady Seller 전력조정기</p>
-          <a href="pages/product-ptype.html" class="card-link">자세히 보기 →</a>
+          <a href="pages/product-ptype.html" class="card-img-link">
+            <img class="card-photo" src="assets/images/products/ptype.png" alt="P-TYPE 디지털 전력조정기">
+            <div class="card-scrim"></div>
+            <div class="card-overlay">
+              <p class="card-label">P-TYPE</p>
+              <h3 class="card-title">P-TYPE 디지털 전력조정기</h3>
+              <p class="card-tagline">Steady Seller 전력조정기</p>
+              <span class="card-link">자세히 보기 →</span>
+            </div>
+          </a>
         </div>
       </div>
     </div>
