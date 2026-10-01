@@ -550,6 +550,35 @@ body.menu-open { overflow: hidden; }
 }
 
 /* ══════════════════════════════════════════════════
+   FIX 7 — 인라인 3/4단 이미지 그리드 (SMART PLF/PSD 갤러리,
+   인증현황 CE/ISO/기타인증 카드) 모바일에서 전혀 안 줄어들던 문제
+══════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  [style*="grid-template-columns:repeat(4,1fr)"],
+  [style*="grid-template-columns: repeat(4,1fr)"],
+  [style*="grid-template-columns:repeat(4, 1fr)"] {
+    grid-template-columns: repeat(2,1fr) !important;
+  }
+}
+@media (max-width: 767px) {
+  [style*="grid-template-columns:repeat(3,1fr)"],
+  [style*="grid-template-columns: repeat(3,1fr)"],
+  [style*="grid-template-columns:repeat(3, 1fr)"],
+  [style*="grid-template-columns:200px 1fr 1fr"],
+  [style*="grid-template-columns:3fr 2fr"],
+  [style*="grid-template-columns:repeat(2,1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+@media (max-width: 480px) {
+  [style*="grid-template-columns:repeat(4,1fr)"],
+  [style*="grid-template-columns: repeat(4,1fr)"],
+  [style*="grid-template-columns:repeat(4, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════
    FIX 6 — 메인 히어로 배경 이미지 잘림 수정
 ══════════════════════════════════════════════════ */
 @media (max-width: 767px) {
