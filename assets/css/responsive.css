@@ -267,6 +267,15 @@ body.menu-open { overflow: hidden; }
 
   /* PRODUCT HERO */
   .product-hero { padding: 56px 16px 44px !important; }
+  /* 제품명/소개 텍스트가 배경 제품 사진과 겹쳐 보이던 문제 —
+     텍스트 전용 반투명 패널로 분리 */
+  .product-hero-text {
+    background: rgba(8,10,14,0.6) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-radius: 20px !important;
+    padding: 24px 20px !important;
+  }
   .product-hero h1 { font-size: 40px !important; }
   .product-hero-sub { font-size: 15px !important; margin-bottom: 24px; }
   .hero-actions { flex-direction: column; align-items: stretch; gap: 10px; }
@@ -600,6 +609,15 @@ body.menu-open { overflow: hidden; }
       rgba(0,0,0,0.55) 100%
     ) !important;
   }
-  /* 텍스트 영역 풀너비 */
-  .slide-text { max-width: 100% !important; }
+  /* 텍스트 영역 풀너비 + 배경 사진과 분리되는 카드형 패널
+     (모바일에서 텍스트가 풀너비로 늘어나면서 배경 속 제품 사진과
+     겹쳐 보이던 문제 — 텍스트 전용 반투명 패널로 확실히 분리) */
+  .slide-text {
+    max-width: 100% !important;
+    background: rgba(8,10,14,0.62) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-radius: 20px !important;
+    padding: 24px 20px !important;
+  }
 }
