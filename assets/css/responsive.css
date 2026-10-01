@@ -275,6 +275,21 @@ body.menu-open { overflow: hidden; }
     min-height: 0 !important;
   }
   .product-hero::before { display: none !important; }
+
+  /* 타이틀 바로 아래, 설명 바로 위에 제품 사진 삽입.
+     pll/smart/ptype는 투명 배경 사진을 그대로 사용하고,
+     flex/mini/etype는 투명 소스가 없어 mix-blend-mode(.blend-dark)로
+     어두운 스튜디오 배경을 페이지 배경에 흡수시킴 */
+  .hero-mobile-img {
+    display: block;
+    width: 52%;
+    max-width: 200px;
+    height: auto;
+    margin: 10px auto 14px;
+    filter: drop-shadow(0 6px 20px rgba(0,0,0,0.4));
+  }
+  .hero-mobile-img.blend-dark { mix-blend-mode: multiply; }
+
   .product-hero h1 { font-size: 40px !important; }
   .product-hero-sub { font-size: 15px !important; margin-bottom: 24px; }
   .hero-actions { flex-direction: column; align-items: stretch; gap: 10px; }
@@ -587,36 +602,31 @@ body.menu-open { overflow: hidden; }
 }
 
 /* ══════════════════════════════════════════════════
-   FIX 6 — 메인 히어로: 배경 사진과 텍스트가 겹쳐 보이던 문제
-   → 모바일에서는 배경 사진을 끄고, 타이틀 → 제품 사진(.hero-mobile-img)
-     → 설명 순서로 세로로 쌓이는 깔끔한 레이아웃으로 전환
+   FIX 6 — 메인 히어로 배경 이미지 잘림 수정
+   (.hero-mobile-img 기본값: 데스크탑에서는 숨김 — 제품상세 히어로
+    모바일에서만 사용, PRODUCT HERO 섹션 참고)
 ══════════════════════════════════════════════════ */
 .hero-mobile-img { display: none; }
 
 @media (max-width: 767px) {
+  /* 슬라이드 높이 제한 — 과도한 세로 크롭 방지 */
   .slide {
-    min-height: 0 !important;
-    max-height: none !important;
-    height: auto !important;
+    min-height: 420px !important;
+    max-height: 520px !important;
   }
-  /* 배경 사진 완전히 끄고 단색 배경으로 전환 — 사진은 .hero-mobile-img로 */
+  /* 히어로 배경 이미지 위치 — 제품이 있는 오른쪽 영역을 더 보이도록 */
   .slide-hero {
-    background-image: none !important;
-    background-color: #0a0b10 !important;
+    background-position: 68% center !important;
   }
-  .slide-hero::before { display: none !important; }
+  /* 모바일용 오버레이 — 좌우 그라데이션 대신 전체 어둡게 */
+  .slide-hero::before {
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.55) 0%,
+      rgba(0,0,0,0.40) 50%,
+      rgba(0,0,0,0.55) 100%
+    ) !important;
+  }
+  /* 텍스트 영역 풀너비 */
   .slide-text { max-width: 100% !important; }
-
-  /* 타이틀 바로 아래, 설명 바로 위에 제품 사진 삽입
-     — 원본 사진에 어두운 스튜디오 배경이 박혀있어서 생기는 사각 테두리를
-     mix-blend-mode:multiply로 지워서 어두운 페이지 배경과 자연스럽게 섞이게 함 */
-  .hero-mobile-img {
-    display: block;
-    width: 52%;
-    max-width: 200px;
-    height: auto;
-    margin: 10px auto 14px;
-    mix-blend-mode: multiply;
-    filter: drop-shadow(0 6px 20px rgba(0,0,0,0.4));
-  }
 }
