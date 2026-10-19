@@ -2,8 +2,8 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    # 매주 월, 목 09:00 UTC(한국시간 18:00) 실행 — 7일 무활동 자동 일시정지 방지
-    - cron: '0 9 * * 1,4'
+    # 매주 월·수·금 09:00 UTC(한국시간 18:00) 실행 — 최대 간격 3일이라 7일 무활동 자동 일시정지 방지
+    - cron: '0 9 * * 1,3,5'
   workflow_dispatch:
 
 jobs:
@@ -11,8 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Supabase REST API
+        # anon key는 공개 페이지(pages/notice.html 등)에 이미 노출된 값이라 시크릿 대신 직접 사용
+        # (예전엔 시크릿 값이 틀려도 curl -s 가 HTTP 오류를 숨겨서 '성공'으로 표시됐음)
+        env:
+          SUPABASE_URL: https://yqabxdmhwfdjjvvtuutt.supabase.co
+          SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxYWJ4ZG1od2Zkamp2dnR1dXR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NTM1NDAsImV4cCI6MjEwNjQyOTU0MH0.BN6bjCkds_uPeQU9pyP0LlXHqnDKkUwMpGvoy8CXCq8
         run: |
-          curl -s -o /dev/null -w "%{http_code}" \
-            "https://yqabxdmhwfdjjvvtuutt.supabase.co/rest/v1/inquiries?select=id&limit=1" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+          # 공개 조회가 허용된 notices 테이블을 실제로 읽어 DB 활동을 남김. 200이 아니면 워크플로우 실패 처리
+          curl -sS --fail-with-body \
+            "$SUPABASE_URL/rest/v1/notices?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY"
