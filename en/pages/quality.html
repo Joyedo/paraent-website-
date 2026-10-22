@@ -131,7 +131,84 @@
     @media (max-width: 960px) { .q-sec1-inner, .q-sec3-inner { grid-template-columns: 1fr; gap: 32px; } .q-sec1-card { margin-left: 0; } .q-sec3-card { margin-right: 0; } .q-sec2-inner { grid-template-columns: 1fr; } .q-sec2-img { min-height: 320px; } .q-sec2-bignum { font-size: 100px; } .q-sec2-text { max-width: none; padding: 64px 24px; } .q-sec2-text-wrap { justify-content: flex-start; } .q-stats-grid { grid-template-columns: repeat(2, 1fr); } .q-stat-item:nth-child(2) { border-right: none; } .q-stat-item:nth-child(3) { border-top: 1px solid rgba(255,255,255,0.07); } .q-stat-item:last-child { border-top: 1px solid rgba(255,255,255,0.07); } }
     @media (max-width: 600px) { .q-strip-inner { grid-template-columns: 1fr; } .q-strip-item, .q-strip-item:nth-child(2), .q-strip-item:last-child { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 32px 0; } .q-strip-item:last-child { border-bottom: none; } .q-stats-grid { grid-template-columns: 1fr 1fr; } .page-header h1 { font-size: 40px; } .q-sec1, .q-sec3 { padding: 64px 24px; } .q-sec1-card, .q-sec3-card { padding: 36px 28px; } .q-stat-num { font-size: 52px; } .footer-grid { grid-template-columns: 1fr 1fr; } }
   </style>
-  <link rel="stylesheet" href="../../assets/css/responsive.css?v=5" /></head>
+  <link rel="stylesheet" href="../../assets/css/responsive.css?v=5" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.paratec.co.kr/#organization",
+        "name": "(주)파라이엔티",
+        "alternateName": [
+          "파라이엔티",
+          "PARAENT",
+          "Paraent"
+        ],
+        "url": "https://www.paratec.co.kr/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.paratec.co.kr/assets/images/logo.png"
+        },
+        "foundingDate": "2000-08",
+        "description": "SCR·TPR 디지털 전력조정기 전문 기업",
+        "email": "cpmaui@paratec.co.kr",
+        "telephone": "+82-31-831-8310",
+        "faxNumber": "+82-31-831-8314",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "동탄기흥로 64-14",
+          "addressLocality": "화성시",
+          "addressRegion": "경기도",
+          "addressCountry": "KR"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "telephone": "+82-31-831-8310",
+          "email": "cpmaui@paratec.co.kr",
+          "availableLanguage": [
+            "Korean",
+            "English",
+            "Chinese"
+          ]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.paratec.co.kr/#website",
+        "url": "https://www.paratec.co.kr/",
+        "name": "파라이엔티",
+        "alternateName": "PARAENT",
+        "publisher": {
+          "@id": "https://www.paratec.co.kr/#organization"
+        },
+        "inLanguage": [
+          "ko-KR",
+          "en",
+          "zh-CN"
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.paratec.co.kr/en/pages/quality.html#webpage",
+        "url": "https://www.paratec.co.kr/en/pages/quality.html",
+        "name": "Quality Innovation — Paraent",
+        "isPartOf": {
+          "@id": "https://www.paratec.co.kr/#website"
+        },
+        "about": {
+          "@id": "https://www.paratec.co.kr/#organization"
+        },
+        "publisher": {
+          "@id": "https://www.paratec.co.kr/#organization"
+        },
+        "inLanguage": "en"
+      }
+    ]
+  }
+  </script>
+</head>
 <body>
 
 <nav class="nav">
