@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /tools/
+Disallow: /tmp_
+Disallow: /test-
+
+Sitemap: https://www.paratec.co.kr/sitemap.xml
