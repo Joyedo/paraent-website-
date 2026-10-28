@@ -267,6 +267,13 @@
       line-height: 1.7;
       white-space: pre-wrap;
     }
+    .attach-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .attach-list li { display: flex; align-items: center; gap: 10px; background: #f9fafb; border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+    .attach-list .attach-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #111; }
+    .attach-list .attach-size { color: #9ca3af; flex-shrink: 0; }
+    .attach-list a { color: #2563eb; font-weight: 600; text-decoration: none; flex-shrink: 0; }
+    .attach-list a:hover { text-decoration: underline; }
+    .attach-icon { margin-left: 6px; font-size: 12px; color: #9ca3af; }
     .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
     .btn-modal-close {
       padding: 9px 20px;
@@ -639,7 +646,7 @@
         <td class="td-no">${no}</td>
         <td><span class="lang-badge ${lang.cls}" title="${lang.flag}">${lang.flag} ${lang.label}</span></td>
         <td class="td-title">
-          <span class="td-title-text" onclick="showDetail(${r.id})" title="${escHtml(r.title)}">${escHtml(r.title)}</span>
+          <span class="td-title-text" onclick="showDetail(${r.id})" title="${escHtml(r.title)}">${escHtml(r.title)}</span>${r.attachments?.length ? `<span class="attach-icon" title="첨부파일 ${r.attachments.length}개">📎${r.attachments.length}</span>` : ''}
           ${r.product ? `<div class="td-product">${escHtml(r.product)}</div>` : ''}
         </td>
         <td class="td-name">${escHtml(r.name)}</td>
@@ -709,6 +716,9 @@
   // 삭제
   async function deleteInquiry(id) {
     if (!confirm('이 문의를 삭제하시겠습니까?')) return;
+    const { data: row } = await _supabase.from('inquiries').select('attachments').eq('id', id).single();
+    const paths = (row?.attachments ?? []).map(a => a.path);
+    if (paths.length) await _supabase.storage.from('inquiry-files').remove(paths);
     const { error } = await _supabase.from('inquiries').delete().eq('id', id);
     if (!error) { loadInquiries(); loadStats(); }
   }
@@ -733,9 +743,11 @@
       ${data.inquiry_type ? `<div class="modal-row"><div class="modal-label">문의 유형</div><div class="modal-value">${escHtml(data.inquiry_type)}</div></div>` : ''}
       <div class="modal-row"><div class="modal-label">제목</div><div class="modal-value" style="font-weight:600">${escHtml(data.title)}</div></div>
       <div class="modal-row"><div class="modal-label">내용</div><div class="modal-content-box">${escHtml(data.content)}</div></div>
+      ${data.attachments?.length ? `<div class="modal-row"><div class="modal-label">첨부파일 (${data.attachments.length})</div><ul class="attach-list" id="attachList">${data.attachments.map(a => `<li><span class="attach-name" title="${escHtml(a.name)}">${escHtml(a.name)}</span><span class="attach-size">${formatFileSize(a.size)}</span><a href="#" data-path="${escHtml(a.path)}" data-name="${escHtml(a.name)}">다운로드</a></li>`).join('')}</ul></div>` : ''}
       <div class="modal-row"><div class="modal-label">신청일</div><div class="modal-value">${date}</div></div>
       ${data.ip_address ? `<div class="modal-row"><div class="modal-label">IP</div><div class="modal-value" style="font-family:monospace">${escHtml(data.ip_address)}</div></div>` : ''}
     `;
+    document.querySelectorAll('#attachList a').forEach(a => a.addEventListener('click', downloadAttachment));
     document.getElementById('detailModal').classList.add('open');
     loadNotes(id);
   }
@@ -850,6 +862,22 @@
   async function handleLogout() {
     await _supabase.auth.signOut();
     window.location.href = './index.html';
+  }
+
+  // 첨부파일 다운로드 (비공개 버킷 → 1분짜리 서명 URL)
+  async function downloadAttachment(e) {
+    e.preventDefault();
+    const { path, name } = e.currentTarget.dataset;
+    const { data, error } = await _supabase.storage.from('inquiry-files').createSignedUrl(path, 60, { download: name });
+    if (error) { alert('파일을 불러오지 못했습니다: ' + error.message); return; }
+    window.location.href = data.signedUrl;
+  }
+
+  function formatFileSize(bytes) {
+    if (!bytes && bytes !== 0) return '';
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   }
 
   // XSS 방지

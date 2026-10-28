@@ -163,6 +163,17 @@
     }
     .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,102,204,0.1); }
     .form-textarea { resize: vertical; min-height: 140px; line-height: 1.6; }
+    .file-picker { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .btn-file { display: inline-flex; align-items: center; gap: 6px; background: var(--canvas-parchment); color: var(--ink); border: 1px solid var(--hairline); border-radius: var(--r-pill); padding: 9px 18px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--font-text); transition: border-color 0.15s; }
+    .btn-file:hover { border-color: var(--primary); color: var(--primary); }
+    .file-hint { font-size: 12px; color: var(--ink-muted-48); }
+    .file-list { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+    .file-list:empty { display: none; }
+    .file-list li { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-muted-80); background: var(--canvas-parchment); border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 8px 12px; }
+    .file-list .file-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-list .file-size { color: var(--ink-muted-48); flex-shrink: 0; }
+    .file-list button { background: none; border: none; color: var(--ink-muted-48); cursor: pointer; font-size: 13px; padding: 0 2px; font-family: var(--font-text); }
+    .file-list button:hover { color: #dc2626; }
     .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237a7a7a' d='M6 8L0 0h12z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
     .email-field { display: flex; align-items: center; gap: 8px; }
     .email-field .form-input { flex: 1; min-width: 0; }
@@ -410,6 +421,18 @@
             <label class="form-label">문의 내용 <span class="req">*</span></label>
             <textarea id="inp-content" class="form-textarea" placeholder="문의 내용을 자세히 입력해 주세요.&#10;&#10;예: 사용 환경 (전압/전류/부하 종류), 희망 납기일, 수량 등을 포함해 주시면 더욱 정확한 답변을 드릴 수 있습니다." required></textarea>
           </div>
+          <div class="form-group full">
+            <label class="form-label" for="inp-files">첨부파일</label>
+            <div class="file-picker">
+              <button type="button" class="btn-file" onclick="document.getElementById('inp-files').click()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                파일 선택
+              </button>
+              <span class="file-hint">도면, 사양서, 사진 등 (최대 5개, 파일당 10MB 이하)</span>
+            </div>
+            <input type="file" id="inp-files" multiple hidden />
+            <ul id="file-list" class="file-list"></ul>
+          </div>
         </div>
 
         <!-- PRIVACY CONSENT -->
@@ -488,6 +511,76 @@ function getEmailValue() {
   return id && domain ? id + '@' + domain : '';
 }
 
+var MAX_FILES = 5;
+var MAX_FILE_SIZE = 10 * 1024 * 1024;
+var selectedFiles = [];
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function sanitizeFileName(name) {
+  var lastDot = name.lastIndexOf('.');
+  var base = lastDot > -1 ? name.slice(0, lastDot) : name;
+  var ext = lastDot > -1 ? name.slice(lastDot + 1).replace(/[^a-zA-Z0-9]/g, '') : '';
+  var cleanBase = base.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_-]/g, '_').replace(/_+/g, '_').slice(0, 60) || 'file';
+  return ext ? cleanBase + '.' + ext : cleanBase;
+}
+
+function renderFileList() {
+  var list = document.getElementById('file-list');
+  list.innerHTML = '';
+  selectedFiles.forEach(function(file, i) {
+    var li = document.createElement('li');
+    var name = document.createElement('span');
+    name.className = 'file-name';
+    name.textContent = file.name;
+    var size = document.createElement('span');
+    size.className = 'file-size';
+    size.textContent = formatFileSize(file.size);
+    var del = document.createElement('button');
+    del.type = 'button';
+    del.textContent = '삭제';
+    del.addEventListener('click', function() {
+      selectedFiles.splice(i, 1);
+      renderFileList();
+    });
+    li.append(name, size, del);
+    list.appendChild(li);
+  });
+}
+
+document.getElementById('inp-files').addEventListener('change', function() {
+  var files = Array.from(this.files);
+  this.value = '';
+  var tooBig = files.filter(function(f) { return f.size > MAX_FILE_SIZE; });
+  if (tooBig.length) {
+    alert('10MB를 초과하는 파일은 첨부할 수 없습니다: ' + tooBig.map(function(f) { return f.name; }).join(', '));
+    files = files.filter(function(f) { return f.size <= MAX_FILE_SIZE; });
+  }
+  if (selectedFiles.length + files.length > MAX_FILES) {
+    alert('첨부파일은 최대 5개까지 가능합니다.');
+    files = files.slice(0, MAX_FILES - selectedFiles.length);
+  }
+  selectedFiles = selectedFiles.concat(files);
+  renderFileList();
+});
+
+async function uploadAttachments() {
+  var folder = Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+  var uploaded = [];
+  for (var i = 0; i < selectedFiles.length; i++) {
+    var file = selectedFiles[i];
+    var path = folder + '/' + i + '-' + sanitizeFileName(file.name);
+    var res = await _supabase.storage.from('inquiry-files').upload(path, file);
+    if (res.error) throw res.error;
+    uploaded.push({ name: file.name, path: path, size: file.size });
+  }
+  return uploaded;
+}
+
 async function handleSubmit(e) {
   e.preventDefault();
   var email = getEmailValue();
@@ -501,6 +594,20 @@ async function handleSubmit(e) {
   btn.textContent = '접수 중...';
   btn.disabled = true;
 
+  var attachments = [];
+  if (selectedFiles.length) {
+    btn.textContent = '파일 업로드 중...';
+    try {
+      attachments = await uploadAttachments();
+    } catch (err) {
+      console.error(err);
+      alert('파일 업로드 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+      btn.textContent = '문의 접수하기';
+      btn.disabled = false;
+      return;
+    }
+  }
+
   const { error } = await _supabase.from('inquiries').insert({
     name:         document.getElementById('inp-name').value.trim(),
     company:      document.getElementById('inp-company').value.trim() || null,
@@ -511,6 +618,7 @@ async function handleSubmit(e) {
     title:        document.getElementById('inp-title').value.trim(),
     content:      document.getElementById('inp-content').value.trim(),
     language:     'ko',
+    attachments:  attachments.length ? attachments : null,
   });
 
   if (error) {
@@ -526,6 +634,8 @@ async function handleSubmit(e) {
   setTimeout(function() {
     alert('문의가 접수되었습니다. 영업일 기준 1-2일 이내에 답변 드리겠습니다.');
     e.target.reset();
+    selectedFiles = [];
+    renderFileList();
     document.getElementById('email-domain-custom').style.display = 'none';
     document.getElementById('email-domain-select').style.display = '';
     btn.textContent = '문의 접수하기';
